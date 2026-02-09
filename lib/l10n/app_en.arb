@@ -1,0 +1,73 @@
+{
+  "@@locale": "en",
+  "appName": "Novda",
+
+  "continueButton": "Continue",
+  "selectLanguage": "Select language",
+
+  "onboardingTitle1": "Track baby's daily activities",
+  "onboardingDescription1": "Log feedings, sleep, diapers, and more in one simple dashboard to stay organized every day.",
+
+  "onboardingTitle2": "Set reminders",
+  "onboardingDescription2": "Never forget a feeding or medicine, get helpful notifications right when you need them.",
+
+  "onboardingTitle3": "Track Baby's Progress",
+  "onboardingDescription3": "Follow your baby's growth, routines, and celebrate every small achievement.",
+
+  "height": "Height",
+  "weight": "Weight",
+
+  "today": "Today",
+  "medication": "Medication",
+  "other": "Other",
+
+  "errorWrongFormat": "You entered the wrong format",
+  "errorWrongCode": "Wrong code is entered",
+
+  "email": "Email",
+  "enterYourEmail": "Enter your email",
+
+  "enterPhoneNumber": "Enter your phone number",
+  "phoneNumberHint": "Phone number",
+  "receiveCodeDescription": "You will receive a 6-digit code.",
+  "termsOfUse": "Terms of Use",
+  "privacyPolicy": "Privacy policy",
+  "termsAcceptance": "By clicking 'Continue' button you accept our",
+  "termsCheckboxAcceptance": "By checking this box, you agree to our",
+  "and": "and",
+
+  "enterVerificationCode": "Enter the verification code",
+  "codeSentTo": "We sent a 6-digit code to",
+  "resendCode": "Resend code",
+  "sendAgainAfter": "Send again after",
+
+  "whoIsYourBaby": "Who's your baby?",
+  "selectBabyGender": "Select your baby's gender",
+  "boy": "Boy",
+  "girl": "Girl",
+  "appTheme": "App theme",
+  "autoWarm": "Auto (warm)",
+  "warm": "Warm",
+  "cold": "Cold",
+
+  "babyNameQuestion": "What's your baby's name?",
+  "enterBabyName": "Enter your little one's full name",
+  "babyNameHint": "Baby's name",
+
+  "babyBirthdateQuestion": "When was your baby born?",
+  "enterBabyBirthdate": "Enter your baby's birthdate",
+  "day": "Day",
+  "month": "Month",
+  "year": "Year",
+
+  "babyWeightQuestion": "What's your baby's weight?",
+  "enterWeightKg": "Enter the weight in kilograms.",
+  "weightInKg": "Weight in kg",
+
+  "babyHeightQuestion": "What's your baby's height?",
+  "enterHeightCm": "Enter the height in centimeters.",
+  "heightInCm": "Height in cm",
+
+  "welcomeHome": "Welcome Home",
+  "homeDescription": "Your baby tracking dashboard will appear here"
+}

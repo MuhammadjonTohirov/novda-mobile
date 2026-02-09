@@ -1,0 +1,210 @@
+import 'package:novda/features/auth/models/registrantion_data.dart';
+import 'package:novda_sdk/novda_sdk.dart';
+
+import '../../../core/base/base_view_model.dart';
+import '../../../core/services/services.dart';
+import '../../../core/ui/verification/verification_view_model.dart';
+
+/// View model for the entire authentication flow
+class AuthorizationViewModel extends BaseViewModel implements VerificationViewModel {
+  AuthorizationViewModel({
+    AuthUseCase? authUseCase,
+    ChildrenUseCase? childrenUseCase,
+    MeasurementsUseCase? measurementsUseCase,
+    TokenStorage? tokenStorage,
+  })  : _authUseCase = authUseCase ?? services.sdk.auth,
+        _childrenUseCase = childrenUseCase ?? services.sdk.children,
+        _measurementsUseCase = measurementsUseCase ?? services.sdk.measurements,
+        _tokenStorage = tokenStorage ?? services.tokenStorage;
+
+  final AuthUseCase _authUseCase;
+  final ChildrenUseCase _childrenUseCase;
+  final MeasurementsUseCase _measurementsUseCase;
+  final TokenStorage _tokenStorage;
+
+  final RegistrationData _registrationData = RegistrationData();
+  int _otpExpiresIn = 60;
+  Child? _createdChild;
+
+  /// Get registration data
+  RegistrationData get registrationData => _registrationData;
+
+  /// OTP expiration time in seconds
+  int get otpExpiresIn => _otpExpiresIn;
+
+  /// Created child after registration
+  Child? get createdChild => _createdChild;
+
+  // --- VerificationViewModel Implementation ---
+
+  @override
+  String get destination => _registrationData.phoneNumber ?? '';
+
+  @override
+  Future<bool> verify(String code) => verifyOtp(code);
+
+  @override
+  Future<bool> resend() => resendOtp();
+
+  // -------------------------------------------
+
+  /// Request OTP for phone number
+  Future<bool> requestOtp(String phoneNumber) async {
+    setLoading();
+    try {
+      final response = await _authUseCase.requestOtp(phone: phoneNumber);
+      _registrationData.phoneNumber = phoneNumber;
+      _otpExpiresIn = response.expiresIn;
+      setSuccess();
+      return true;
+    } catch (e) {
+      handleException(e);
+      return false;
+    }
+  }
+
+  /// Verify OTP code
+  Future<bool> verifyOtp(String code) async {
+    if (_registrationData.phoneNumber == null) {
+      setError('Phone number not set');
+      return false;
+    }
+
+    setLoading();
+    try {
+      final tokens = await _authUseCase.verifyOtp(
+        phone: _registrationData.phoneNumber!,
+        code: code,
+      );
+
+      await _tokenStorage.saveTokens(
+        access: tokens.access,
+        refresh: tokens.refresh,
+      );
+
+      _registrationData.verificationCode = code;
+      setSuccess();
+      return true;
+    } catch (e) {
+      handleException(e);
+      return false;
+    }
+  }
+
+  /// Resend OTP code
+  Future<bool> resendOtp() async {
+    if (_registrationData.phoneNumber == null) {
+      setError('Phone number not set');
+      return false;
+    }
+
+    setLoading();
+    try {
+      final response = await _authUseCase.requestOtp(
+        phone: _registrationData.phoneNumber!,
+      );
+      _otpExpiresIn = response.expiresIn;
+      setSuccess();
+      return true;
+    } catch (e) {
+      handleException(e);
+      return false;
+    }
+  }
+
+  /// Set baby gender
+  void setGender(Gender gender) {
+    _registrationData.gender = gender;
+    notifyListeners();
+  }
+
+  /// Set baby name
+  void setBabyName(String name) {
+    _registrationData.babyName = name;
+    notifyListeners();
+  }
+
+  /// Set baby birthdate
+  void setBirthdate(DateTime birthdate) {
+    _registrationData.birthdate = birthdate;
+    notifyListeners();
+  }
+
+  /// Set baby weight
+  void setWeight(double weight) {
+    _registrationData.weight = weight;
+    notifyListeners();
+  }
+
+  /// Set baby height
+  void setHeight(double height) {
+    _registrationData.height = height;
+    notifyListeners();
+  }
+
+  /// Complete registration by creating child and measurements
+  Future<bool> completeRegistration() async {
+    if (!_registrationData.isComplete) {
+      setError('Registration data incomplete');
+      return false;
+    }
+
+    setLoading();
+    try {
+      // Create child
+      final child = await _childrenUseCase.createChild(
+        name: _registrationData.babyName!,
+        gender: _registrationData.gender!,
+        birthDate: _registrationData.birthdate!,
+      );
+
+      _createdChild = child;
+
+      // Add initial measurements
+      await Future.wait([
+        _measurementsUseCase.createMeasurement(
+          child.id,
+          type: MeasurementType.weight,
+          value: _registrationData.weight!,
+          takenAt: _registrationData.birthdate!,
+        ),
+        _measurementsUseCase.createMeasurement(
+          child.id,
+          type: MeasurementType.height,
+          value: _registrationData.height!,
+          takenAt: _registrationData.birthdate!,
+        ),
+      ]);
+
+      setSuccess();
+      return true;
+    } catch (e) {
+      handleException(e);
+      return false;
+    }
+  }
+
+  /// Check if user has existing children
+  Future<bool> checkExistingChildren() async {
+    try {
+      final children = await _childrenUseCase.getChildren();
+      return children.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Clear registration data
+  void clearRegistrationData() {
+    _registrationData
+      ..phoneNumber = null
+      ..verificationCode = null
+      ..gender = null
+      ..babyName = null
+      ..birthdate = null
+      ..weight = null
+      ..height = null;
+    _createdChild = null;
+    setIdle();
+  }
+}

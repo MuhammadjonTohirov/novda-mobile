@@ -1,0 +1,73 @@
+{
+  "@@locale": "ru",
+  "appName": "Novda",
+
+  "continueButton": "Продолжить",
+  "selectLanguage": "Выберите язык",
+
+  "onboardingTitle1": "Отслеживайте ежедневные активности малыша",
+  "onboardingDescription1": "Записывайте кормления, сон, смену подгузников и многое другое в одной простой панели, чтобы оставаться организованным каждый день.",
+
+  "onboardingTitle2": "Установите напоминания",
+  "onboardingDescription2": "Никогда не забывайте о кормлении или лекарстве, получайте полезные уведомления именно тогда, когда они нужны.",
+
+  "onboardingTitle3": "Следите за прогрессом малыша",
+  "onboardingDescription3": "Следите за ростом и режимом вашего малыша, отмечайте каждое маленькое достижение.",
+
+  "height": "Рост",
+  "weight": "Вес",
+
+  "today": "Сегодня",
+  "medication": "Лекарство",
+  "other": "Другое",
+
+  "errorWrongFormat": "Вы ввели неверный формат",
+  "errorWrongCode": "Введён неверный код",
+
+  "email": "Эл. почта",
+  "enterYourEmail": "Введите вашу эл. почту",
+
+  "enterPhoneNumber": "Введите номер телефона",
+  "phoneNumberHint": "Номер телефона",
+  "receiveCodeDescription": "Вы получите 6-значный код.",
+  "termsOfUse": "Условия использования",
+  "privacyPolicy": "Политика конфиденциальности",
+  "termsAcceptance": "Нажимая кнопку 'Продолжить', вы принимаете наши",
+  "termsCheckboxAcceptance": "Отметив этот флажок, вы соглашаетесь с нашими",
+  "and": "и",
+
+  "enterVerificationCode": "Введите код подтверждения",
+  "codeSentTo": "Мы отправили 6-значный код на",
+  "resendCode": "Отправить код повторно",
+  "sendAgainAfter": "Отправить снова через",
+
+  "whoIsYourBaby": "Кто ваш малыш?",
+  "selectBabyGender": "Выберите пол вашего малыша",
+  "boy": "Мальчик",
+  "girl": "Девочка",
+  "appTheme": "Тема приложения",
+  "autoWarm": "Авто (тёплая)",
+  "warm": "Тёплая",
+  "cold": "Холодная",
+
+  "babyNameQuestion": "Как зовут вашего малыша?",
+  "enterBabyName": "Введите полное имя вашего малыша",
+  "babyNameHint": "Имя малыша",
+
+  "babyBirthdateQuestion": "Когда родился ваш малыш?",
+  "enterBabyBirthdate": "Введите дату рождения вашего малыша",
+  "day": "День",
+  "month": "Месяц",
+  "year": "Год",
+
+  "babyWeightQuestion": "Какой вес вашего малыша?",
+  "enterWeightKg": "Введите вес в килограммах.",
+  "weightInKg": "Вес в кг",
+
+  "babyHeightQuestion": "Какой рост вашего малыша?",
+  "enterHeightCm": "Введите рост в сантиметрах.",
+  "heightInCm": "Рост в см",
+
+  "welcomeHome": "Добро пожаловать",
+  "homeDescription": "Здесь появится панель отслеживания вашего малыша"
+}

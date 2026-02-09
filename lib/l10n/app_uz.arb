@@ -1,0 +1,73 @@
+{
+  "@@locale": "uz",
+  "appName": "Novda",
+
+  "continueButton": "Davom etish",
+  "selectLanguage": "Tilni tanlang",
+
+  "onboardingTitle1": "Chaqaloqning kunlik faoliyatlarini kuzating",
+  "onboardingDescription1": "Har kuni tartibli bo'lish uchun ovqatlanish, uyqu, tagliklar va boshqalarni bitta oddiy panelda qayd qiling.",
+
+  "onboardingTitle2": "Eslatmalar o'rnating",
+  "onboardingDescription2": "Ovqatlanish yoki dori haqida hech qachon unutmang, kerakli paytda foydali bildirishnomalar oling.",
+
+  "onboardingTitle3": "Chaqaloq rivojlanishini kuzating",
+  "onboardingDescription3": "Chaqaloqingizning o'sishi va tartibini kuzating, har bir kichik yutuqni nishonlang.",
+
+  "height": "Bo'yi",
+  "weight": "Vazni",
+
+  "today": "Bugun",
+  "medication": "Dori",
+  "other": "Boshqa",
+
+  "errorWrongFormat": "Noto'g'ri format kiritdingiz",
+  "errorWrongCode": "Noto'g'ri kod kiritildi",
+
+  "email": "Elektron pochta",
+  "enterYourEmail": "Elektron pochtangizni kiriting",
+
+  "enterPhoneNumber": "Telefon raqamingizni kiriting",
+  "phoneNumberHint": "Telefon raqami",
+  "receiveCodeDescription": "Siz 6 xonali kod olasiz.",
+  "termsOfUse": "Foydalanish shartlari",
+  "privacyPolicy": "Maxfiylik siyosati",
+  "termsAcceptance": "'Davom etish' tugmasini bosish orqali bizning shartlarimizni qabul qilasiz",
+  "termsCheckboxAcceptance": "Ushbu katakchani belgilash orqali siz bizning shartlarimizga rozilik bildirasiz",
+  "and": "va",
+
+  "enterVerificationCode": "Tasdiqlash kodini kiriting",
+  "codeSentTo": "Biz 6 xonali kodni yuboردik",
+  "resendCode": "Kodni qayta yuborish",
+  "sendAgainAfter": "Keyin qayta yuboring",
+
+  "whoIsYourBaby": "Chaqaloqingiz kim?",
+  "selectBabyGender": "Chaqaloqingizning jinsini tanlang",
+  "boy": "O'g'il bola",
+  "girl": "Qiz bola",
+  "appTheme": "Ilova mavzusi",
+  "autoWarm": "Avto (issiq)",
+  "warm": "Issiq",
+  "cold": "Sovuq",
+
+  "babyNameQuestion": "Chaqaloqingizning ismi nima?",
+  "enterBabyName": "Chaqaloqingizning to'liq ismini kiriting",
+  "babyNameHint": "Chaqaloq ismi",
+
+  "babyBirthdateQuestion": "Chaqaloqingiz qachon tug'ilgan?",
+  "enterBabyBirthdate": "Chaqaloqingizning tug'ilgan sanasini kiriting",
+  "day": "Kun",
+  "month": "Oy",
+  "year": "Yil",
+
+  "babyWeightQuestion": "Chaqaloqingizning vazni qancha?",
+  "enterWeightKg": "Vaznini kilogrammlarda kiriting.",
+  "weightInKg": "Vazni kg da",
+
+  "babyHeightQuestion": "Chaqaloqingizning bo'yi qancha?",
+  "enterHeightCm": "Bo'yini santimetrlarda kiriting.",
+  "heightInCm": "Bo'yi sm da",
+
+  "welcomeHome": "Xush kelibsiz",
+  "homeDescription": "Chaqaloqingizni kuzatish paneli shu yerda paydo bo'ladi"
+}

@@ -69,5 +69,9 @@
   "heightInCm": "Height in cm",
 
   "welcomeHome": "Welcome Home",
-  "homeDescription": "Your baby tracking dashboard will appear here"
+  "homeDescription": "Your baby tracking dashboard will appear here",
+
+  "yourChildren": "Your children",
+  "whichChildToSelect": "Which one do you select",
+  "addAChild": "Add a child"
 }

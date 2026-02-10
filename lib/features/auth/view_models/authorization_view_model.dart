@@ -194,6 +194,32 @@ class AuthorizationViewModel extends BaseViewModel implements VerificationViewMo
     }
   }
 
+  /// Load all children for current user
+  Future<List<ChildListItem>> loadChildren() async {
+    setLoading();
+    try {
+      final children = await _childrenUseCase.getChildren();
+      setSuccess();
+      return children;
+    } catch (e) {
+      handleException(e);
+      return [];
+    }
+  }
+
+  /// Select a child as active
+  Future<bool> selectChild(int childId) async {
+    setLoading();
+    try {
+      await _childrenUseCase.selectChild(childId);
+      setSuccess();
+      return true;
+    } catch (e) {
+      handleException(e);
+      return false;
+    }
+  }
+
   /// Clear registration data
   void clearRegistrationData() {
     _registrationData

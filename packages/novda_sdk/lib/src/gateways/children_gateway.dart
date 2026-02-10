@@ -21,9 +21,13 @@ class ChildrenGatewayImpl implements ChildrenGateway {
   Future<List<ChildListItem>> getChildren() async {
     return _client.get(
       '/api/v1/children',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => ChildListItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) {
+        final data = json as Map<String, dynamic>;
+        final children = data['children'] as List<dynamic>;
+        return children
+            .map((e) => ChildListItem.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 

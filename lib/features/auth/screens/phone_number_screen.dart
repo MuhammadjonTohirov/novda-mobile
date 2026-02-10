@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novda/core/ui/app_checkbox.dart';
-import 'package:novda/features/onboarding/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/extensions.dart';
@@ -11,6 +10,7 @@ import '../../home/home.dart';
 import '../view_models/authorization_view_model.dart';
 import '../../../core/ui/verification/verification_view_model.dart';
 import 'baby_gender_screen.dart';
+import 'children_selection_screen.dart';
 import '../../../core/ui/verification/verification_screen.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
@@ -60,8 +60,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               if (!mounted) return;
 
               if (hasChildren) {
-                // User already has children, go to home screen
-                _goToHomeScreen();
+                // User already has children, let them select or add new
+                _goToChildrenSelectionScreen();
               } else {
                 // User needs to add a child
                 _goToBabyGenderScreen();
@@ -80,6 +80,18 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         builder: (context) => ChangeNotifierProvider.value(
           value: viewModel,
           child: const BabyGenderScreen(),
+        ),
+      ),
+    );
+  }
+
+  void _goToChildrenSelectionScreen() {
+    final viewModel = context.read<AuthorizationViewModel>();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider.value(
+          value: viewModel,
+          child: const ChildrenSelectionScreen(),
         ),
       ),
     );

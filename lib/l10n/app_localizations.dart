@@ -423,6 +423,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your baby tracking dashboard will appear here'**
   String get homeDescription;
+
+  /// No description provided for @yourChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Your children'**
+  String get yourChildren;
+
+  /// No description provided for @whichChildToSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Which one do you select'**
+  String get whichChildToSelect;
+
+  /// No description provided for @addAChild.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a child'**
+  String get addAChild;
 }
 
 class _AppLocalizationsDelegate

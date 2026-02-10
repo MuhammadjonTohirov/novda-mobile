@@ -176,4 +176,13 @@ class AppLocalizationsUz extends AppLocalizations {
   @override
   String get homeDescription =>
       'Chaqaloqingizni kuzatish paneli shu yerda paydo bo\'ladi';
+
+  @override
+  String get yourChildren => 'Bolalaringiz';
+
+  @override
+  String get whichChildToSelect => 'Qaysi birini tanlaysiz';
+
+  @override
+  String get addAChild => 'Bola qo\'shish';
 }

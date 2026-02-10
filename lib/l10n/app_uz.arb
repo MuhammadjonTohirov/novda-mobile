@@ -69,5 +69,9 @@
   "heightInCm": "Bo'yi sm da",
 
   "welcomeHome": "Xush kelibsiz",
-  "homeDescription": "Chaqaloqingizni kuzatish paneli shu yerda paydo bo'ladi"
+  "homeDescription": "Chaqaloqingizni kuzatish paneli shu yerda paydo bo'ladi",
+
+  "yourChildren": "Bolalaringiz",
+  "whichChildToSelect": "Qaysi birini tanlaysiz",
+  "addAChild": "Bola qo'shish"
 }

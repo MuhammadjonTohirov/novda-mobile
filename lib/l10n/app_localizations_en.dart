@@ -174,4 +174,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeDescription => 'Your baby tracking dashboard will appear here';
+
+  @override
+  String get yourChildren => 'Your children';
+
+  @override
+  String get whichChildToSelect => 'Which one do you select';
+
+  @override
+  String get addAChild => 'Add a child';
 }

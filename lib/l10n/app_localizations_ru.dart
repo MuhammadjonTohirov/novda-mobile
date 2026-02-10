@@ -175,4 +175,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get homeDescription =>
       'Здесь появится панель отслеживания вашего малыша';
+
+  @override
+  String get yourChildren => 'Ваши дети';
+
+  @override
+  String get whichChildToSelect => 'Кого вы выбираете';
+
+  @override
+  String get addAChild => 'Добавить ребёнка';
 }

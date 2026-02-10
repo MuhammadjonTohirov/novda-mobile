@@ -69,5 +69,9 @@
   "heightInCm": "Рост в см",
 
   "welcomeHome": "Добро пожаловать",
-  "homeDescription": "Здесь появится панель отслеживания вашего малыша"
+  "homeDescription": "Здесь появится панель отслеживания вашего малыша",
+
+  "yourChildren": "Ваши дети",
+  "whichChildToSelect": "Кого вы выбираете",
+  "addAChild": "Добавить ребёнка"
 }

@@ -48,7 +48,12 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
 
     if (!mounted) return;
 
-    if (success) {
+    if (success && viewModel.createdChild != null) {
+      // Select the newly created child
+      await viewModel.selectChild(viewModel.createdChild!.id);
+
+      if (!mounted) return;
+
       // Navigate to home screen, clearing the navigation stack
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const HomeScreen()),

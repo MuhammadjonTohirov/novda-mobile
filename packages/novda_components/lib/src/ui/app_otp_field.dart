@@ -33,14 +33,8 @@ class _AppOtpFieldState extends State<AppOtpField> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(
-      widget.length,
-      (_) => TextEditingController(),
-    );
-    _focusNodes = List.generate(
-      widget.length,
-      (_) => FocusNode(),
-    );
+    _controllers = List.generate(widget.length, (_) => TextEditingController());
+    _focusNodes = List.generate(widget.length, (_) => FocusNode());
 
     for (var i = 0; i < widget.length; i++) {
       _focusNodes[i].addListener(() {
@@ -128,9 +122,7 @@ class _AppOtpFieldState extends State<AppOtpField> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(widget.length, (index) {
             return Padding(
-              padding: EdgeInsets.only(
-                left: index == 0 ? 0 : 8,
-              ),
+              padding: EdgeInsets.only(left: index == 0 ? 0 : 8),
               child: SizedBox(
                 width: 48,
                 height: 48,
@@ -138,9 +130,7 @@ class _AppOtpFieldState extends State<AppOtpField> {
                   decoration: BoxDecoration(
                     color: colors.bgSecondary,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.transparent
-                    ),
+                    border: Border.all(color: Colors.transparent),
                   ),
                   child: KeyboardListener(
                     focusNode: FocusNode(),
@@ -154,9 +144,7 @@ class _AppOtpFieldState extends State<AppOtpField> {
                       style: AppTypography.headingM.copyWith(
                         color: hasError ? colors.error : colors.textPrimary,
                       ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(
                         counterText: '',
                         border: InputBorder.none,
@@ -175,9 +163,7 @@ class _AppOtpFieldState extends State<AppOtpField> {
           Center(
             child: Text(
               widget.errorText!,
-              style: AppTypography.bodySRegular.copyWith(
-                color: colors.error,
-              ),
+              style: AppTypography.bodySRegular.copyWith(color: colors.error),
             ),
           ),
         ],

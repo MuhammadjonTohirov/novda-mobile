@@ -1,2 +1,2 @@
-export 'service_locator.dart';
-export 'token_storage.dart';
+export 'package:novda_core/novda_core.dart'
+    show ServiceLocator, TokenStorage, services;

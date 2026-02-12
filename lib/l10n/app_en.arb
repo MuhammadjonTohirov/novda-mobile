@@ -73,5 +73,40 @@
 
   "yourChildren": "Your children",
   "whichChildToSelect": "Which one do you select",
-  "addAChild": "Add a child"
+  "addAChild": "Add a child",
+
+  "homeMyChild": "My child",
+  "homeEditDetails": "Edit details",
+  "homeNoActiveChildSelected": "No active child selected.",
+  "homeGender": "Gender",
+  "homeUndisclosed": "Undisclosed",
+  "homeActivities": "Activities",
+  "homeActivityHistory": "Activity history",
+  "homeReminders": "Reminders",
+  "homeSeeAll": "See all",
+  "homeAddReminder": "Add reminder",
+  "homeNoActivityTypes": "No activity types available yet.",
+  "homeNoReminders": "No reminders yet.",
+  "homeComingSoon": "Coming soon",
+  "homeFailedLoad": "Failed to load home data.",
+  "homeRetry": "Retry",
+  "homeTomorrow": "Tomorrow",
+  "homeTab": "Home",
+  "progressTab": "Progress",
+  "addTab": "Add",
+  "learnTab": "Learn",
+  "profileTab": "Profile",
+  "homeLogOut": "Log out",
+  "homeReminderTitle": "{activity} reminder",
+  "@homeReminderTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "homeTabPlaceholder": "{tab} tab",
+  "@homeTabPlaceholder": {
+    "placeholders": {
+      "tab": {}
+    }
+  }
 }

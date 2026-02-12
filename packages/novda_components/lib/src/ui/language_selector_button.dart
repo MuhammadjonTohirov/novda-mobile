@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:novda_core/novda_core.dart';
 
 import '../theme/app_theme.dart';
-
-/// Supported languages
-enum AppLanguage {
-  english('en', 'EN', 'English', 'logo_united_kingdom.png'),
-  uzbek('uz', 'UZ', "O'zbek tili", 'logo_uzbekistan.png'),
-  russian('ru', 'RU', 'Русский язык', 'logo_russia.png');
-
-  const AppLanguage(this.code, this.shortCode, this.name, this.flagAsset);
-
-  final String code;
-  final String shortCode;
-  final String name;
-  final String flagAsset;
-
-  String get flagPath => 'assets/images/$flagAsset';
-}
 
 /// Language selector button (shown in top-right corner)
 class LanguageSelectorButton extends StatelessWidget {
@@ -117,12 +102,7 @@ class LanguageSelectionTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isSelected)
-                Icon(
-                  Icons.check,
-                  color: colors.accent,
-                  size: 24,
-                ),
+              if (isSelected) Icon(Icons.check, color: colors.accent, size: 24),
             ],
           ),
         ),

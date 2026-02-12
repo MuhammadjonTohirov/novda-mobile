@@ -185,4 +185,80 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get addAChild => 'Bola qo\'shish';
+
+  @override
+  String get homeMyChild => 'Mening farzandim';
+
+  @override
+  String get homeEditDetails => 'Ma\'lumotlarni tahrirlash';
+
+  @override
+  String get homeNoActiveChildSelected => 'Faol farzand tanlanmagan.';
+
+  @override
+  String get homeGender => 'Jinsi';
+
+  @override
+  String get homeUndisclosed => 'Ko\'rsatilmagan';
+
+  @override
+  String get homeActivities => 'Faoliyatlar';
+
+  @override
+  String get homeActivityHistory => 'Faoliyat tarixi';
+
+  @override
+  String get homeReminders => 'Eslatmalar';
+
+  @override
+  String get homeSeeAll => 'Barchasini ko\'rish';
+
+  @override
+  String get homeAddReminder => 'Eslatma qo\'shish';
+
+  @override
+  String get homeNoActivityTypes => 'Hozircha faoliyat turlari mavjud emas.';
+
+  @override
+  String get homeNoReminders => 'Hozircha eslatmalar yo\'q.';
+
+  @override
+  String get homeComingSoon => 'Tez orada';
+
+  @override
+  String get homeFailedLoad => 'Bosh sahifa ma\'lumotlarini yuklab bo\'lmadi.';
+
+  @override
+  String get homeRetry => 'Qayta urinish';
+
+  @override
+  String get homeTomorrow => 'Ertaga';
+
+  @override
+  String get homeTab => 'Asosiy';
+
+  @override
+  String get progressTab => 'Rivojlanish';
+
+  @override
+  String get addTab => 'Qo\'shish';
+
+  @override
+  String get learnTab => 'O\'rganish';
+
+  @override
+  String get profileTab => 'Profil';
+
+  @override
+  String get homeLogOut => 'Chiqish';
+
+  @override
+  String homeReminderTitle(Object activity) {
+    return '$activity eslatmasi';
+  }
+
+  @override
+  String homeTabPlaceholder(Object tab) {
+    return '$tab bo\'limi';
+  }
 }

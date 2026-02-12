@@ -1,1 +1,2 @@
-export 'app_controller.dart';
+export 'package:novda_core/novda_core.dart'
+    show AppController, AppControllerExtension, AppLanguage, ThemeVariant;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novda/features/auth/view_models/authorization_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/app/app.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
@@ -53,6 +54,10 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
       await viewModel.selectChild(viewModel.createdChild!.id);
 
       if (!mounted) return;
+
+      final resolvedTheme = await viewModel.resolveThemeVariant();
+      if (!mounted) return;
+      context.appController.setThemeVariant(resolvedTheme);
 
       // Navigate to home screen, clearing the navigation stack
       Navigator.of(context).pushAndRemoveUntil(
@@ -148,9 +153,7 @@ class _HeightInputContent extends StatelessWidget {
       children: [
         Text(
           l10n.babyHeightQuestion,
-          style: AppTypography.headingL.copyWith(
-            color: colors.textPrimary,
-          ),
+          style: AppTypography.headingL.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -194,9 +197,7 @@ class _BottomBar extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: colors.bgPrimary,
-        border: Border(
-          top: BorderSide(color: colors.bgSecondary, width: 1),
-        ),
+        border: Border(top: BorderSide(color: colors.bgSecondary, width: 1)),
       ),
       child: AppButton(
         text: l10n.continueButton,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/app/app.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
@@ -60,6 +61,10 @@ class _ChildrenSelectionScreenState extends State<ChildrenSelectionScreen> {
 
     if (!mounted || !success) return;
 
+    final resolvedTheme = await viewModel.resolveThemeVariant();
+    if (!mounted) return;
+    context.appController.setThemeVariant(resolvedTheme);
+
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const HomeScreen()),
       (route) => false,
@@ -94,9 +99,7 @@ class _ChildrenSelectionScreenState extends State<ChildrenSelectionScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: _linearProgressIndicator(context),
-        actions: [
-          const SizedBox(width: 48),
-        ],
+        actions: [const SizedBox(width: 48)],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -160,9 +163,7 @@ class _ChildrenListContent extends StatelessWidget {
       children: [
         Text(
           l10n.yourChildren,
-          style: AppTypography.headingL.copyWith(
-            color: colors.textPrimary,
-          ),
+          style: AppTypography.headingL.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -226,11 +227,7 @@ class _ChildCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.asset(
-              _getIconPath(),
-              width: 40,
-              height: 40,
-            ),
+            Image.asset(_getIconPath(), width: 40, height: 40),
             const SizedBox(width: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,11 +247,7 @@ class _ChildCard extends StatelessWidget {
                 ),
               ],
             ).expanded(),
-            Icon(
-              Icons.chevron_right,
-              color: colors.textSecondary,
-              size: 24,
-            ),
+            Icon(Icons.chevron_right, color: colors.textSecondary, size: 24),
           ],
         ),
       ),
@@ -279,9 +272,7 @@ class _AddChildButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           l10n.addAChild,
-          style: AppTypography.bodyLMedium.copyWith(
-            color: colors.accent,
-          ),
+          style: AppTypography.bodyLMedium.copyWith(color: colors.accent),
         ),
       ),
     );
@@ -289,10 +280,7 @@ class _AddChildButton extends StatelessWidget {
 }
 
 class _BottomBar extends StatelessWidget {
-  const _BottomBar({
-    required this.onPressed,
-    required this.isEnabled,
-  });
+  const _BottomBar({required this.onPressed, required this.isEnabled});
 
   final VoidCallback onPressed;
   final bool isEnabled;
@@ -306,9 +294,7 @@ class _BottomBar extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: colors.bgPrimary,
-        border: Border(
-          top: BorderSide(color: colors.bgSecondary, width: 1),
-        ),
+        border: Border(top: BorderSide(color: colors.bgSecondary, width: 1)),
       ),
       child: AppButton(
         text: l10n.continueButton,

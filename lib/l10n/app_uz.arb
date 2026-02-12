@@ -73,5 +73,40 @@
 
   "yourChildren": "Bolalaringiz",
   "whichChildToSelect": "Qaysi birini tanlaysiz",
-  "addAChild": "Bola qo'shish"
+  "addAChild": "Bola qo'shish",
+
+  "homeMyChild": "Mening farzandim",
+  "homeEditDetails": "Ma'lumotlarni tahrirlash",
+  "homeNoActiveChildSelected": "Faol farzand tanlanmagan.",
+  "homeGender": "Jinsi",
+  "homeUndisclosed": "Ko'rsatilmagan",
+  "homeActivities": "Faoliyatlar",
+  "homeActivityHistory": "Faoliyat tarixi",
+  "homeReminders": "Eslatmalar",
+  "homeSeeAll": "Barchasini ko'rish",
+  "homeAddReminder": "Eslatma qo'shish",
+  "homeNoActivityTypes": "Hozircha faoliyat turlari mavjud emas.",
+  "homeNoReminders": "Hozircha eslatmalar yo'q.",
+  "homeComingSoon": "Tez orada",
+  "homeFailedLoad": "Bosh sahifa ma'lumotlarini yuklab bo'lmadi.",
+  "homeRetry": "Qayta urinish",
+  "homeTomorrow": "Ertaga",
+  "homeTab": "Asosiy",
+  "progressTab": "Rivojlanish",
+  "addTab": "Qo'shish",
+  "learnTab": "O'rganish",
+  "profileTab": "Profil",
+  "homeLogOut": "Chiqish",
+  "homeReminderTitle": "{activity} eslatmasi",
+  "@homeReminderTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "homeTabPlaceholder": "{tab} bo'limi",
+  "@homeTabPlaceholder": {
+    "placeholders": {
+      "tab": {}
+    }
+  }
 }

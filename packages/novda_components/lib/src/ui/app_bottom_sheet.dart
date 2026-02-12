@@ -23,9 +23,7 @@ class AppBottomSheet {
       isScrollControlled: true,
       backgroundColor: colors.bgPrimary,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(24),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) => SafeArea(
         child: Padding(

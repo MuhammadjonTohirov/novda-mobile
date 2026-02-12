@@ -2,57 +2,35 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
-/// Reminder card component for displaying reminder items
-class ReminderCard extends StatelessWidget {
-  const ReminderCard({
+/// Activity card component for displaying activity items
+class ActivityCard extends StatelessWidget {
+  const ActivityCard({
     super.key,
+    required this.icon,
     required this.title,
-    required this.dateTime,
-    required this.category,
-    this.isCompleted = false,
+    required this.duration,
+    required this.time,
+    this.iconColor,
     this.showBackground = true,
     this.onTap,
-    this.onCheckTap,
   });
 
+  final Widget icon;
   final String title;
-  final String dateTime;
-  final String category;
-  final bool isCompleted;
+  final String duration;
+  final String time;
+  final Color? iconColor;
   final bool showBackground;
   final VoidCallback? onTap;
-  final VoidCallback? onCheckTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
     final content = Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: onCheckTap,
-          child: Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: isCompleted ? colors.accent : colors.border,
-                width: 2,
-              ),
-              color: isCompleted ? colors.accent : Colors.transparent,
-            ),
-            child: isCompleted
-                ? Icon(
-                    Icons.check,
-                    size: 16,
-                    color: colors.bgPrimary,
-                  )
-                : null,
-          ),
-        ),
-        const SizedBox(width: 12),
+        SizedBox(width: 48, height: 48, child: icon),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,17 +39,21 @@ class ReminderCard extends StatelessWidget {
                 title,
                 style: AppTypography.bodyLMedium.copyWith(
                   color: colors.textPrimary,
-                  decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
               ),
-              const SizedBox(height: 2),
               Text(
-                '$dateTime • $category',
-                style: AppTypography.bodySRegular.copyWith(
+                duration,
+                style: AppTypography.bodyMRegular.copyWith(
                   color: colors.textSecondary,
                 ),
               ),
             ],
+          ),
+        ),
+        Text(
+          time,
+          style: AppTypography.bodyMRegular.copyWith(
+            color: colors.textSecondary,
           ),
         ),
       ],
@@ -105,7 +87,7 @@ class ReminderCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: content,
       ),
     );

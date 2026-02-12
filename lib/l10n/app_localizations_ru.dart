@@ -184,4 +184,80 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addAChild => 'Добавить ребёнка';
+
+  @override
+  String get homeMyChild => 'Мой ребёнок';
+
+  @override
+  String get homeEditDetails => 'Изменить данные';
+
+  @override
+  String get homeNoActiveChildSelected => 'Активный ребёнок не выбран.';
+
+  @override
+  String get homeGender => 'Пол';
+
+  @override
+  String get homeUndisclosed => 'Не указан';
+
+  @override
+  String get homeActivities => 'Активности';
+
+  @override
+  String get homeActivityHistory => 'История активностей';
+
+  @override
+  String get homeReminders => 'Напоминания';
+
+  @override
+  String get homeSeeAll => 'Смотреть все';
+
+  @override
+  String get homeAddReminder => 'Добавить напоминание';
+
+  @override
+  String get homeNoActivityTypes => 'Типы активностей пока недоступны.';
+
+  @override
+  String get homeNoReminders => 'Напоминаний пока нет.';
+
+  @override
+  String get homeComingSoon => 'Скоро будет';
+
+  @override
+  String get homeFailedLoad => 'Не удалось загрузить данные главной страницы.';
+
+  @override
+  String get homeRetry => 'Повторить';
+
+  @override
+  String get homeTomorrow => 'Завтра';
+
+  @override
+  String get homeTab => 'Главная';
+
+  @override
+  String get progressTab => 'Прогресс';
+
+  @override
+  String get addTab => 'Добавить';
+
+  @override
+  String get learnTab => 'Обучение';
+
+  @override
+  String get profileTab => 'Профиль';
+
+  @override
+  String get homeLogOut => 'Выйти';
+
+  @override
+  String homeReminderTitle(Object activity) {
+    return 'Напоминание: $activity';
+  }
+
+  @override
+  String homeTabPlaceholder(Object tab) {
+    return 'Вкладка: $tab';
+  }
 }

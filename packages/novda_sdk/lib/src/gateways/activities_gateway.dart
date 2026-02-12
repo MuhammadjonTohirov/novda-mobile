@@ -5,11 +5,20 @@ import '../models/activity.dart';
 abstract interface class ActivitiesGateway {
   Future<List<ActivityType>> getActivityTypes();
   Future<List<ConditionType>> getConditionTypes();
-  Future<List<ActivityItem>> getActivities(int childId, ActivityListQuery query);
+  Future<List<ActivityItem>> getActivities(
+    int childId,
+    ActivityListQuery query,
+  );
   Future<ActivityItem> getActivity(int activityId);
   Future<ActivitySummary> getActivitySummary(int childId);
-  Future<ActivityItem> createActivity(int childId, ActivityCreateRequest request);
-  Future<ActivityItem> updateActivity(int activityId, ActivityUpdateRequest request);
+  Future<ActivityItem> createActivity(
+    int childId,
+    ActivityCreateRequest request,
+  );
+  Future<ActivityItem> updateActivity(
+    int activityId,
+    ActivityUpdateRequest request,
+  );
   Future<void> deleteActivity(int activityId);
 }
 
@@ -19,13 +28,40 @@ class ActivitiesGatewayImpl implements ActivitiesGateway {
 
   final ApiClient _client;
 
+  List<dynamic> _extractList(
+    Object? json, {
+    required List<String> candidateKeys,
+  }) {
+    if (json is List<dynamic>) {
+      return json;
+    }
+
+    if (json is Map<String, dynamic>) {
+      for (final key in candidateKeys) {
+        final value = json[key];
+        if (value is List<dynamic>) {
+          return value;
+        }
+      }
+
+      for (final value in json.values) {
+        if (value is List<dynamic>) {
+          return value;
+        }
+      }
+    }
+
+    throw const FormatException('Expected a list response');
+  }
+
   @override
   Future<List<ActivityType>> getActivityTypes() async {
     return _client.get(
       '/api/v1/activities/types',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => ActivityType.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['activity_types', 'types', 'results'],
+      ).map((e) => ActivityType.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -33,9 +69,10 @@ class ActivitiesGatewayImpl implements ActivitiesGateway {
   Future<List<ConditionType>> getConditionTypes() async {
     return _client.get(
       '/api/v1/activities/condition-types',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => ConditionType.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['condition_types', 'types', 'results'],
+      ).map((e) => ConditionType.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -47,9 +84,10 @@ class ActivitiesGatewayImpl implements ActivitiesGateway {
     return _client.get(
       '/api/v1/children/$childId/activities',
       queryParameters: query.toQueryParams(),
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => ActivityItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['activities', 'results'],
+      ).map((e) => ActivityItem.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -65,7 +103,8 @@ class ActivitiesGatewayImpl implements ActivitiesGateway {
   Future<ActivitySummary> getActivitySummary(int childId) async {
     return _client.get(
       '/api/v1/children/$childId/activities/summary',
-      fromJson: (json) => ActivitySummary.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) =>
+          ActivitySummary.fromJson(json as Map<String, dynamic>),
     );
   }
 

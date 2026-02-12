@@ -2,39 +2,53 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
-/// Activity card component for displaying activity items
-class ActivityCard extends StatelessWidget {
-  const ActivityCard({
+/// Reminder card component for displaying reminder items
+class ReminderCard extends StatelessWidget {
+  const ReminderCard({
     super.key,
-    required this.icon,
     required this.title,
-    required this.duration,
-    required this.time,
-    this.iconColor,
+    required this.dateTime,
+    required this.category,
+    this.isCompleted = false,
     this.showBackground = true,
     this.onTap,
+    this.onCheckTap,
   });
 
-  final Widget icon;
   final String title;
-  final String duration;
-  final String time;
-  final Color? iconColor;
+  final String dateTime;
+  final String category;
+  final bool isCompleted;
   final bool showBackground;
   final VoidCallback? onTap;
+  final VoidCallback? onCheckTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
     final content = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 48,
-          height: 48,
-          child: icon,
+        GestureDetector(
+          onTap: onCheckTap,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isCompleted ? colors.accent : colors.border,
+                width: 2,
+              ),
+              color: isCompleted ? colors.accent : Colors.transparent,
+            ),
+            child: isCompleted
+                ? Icon(Icons.check, size: 16, color: colors.bgPrimary)
+                : null,
+          ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,21 +57,17 @@ class ActivityCard extends StatelessWidget {
                 title,
                 style: AppTypography.bodyLMedium.copyWith(
                   color: colors.textPrimary,
+                  decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
               ),
+              const SizedBox(height: 2),
               Text(
-                duration,
-                style: AppTypography.bodyMRegular.copyWith(
+                '$dateTime • $category',
+                style: AppTypography.bodySRegular.copyWith(
                   color: colors.textSecondary,
                 ),
               ),
             ],
-          ),
-        ),
-        Text(
-          time,
-          style: AppTypography.bodyMRegular.copyWith(
-            color: colors.textSecondary,
           ),
         ),
       ],
@@ -91,7 +101,7 @@ class ActivityCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: content,
       ),
     );

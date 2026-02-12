@@ -31,10 +31,7 @@ class AppListTile extends StatelessWidget {
 
     final content = Row(
       children: [
-        if (leading != null) ...[
-          leading!,
-          const SizedBox(width: 12),
-        ],
+        if (leading != null) ...[leading!, const SizedBox(width: 12)],
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,11 +58,7 @@ class AppListTile extends StatelessWidget {
           trailing!,
         ] else if (isSelected) ...[
           const SizedBox(width: 12),
-          Icon(
-            Icons.check,
-            color: colors.accent,
-            size: 24,
-          ),
+          Icon(Icons.check, color: colors.accent, size: 24),
         ],
       ],
     );
@@ -81,7 +74,8 @@ class AppListTile extends StatelessWidget {
               color: colors.bgPrimary,
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: padding ??
+            padding:
+                padding ??
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: content,
           ),
@@ -92,8 +86,8 @@ class AppListTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: padding ??
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding:
+            padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: content,
       ),
     );
@@ -123,10 +117,7 @@ class AppSelectableTile extends StatelessWidget {
 
     final content = Row(
       children: [
-        if (leading != null) ...[
-          leading!,
-          const SizedBox(width: 12),
-        ],
+        if (leading != null) ...[leading!, const SizedBox(width: 12)],
         Expanded(
           child: Text(
             title,
@@ -137,11 +128,7 @@ class AppSelectableTile extends StatelessWidget {
         ),
         if (isSelected) ...[
           const SizedBox(width: 12),
-          Icon(
-            Icons.check,
-            color: colors.accent,
-            size: 24,
-          ),
+          Icon(Icons.check, color: colors.accent, size: 24),
         ],
       ],
     );

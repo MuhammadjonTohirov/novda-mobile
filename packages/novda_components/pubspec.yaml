@@ -1,0 +1,17 @@
+name: novda_components
+description: Shared UI components, theme, and UI extensions for Novda
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  novda_core:
+    path: ../novda_core
+
+dev_dependencies:
+  flutter_lints: ^5.0.0

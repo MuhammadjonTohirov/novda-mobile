@@ -150,8 +150,8 @@ class _AppPhoneFieldState extends State<AppPhoneField> {
                     },
                   )
                 : hasError
-                    ? Icon(Icons.error_outline, color: colors.error, size: 24)
-                    : null,
+                ? Icon(Icons.error_outline, color: colors.error, size: 24)
+                : null,
           ),
         ),
         if (hasError) ...[
@@ -176,12 +176,12 @@ class _PhoneInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     final text = newValue.text;
-    
+
     if (text.isEmpty) return newValue;
 
     final buffer = StringBuffer();
     final digits = text.replaceAll(RegExp(r'[^\d]'), '');
-    
+
     // Format: (xx) xxx-xx-xx
     for (int i = 0; i < digits.length; i++) {
       if (i == 0) buffer.write('(');
@@ -190,7 +190,7 @@ class _PhoneInputFormatter extends TextInputFormatter {
       if (i == 7) buffer.write('-');
       buffer.write(digits[i]);
     }
-    
+
     final string = buffer.toString();
     return newValue.copyWith(
       text: string,

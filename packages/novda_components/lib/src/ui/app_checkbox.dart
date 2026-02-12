@@ -22,7 +22,10 @@ class AppCheckbox extends StatelessWidget {
         height: 24,
         decoration: BoxDecoration(
           color: value ? Colors.black12 : Colors.transparent,
-          border: Border.all(color: value ? Colors.transparent : Colors.black12, width: value ? 0 : 1),
+          border: Border.all(
+            color: value ? Colors.transparent : Colors.black12,
+            width: value ? 0 : 1,
+          ),
           borderRadius: BorderRadius.circular(4),
         ),
         child: value

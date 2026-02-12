@@ -1,23 +1,28 @@
 import 'package:novda/features/auth/models/registrantion_data.dart';
+import 'package:novda_core/novda_core.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
-import '../../../core/base/base_view_model.dart';
-import '../../../core/services/services.dart';
-import '../../../core/ui/verification/verification_view_model.dart';
+export 'package:novda_core/novda_core.dart' show VerificationViewModel;
+
+enum PostVerificationRoute { goHome, selectChild, createChild }
 
 /// View model for the entire authentication flow
-class AuthorizationViewModel extends BaseViewModel implements VerificationViewModel {
+class AuthorizationViewModel extends BaseViewModel
+    implements VerificationViewModel {
   AuthorizationViewModel({
     AuthUseCase? authUseCase,
+    UserUseCase? userUseCase,
     ChildrenUseCase? childrenUseCase,
     MeasurementsUseCase? measurementsUseCase,
     TokenStorage? tokenStorage,
-  })  : _authUseCase = authUseCase ?? services.sdk.auth,
-        _childrenUseCase = childrenUseCase ?? services.sdk.children,
-        _measurementsUseCase = measurementsUseCase ?? services.sdk.measurements,
-        _tokenStorage = tokenStorage ?? services.tokenStorage;
+  }) : _authUseCase = authUseCase ?? services.sdk.auth,
+       _userUseCase = userUseCase ?? services.sdk.user,
+       _childrenUseCase = childrenUseCase ?? services.sdk.children,
+       _measurementsUseCase = measurementsUseCase ?? services.sdk.measurements,
+       _tokenStorage = tokenStorage ?? services.tokenStorage;
 
   final AuthUseCase _authUseCase;
+  final UserUseCase _userUseCase;
   final ChildrenUseCase _childrenUseCase;
   final MeasurementsUseCase _measurementsUseCase;
   final TokenStorage _tokenStorage;
@@ -187,10 +192,45 @@ class AuthorizationViewModel extends BaseViewModel implements VerificationViewMo
   /// Check if user has existing children
   Future<bool> checkExistingChildren() async {
     try {
-      final children = await _childrenUseCase.getChildren();
+      final children = await loadChildren();
       return children.isNotEmpty;
     } catch (e) {
       return false;
+    }
+  }
+
+  /// Decide the next route after OTP verification.
+  ///
+  /// Flow:
+  /// 1) Read user profile and `last_active_child`
+  /// 2) Load children list
+  /// 3) If `last_active_child` exists in list -> activate and go home
+  /// 4) If no children -> create child flow
+  /// 5) Otherwise -> children selection
+  Future<PostVerificationRoute> resolvePostVerificationRoute() async {
+    try {
+      final user = await _userUseCase.getProfile();
+      final children = await _childrenUseCase.getChildren();
+
+      if (children.isEmpty) {
+        return PostVerificationRoute.createChild;
+      }
+
+      final lastActiveChildId = user.lastActiveChild;
+      if (lastActiveChildId != null) {
+        final childExists = children.any(
+          (child) => child.id == lastActiveChildId,
+        );
+        if (childExists) {
+          await _childrenUseCase.selectChild(lastActiveChildId);
+          return PostVerificationRoute.goHome;
+        }
+      }
+
+      return PostVerificationRoute.selectChild;
+    } catch (e) {
+      handleException(e);
+      return PostVerificationRoute.createChild;
     }
   }
 
@@ -218,6 +258,11 @@ class AuthorizationViewModel extends BaseViewModel implements VerificationViewMo
       handleException(e);
       return false;
     }
+  }
+
+  /// Resolve app theme from the current profile preference.
+  Future<ThemeVariant> resolveThemeVariant() {
+    return services.resolveThemeVariant();
   }
 
   /// Clear registration data

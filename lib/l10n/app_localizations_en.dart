@@ -183,4 +183,80 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addAChild => 'Add a child';
+
+  @override
+  String get homeMyChild => 'My child';
+
+  @override
+  String get homeEditDetails => 'Edit details';
+
+  @override
+  String get homeNoActiveChildSelected => 'No active child selected.';
+
+  @override
+  String get homeGender => 'Gender';
+
+  @override
+  String get homeUndisclosed => 'Undisclosed';
+
+  @override
+  String get homeActivities => 'Activities';
+
+  @override
+  String get homeActivityHistory => 'Activity history';
+
+  @override
+  String get homeReminders => 'Reminders';
+
+  @override
+  String get homeSeeAll => 'See all';
+
+  @override
+  String get homeAddReminder => 'Add reminder';
+
+  @override
+  String get homeNoActivityTypes => 'No activity types available yet.';
+
+  @override
+  String get homeNoReminders => 'No reminders yet.';
+
+  @override
+  String get homeComingSoon => 'Coming soon';
+
+  @override
+  String get homeFailedLoad => 'Failed to load home data.';
+
+  @override
+  String get homeRetry => 'Retry';
+
+  @override
+  String get homeTomorrow => 'Tomorrow';
+
+  @override
+  String get homeTab => 'Home';
+
+  @override
+  String get progressTab => 'Progress';
+
+  @override
+  String get addTab => 'Add';
+
+  @override
+  String get learnTab => 'Learn';
+
+  @override
+  String get profileTab => 'Profile';
+
+  @override
+  String get homeLogOut => 'Log out';
+
+  @override
+  String homeReminderTitle(Object activity) {
+    return '$activity reminder';
+  }
+
+  @override
+  String homeTabPlaceholder(Object tab) {
+    return '$tab tab';
+  }
 }

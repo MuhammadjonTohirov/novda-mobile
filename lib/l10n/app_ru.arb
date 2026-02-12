@@ -73,5 +73,40 @@
 
   "yourChildren": "Ваши дети",
   "whichChildToSelect": "Кого вы выбираете",
-  "addAChild": "Добавить ребёнка"
+  "addAChild": "Добавить ребёнка",
+
+  "homeMyChild": "Мой ребёнок",
+  "homeEditDetails": "Изменить данные",
+  "homeNoActiveChildSelected": "Активный ребёнок не выбран.",
+  "homeGender": "Пол",
+  "homeUndisclosed": "Не указан",
+  "homeActivities": "Активности",
+  "homeActivityHistory": "История активностей",
+  "homeReminders": "Напоминания",
+  "homeSeeAll": "Смотреть все",
+  "homeAddReminder": "Добавить напоминание",
+  "homeNoActivityTypes": "Типы активностей пока недоступны.",
+  "homeNoReminders": "Напоминаний пока нет.",
+  "homeComingSoon": "Скоро будет",
+  "homeFailedLoad": "Не удалось загрузить данные главной страницы.",
+  "homeRetry": "Повторить",
+  "homeTomorrow": "Завтра",
+  "homeTab": "Главная",
+  "progressTab": "Прогресс",
+  "addTab": "Добавить",
+  "learnTab": "Обучение",
+  "profileTab": "Профиль",
+  "homeLogOut": "Выйти",
+  "homeReminderTitle": "Напоминание: {activity}",
+  "@homeReminderTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "homeTabPlaceholder": "Вкладка: {tab}",
+  "@homeTabPlaceholder": {
+    "placeholders": {
+      "tab": {}
+    }
+  }
 }

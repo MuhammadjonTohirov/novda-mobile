@@ -50,7 +50,9 @@ class AppButton extends StatelessWidget {
             : Text(
                 text,
                 style: AppTypography.bodyLMedium.copyWith(
-                  color: isEnabled ? colors.textOnPrimary : colors.textSecondary,
+                  color: isEnabled
+                      ? colors.textOnPrimary
+                      : colors.textSecondary,
                 ),
               ),
       ),

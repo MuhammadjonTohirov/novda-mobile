@@ -441,6 +441,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a child'**
   String get addAChild;
+
+  /// No description provided for @homeMyChild.
+  ///
+  /// In en, this message translates to:
+  /// **'My child'**
+  String get homeMyChild;
+
+  /// No description provided for @homeEditDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit details'**
+  String get homeEditDetails;
+
+  /// No description provided for @homeNoActiveChildSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No active child selected.'**
+  String get homeNoActiveChildSelected;
+
+  /// No description provided for @homeGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get homeGender;
+
+  /// No description provided for @homeUndisclosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Undisclosed'**
+  String get homeUndisclosed;
+
+  /// No description provided for @homeActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get homeActivities;
+
+  /// No description provided for @homeActivityHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity history'**
+  String get homeActivityHistory;
+
+  /// No description provided for @homeReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get homeReminders;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeAddReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get homeAddReminder;
+
+  /// No description provided for @homeNoActivityTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity types available yet.'**
+  String get homeNoActivityTypes;
+
+  /// No description provided for @homeNoReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders yet.'**
+  String get homeNoReminders;
+
+  /// No description provided for @homeComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get homeComingSoon;
+
+  /// No description provided for @homeFailedLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load home data.'**
+  String get homeFailedLoad;
+
+  /// No description provided for @homeRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get homeRetry;
+
+  /// No description provided for @homeTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get homeTomorrow;
+
+  /// No description provided for @homeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTab;
+
+  /// No description provided for @progressTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progressTab;
+
+  /// No description provided for @addTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addTab;
+
+  /// No description provided for @learnTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn'**
+  String get learnTab;
+
+  /// No description provided for @profileTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTab;
+
+  /// No description provided for @homeLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get homeLogOut;
+
+  /// No description provided for @homeReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{activity} reminder'**
+  String homeReminderTitle(Object activity);
+
+  /// No description provided for @homeTabPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'{tab} tab'**
+  String homeTabPlaceholder(Object tab);
 }
 
 class _AppLocalizationsDelegate

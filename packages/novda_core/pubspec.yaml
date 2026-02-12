@@ -1,0 +1,17 @@
+name: novda_core
+description: Shared non-UI core for Novda app and packages
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  novda_sdk:
+    path: ../novda_sdk
+  shared_preferences: ^2.2.3
+
+dev_dependencies:
+  flutter_lints: ^5.0.0

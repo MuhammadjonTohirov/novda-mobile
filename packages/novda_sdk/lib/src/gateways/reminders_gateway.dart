@@ -6,9 +6,16 @@ abstract interface class RemindersGateway {
   Future<List<Reminder>> getReminders(int childId, ReminderListQuery query);
   Future<Reminder> getReminder(int reminderId);
   Future<List<CalendarDay>> getCalendar(int childId, String month);
-  Future<List<Reminder>> searchReminders(int childId, String query, {int? limit});
+  Future<List<Reminder>> searchReminders(
+    int childId,
+    String query, {
+    int? limit,
+  });
   Future<Reminder> createReminder(int childId, ReminderCreateRequest request);
-  Future<Reminder> updateReminder(int reminderId, ReminderUpdateRequest request);
+  Future<Reminder> updateReminder(
+    int reminderId,
+    ReminderUpdateRequest request,
+  );
   Future<Reminder> completeReminder(int reminderId);
   Future<void> deleteReminder(int reminderId);
 }
@@ -19,6 +26,32 @@ class RemindersGatewayImpl implements RemindersGateway {
 
   final ApiClient _client;
 
+  List<dynamic> _extractList(
+    Object? json, {
+    required List<String> candidateKeys,
+  }) {
+    if (json is List<dynamic>) {
+      return json;
+    }
+
+    if (json is Map<String, dynamic>) {
+      for (final key in candidateKeys) {
+        final value = json[key];
+        if (value is List<dynamic>) {
+          return value;
+        }
+      }
+
+      for (final value in json.values) {
+        if (value is List<dynamic>) {
+          return value;
+        }
+      }
+    }
+
+    throw const FormatException('Expected a list response');
+  }
+
   @override
   Future<List<Reminder>> getReminders(
     int childId,
@@ -27,9 +60,10 @@ class RemindersGatewayImpl implements RemindersGateway {
     return _client.get(
       '/api/v1/children/$childId/reminders',
       queryParameters: query.toQueryParams(),
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => Reminder.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['reminders', 'results'],
+      ).map((e) => Reminder.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -46,9 +80,10 @@ class RemindersGatewayImpl implements RemindersGateway {
     return _client.get(
       '/api/v1/children/$childId/reminders/calendar',
       queryParameters: {'month': month},
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => CalendarDay.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['calendar', 'days', 'results'],
+      ).map((e) => CalendarDay.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -64,9 +99,10 @@ class RemindersGatewayImpl implements RemindersGateway {
         'q': query,
         if (limit != null) 'limit': limit.toString(),
       },
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => Reminder.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => _extractList(
+        json,
+        candidateKeys: const ['reminders', 'results'],
+      ).map((e) => Reminder.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 

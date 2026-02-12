@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:novda/core/ui/app_checkbox.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/app/app.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
 import '../../home/home.dart';
 import '../view_models/authorization_view_model.dart';
-import '../../../core/ui/verification/verification_view_model.dart';
 import 'baby_gender_screen.dart';
 import 'children_selection_screen.dart';
 import '../../../core/ui/verification/verification_screen.dart';
@@ -46,29 +45,37 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     final success = await viewModel.requestOtp(fullPhoneNumber);
 
     if (!mounted || !success) return;
-    
+
     Navigator.of(context).push(
       CupertinoPageRoute(
         fullscreenDialog: true,
-        builder: (context) => ChangeNotifierProvider<VerificationViewModel>.value(
-          value: viewModel,
-          child: VerificationScreen(
-            onSuccess: () async {
-              // Check if user has existing children
-              final hasChildren = await viewModel.checkExistingChildren();
+        builder: (pageContext) =>
+            ChangeNotifierProvider<VerificationViewModel>.value(
+              value: viewModel,
+              child: VerificationScreen(
+                onSuccess: () async {
+                  final route = await viewModel.resolvePostVerificationRoute();
 
-              if (!mounted) return;
+                  if (!mounted) return;
 
-              if (hasChildren) {
-                // User already has children, let them select or add new
-                _goToChildrenSelectionScreen();
-              } else {
-                // User needs to add a child
-                _goToBabyGenderScreen();
-              }
-            },
-          ),
-        ),
+                  switch (route) {
+                    case PostVerificationRoute.goHome:
+                      final resolvedTheme = await viewModel
+                          .resolveThemeVariant();
+                      if (!mounted) return;
+                      context.appController.setThemeVariant(resolvedTheme);
+                      _goToHomeScreen();
+                      break;
+                    case PostVerificationRoute.selectChild:
+                      _goToChildrenSelectionScreen();
+                      break;
+                    case PostVerificationRoute.createChild:
+                      _goToBabyGenderScreen();
+                      break;
+                  }
+                },
+              ),
+            ),
       ),
     );
   }

@@ -14,6 +14,10 @@ dependencies:
   intl: any
   novda_sdk:
     path: packages/novda_sdk
+  novda_core:
+    path: packages/novda_core
+  novda_components:
+    path: packages/novda_components
   shared_preferences: ^2.2.3
   provider: ^6.1.2
 

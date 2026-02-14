@@ -216,6 +216,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeAddReminder => 'Добавить напоминание';
 
   @override
+  String get addActionSheetTitle => 'Добавить новый элемент';
+
+  @override
+  String get addActionSheetDescription =>
+      'Запишите активность или создайте напоминание на потом.';
+
+  @override
+  String get addActionTypeActivity => 'Активность';
+
+  @override
+  String get addActionTypeReminder => 'Напоминание';
+
+  @override
   String get homeNoActivityTypes => 'Типы активностей пока недоступны.';
 
   @override
@@ -247,6 +260,83 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileTab => 'Профиль';
+
+  @override
+  String get profileTitle => 'Профиль';
+
+  @override
+  String get profileParent => 'Родитель';
+
+  @override
+  String get profileMyBabies => 'Мои дети';
+
+  @override
+  String get profileAdd => 'Добавить';
+
+  @override
+  String get profileSavedArticles => 'Сохранённые статьи';
+
+  @override
+  String get profileSettings => 'Настройки';
+
+  @override
+  String get profileChangePhoneNumber => 'Сменить номер телефона';
+
+  @override
+  String get profileFollowUs => 'Подписывайтесь на нас';
+
+  @override
+  String get profileSupport => 'Поддержка';
+
+  @override
+  String get profileLegalDocuments => 'Юридические документы';
+
+  @override
+  String get profileLogoutConfirmTitle => 'Выйти?';
+
+  @override
+  String get profileLogoutConfirmDescription =>
+      'Чтобы продолжить, нужно будет снова войти в аккаунт.';
+
+  @override
+  String get settingsTitle => 'Настройки';
+
+  @override
+  String get settingsAppTheme => 'Тема приложения';
+
+  @override
+  String get settingsLanguage => 'Язык';
+
+  @override
+  String get settingsNotifications => 'Уведомления';
+
+  @override
+  String get settingsSelectLanguage => 'Выберите язык';
+
+  @override
+  String get settingsThemeWarm => 'Тёплая';
+
+  @override
+  String get settingsThemeCalm => 'Спокойная';
+
+  @override
+  String get settingsThemeAutoWarm => 'Авто (тёплая)';
+
+  @override
+  String get settingsDeleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get settingsDeleteAccountTitle => 'Удалить аккаунт?';
+
+  @override
+  String get settingsDeleteAccountDescription =>
+      'Все ваши данные будут удалены безвозвратно.';
+
+  @override
+  String get settingsCancel => 'Отмена';
+
+  @override
+  String get settingsDelete => 'Удалить';
 
   @override
   String get homeLogOut => 'Выйти';

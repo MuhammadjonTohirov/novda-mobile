@@ -37,7 +37,6 @@ class _NovdaAppState extends State<NovdaApp> {
 
   @override
   Widget build(BuildContext context) {
-    
     return AppController(
       themeVariant: _themeVariant,
       locale: _locale,

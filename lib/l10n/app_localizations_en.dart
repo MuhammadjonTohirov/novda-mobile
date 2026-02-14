@@ -215,6 +215,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAddReminder => 'Add reminder';
 
   @override
+  String get addActionSheetTitle => 'Add new item';
+
+  @override
+  String get addActionSheetDescription =>
+      'Log an activity or create a reminder for later.';
+
+  @override
+  String get addActionTypeActivity => 'Activity';
+
+  @override
+  String get addActionTypeReminder => 'Reminder';
+
+  @override
   String get homeNoActivityTypes => 'No activity types available yet.';
 
   @override
@@ -246,6 +259,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileTab => 'Profile';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileParent => 'Parent';
+
+  @override
+  String get profileMyBabies => 'My babies';
+
+  @override
+  String get profileAdd => 'Add';
+
+  @override
+  String get profileSavedArticles => 'Saved articles';
+
+  @override
+  String get profileSettings => 'Settings';
+
+  @override
+  String get profileChangePhoneNumber => 'Change phone number';
+
+  @override
+  String get profileFollowUs => 'Follow us';
+
+  @override
+  String get profileSupport => 'Support';
+
+  @override
+  String get profileLegalDocuments => 'Legal documents';
+
+  @override
+  String get profileLogoutConfirmTitle => 'Log out?';
+
+  @override
+  String get profileLogoutConfirmDescription =>
+      'You\'ll need to log in again to access your account.';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsAppTheme => 'App theme';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get settingsSelectLanguage => 'Select language';
+
+  @override
+  String get settingsThemeWarm => 'Warm';
+
+  @override
+  String get settingsThemeCalm => 'Calm';
+
+  @override
+  String get settingsThemeAutoWarm => 'Auto (warm)';
+
+  @override
+  String get settingsDeleteAccount => 'Delete account';
+
+  @override
+  String get settingsDeleteAccountTitle => 'Delete account?';
+
+  @override
+  String get settingsDeleteAccountDescription =>
+      'All your data will be permanently removed.';
+
+  @override
+  String get settingsCancel => 'Cancel';
+
+  @override
+  String get settingsDelete => 'Delete';
 
   @override
   String get homeLogOut => 'Log out';

@@ -6,7 +6,7 @@ import '../../../core/app/app.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
-import '../../home/home.dart';
+import '../../main_tab/tabs/home/home.dart';
 import '../view_models/authorization_view_model.dart';
 import 'baby_gender_screen.dart';
 
@@ -61,12 +61,14 @@ class _ChildrenSelectionScreenState extends State<ChildrenSelectionScreen> {
 
     if (!mounted || !success) return;
 
-    final resolvedTheme = await viewModel.resolveThemeVariant();
+    final resolvedTheme = await viewModel.resolveThemeVariant(
+      selectedChildId: _selectedChildId,
+    );
     if (!mounted) return;
     context.appController.setThemeVariant(resolvedTheme);
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const MainTabScreen()),
       (route) => false,
     );
   }

@@ -502,6 +502,30 @@ abstract class AppLocalizations {
   /// **'Add reminder'**
   String get homeAddReminder;
 
+  /// No description provided for @addActionSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new item'**
+  String get addActionSheetTitle;
+
+  /// No description provided for @addActionSheetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Log an activity or create a reminder for later.'**
+  String get addActionSheetDescription;
+
+  /// No description provided for @addActionTypeActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get addActionTypeActivity;
+
+  /// No description provided for @addActionTypeReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get addActionTypeReminder;
+
   /// No description provided for @homeNoActivityTypes.
   ///
   /// In en, this message translates to:
@@ -567,6 +591,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTab;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent'**
+  String get profileParent;
+
+  /// No description provided for @profileMyBabies.
+  ///
+  /// In en, this message translates to:
+  /// **'My babies'**
+  String get profileMyBabies;
+
+  /// No description provided for @profileAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get profileAdd;
+
+  /// No description provided for @profileSavedArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved articles'**
+  String get profileSavedArticles;
+
+  /// No description provided for @profileSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get profileSettings;
+
+  /// No description provided for @profileChangePhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change phone number'**
+  String get profileChangePhoneNumber;
+
+  /// No description provided for @profileFollowUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us'**
+  String get profileFollowUs;
+
+  /// No description provided for @profileSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get profileSupport;
+
+  /// No description provided for @profileLegalDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal documents'**
+  String get profileLegalDocuments;
+
+  /// No description provided for @profileLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get profileLogoutConfirmTitle;
+
+  /// No description provided for @profileLogoutConfirmDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to log in again to access your account.'**
+  String get profileLogoutConfirmDescription;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsAppTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'App theme'**
+  String get settingsAppTheme;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsSelectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get settingsSelectLanguage;
+
+  /// No description provided for @settingsThemeWarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm'**
+  String get settingsThemeWarm;
+
+  /// No description provided for @settingsThemeCalm.
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get settingsThemeCalm;
+
+  /// No description provided for @settingsThemeAutoWarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto (warm)'**
+  String get settingsThemeAutoWarm;
+
+  /// No description provided for @settingsDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get settingsDeleteAccount;
+
+  /// No description provided for @settingsDeleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get settingsDeleteAccountTitle;
+
+  /// No description provided for @settingsDeleteAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'All your data will be permanently removed.'**
+  String get settingsDeleteAccountDescription;
+
+  /// No description provided for @settingsCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settingsCancel;
+
+  /// No description provided for @settingsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get settingsDelete;
 
   /// No description provided for @homeLogOut.
   ///

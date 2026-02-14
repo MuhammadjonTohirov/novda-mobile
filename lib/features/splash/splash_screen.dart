@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:novda_components/novda_components.dart';
 
 import '../../core/app/app.dart';
 import '../../core/services/services.dart';
-import '../../core/theme/app_theme.dart';
 import '../auth/auth.dart';
-import '../home/home.dart';
+import '../main_tab/tabs/home/home.dart';
 import '../onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    final isAuthenticated = services.isAuthenticated;
+    final isAuthenticated = await services.hasValidSession();
+    if (!mounted) return;
+
     final hasCompletedOnboarding =
         services.prefs.getBool('onboarding_completed') ?? false;
 
@@ -37,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
       context.appController.setThemeVariant(resolvedTheme);
 
-      _navigateTo(const HomeScreen());
+      _navigateTo(const MainTabScreen());
     } else if (hasCompletedOnboarding) {
       _navigateTo(const AuthorizationFlowScreen());
     } else {
@@ -71,7 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 32),
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(colors.accent),
-            ),
+              strokeWidth: 2,
+            ).container(width: 32, height: 32),
           ],
         ),
       ),

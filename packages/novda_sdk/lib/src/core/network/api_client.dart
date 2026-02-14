@@ -66,13 +66,17 @@ abstract interface class ApiClient {
 
 /// Dio-based implementation of ApiClient
 class DioApiClient implements ApiClient {
+  static const _refreshEndpointPath = '/api/v1/auth/token/refresh';
+  static const _skipAuthRefreshExtraKey = 'skip_auth_refresh';
+  static const _authRetryAttemptedExtraKey = 'auth_retry_attempted';
+
   DioApiClient({
     required ApiClientConfig config,
     required TokenProvider tokenProvider,
     Dio? dio,
-  })  : _config = config,
-        _tokenProvider = tokenProvider,
-        _dio = dio ?? Dio() {
+  }) : _config = config,
+       _tokenProvider = tokenProvider,
+       _dio = dio ?? Dio() {
     _setupDio();
   }
 
@@ -150,9 +154,10 @@ class DioApiClient implements ApiClient {
           handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
+          if (_shouldTryRefresh(error)) {
             final refreshed = await _tryRefreshToken();
             if (refreshed) {
+              error.requestOptions.extra[_authRetryAttemptedExtraKey] = true;
               final response = await _retry(error.requestOptions);
               return handler.resolve(response);
             }
@@ -169,9 +174,12 @@ class DioApiClient implements ApiClient {
 
     try {
       final response = await _dio.post(
-        '/api/v1/auth/token/refresh',
+        _refreshEndpointPath,
         data: {'refresh': refreshToken},
-        options: Options(headers: {'Authorization': null}),
+        options: Options(
+          headers: {'Authorization': null},
+          extra: {_skipAuthRefreshExtraKey: true},
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -198,6 +206,17 @@ class DioApiClient implements ApiClient {
     return _dio.fetch(requestOptions);
   }
 
+  bool _shouldTryRefresh(DioException error) {
+    if (error.response?.statusCode != 401) return false;
+
+    final options = error.requestOptions;
+    final isRefreshRequest = options.path.contains(_refreshEndpointPath);
+    final skipRefresh = options.extra[_skipAuthRefreshExtraKey] == true;
+    final alreadyRetried = options.extra[_authRetryAttemptedExtraKey] == true;
+
+    return !isRefreshRequest && !skipRefresh && !alreadyRetried;
+  }
+
   @override
   void setLocale(String locale) {
     _locale = locale;
@@ -211,10 +230,7 @@ class DioApiClient implements ApiClient {
     bool requiresAuth = true,
   }) async {
     try {
-      final response = await _dio.get(
-        path,
-        queryParameters: queryParameters,
-      );
+      final response = await _dio.get(path, queryParameters: queryParameters);
       return _handleResponse(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioError(e);
@@ -268,10 +284,7 @@ class DioApiClient implements ApiClient {
     bool requiresAuth = true,
   }) async {
     try {
-      await _dio.delete(
-        path,
-        queryParameters: queryParameters,
-      );
+      await _dio.delete(path, queryParameters: queryParameters);
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
@@ -322,22 +335,22 @@ class DioApiClient implements ApiClient {
 
         return switch (statusCode) {
           400 => ValidationException(
-              message: errorText ?? message ?? 'Validation failed',
-            ),
+            message: errorText ?? message ?? 'Validation failed',
+          ),
           401 => UnauthorizedException(
-              message: errorText ?? message ?? 'Unauthorized',
-            ),
+            message: errorText ?? message ?? 'Unauthorized',
+          ),
           404 => NotFoundException(
-              message: errorText ?? message ?? 'Resource not found',
-            ),
+            message: errorText ?? message ?? 'Resource not found',
+          ),
           429 => RateLimitException(
-              message: errorText ?? message ?? 'Rate limit exceeded',
-            ),
+            message: errorText ?? message ?? 'Rate limit exceeded',
+          ),
           _ => ServerException(
-              message: errorText ?? message ?? 'Server error',
-              statusCode: statusCode ?? 500,
-              error: errorText,
-            ),
+            message: errorText ?? message ?? 'Server error',
+            statusCode: statusCode ?? 500,
+            error: errorText,
+          ),
         };
 
       case DioExceptionType.cancel:

@@ -1,6 +1,6 @@
 import 'package:novda_sdk/novda_sdk.dart';
 
-import '../../../core/base/base_view_model.dart';
+import '../../../../../core/base/base_view_model.dart';
 import '../interactors/home_interactor.dart';
 
 class HomeViewModel extends BaseViewModel {

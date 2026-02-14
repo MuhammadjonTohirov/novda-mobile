@@ -1,6 +1,6 @@
 import 'package:novda_sdk/novda_sdk.dart';
 
-import '../../../core/services/services.dart';
+import '../../../../../core/services/services.dart';
 
 class HomeDashboardData {
   const HomeDashboardData({

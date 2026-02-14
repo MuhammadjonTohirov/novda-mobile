@@ -19,11 +19,13 @@
 
 ## Flutter UI Rules
 - Reuse `AppTypography`, `context.appColors`, and shared components first.
-- Keep widgets composable: split large screens into private stateless widgets.
+- Keep widgets composable: avoid declaring multiple widget classes in a single `.dart` file (including private ones); extract view-specific UI pieces into extension files and import them.
 - Avoid hardcoding magic numbers repeatedly; reuse constants in-file when repeated.
 - Ensure mobile-safe layout with `SafeArea`, overflow-safe text, and scrollable content.
 - Keep tap targets and spacing accessible.
-- Since our UI is based on nested strategy we already created extensions for simpler usecase, use them as possible as you can. feel free to expand extensions for easy useage
+- Default to UI extension methods (`WidgetExtensions`, context extensions, etc.) to keep view code concise and consistent.
+- Use extensions as much as possible for common layout/styling patterns; avoid verbose raw widget wrappers when an extension exists.
+- If a UI pattern repeats and no extension exists yet, add/expand an extension in the shared layer and reuse it.
 
 ## State Management Rules
 - Use existing `BaseViewModel` + `Provider` pattern unless told otherwise.

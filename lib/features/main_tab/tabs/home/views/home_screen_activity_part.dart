@@ -1,4 +1,4 @@
-part of 'home_screen.dart';
+part of '../home_screen.dart';
 
 class _ActivitiesGrid extends StatelessWidget {
   const _ActivitiesGrid({required this.viewModel});
@@ -7,24 +7,21 @@ class _ActivitiesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final types = viewModel.activityTypes.take(6).toList();
+    final types = _topDashboardTypes(viewModel.activityTypes);
 
     if (types.isEmpty) {
       final colors = context.appColors;
 
-      return Container(
+      return Text(
+        context.l10n.homeNoActivityTypes,
+        style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
+        textAlign: TextAlign.center,
+      ).container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
         decoration: BoxDecoration(
           color: colors.bgSecondary,
           borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          context.l10n.homeNoActivityTypes,
-          style: AppTypography.bodyMRegular.copyWith(
-            color: colors.textSecondary,
-          ),
-          textAlign: TextAlign.center,
         ),
       );
     }
@@ -32,12 +29,13 @@ class _ActivitiesGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       itemCount: types.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 1.12,
+        childAspectRatio: 1.31,
       ),
       itemBuilder: (context, index) {
         final type = types[index];
@@ -50,6 +48,46 @@ class _ActivitiesGrid extends StatelessWidget {
           count: count,
         );
       },
+    );
+  }
+
+  List<ActivityType> _topDashboardTypes(List<ActivityType> allTypes) {
+    if (allTypes.isEmpty) return const [];
+
+    final nonOther = <ActivityType>[];
+  
+    for (final type in allTypes) {
+      nonOther.add(type);
+    }
+
+    final selected = <ActivityType>[...nonOther.take(5)];
+    // first where title is other
+    final other = nonOther.firstWhere(_isOtherType, orElse: () => _hardcodedOtherType());
+
+    selected.add(other);
+
+    return selected.take(6).toList();
+  }
+
+  bool _isOtherType(ActivityType type) {
+    final normalizedSlug = type.slug.trim().toLowerCase();
+    final normalizedTitle = type.title.trim().toLowerCase();
+    
+    return normalizedSlug == 'other' || normalizedTitle == 'other';
+  }
+
+  ActivityType _hardcodedOtherType() {
+    return const ActivityType(
+      id: -1,
+      slug: 'other',
+      iconUrl: '',
+      color: '#706A93',
+      hasDuration: false,
+      hasQuality: false,
+      isActive: true,
+      order: 999,
+      title: 'Other',
+      description: '',
     );
   }
 }
@@ -68,11 +106,11 @@ class _ActivityTypeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final baseColor = _parseColor(type.color, colors.accent);
+    final baseColor = colors.accent.parseHexOrSelf(type.color);
 
     return Container(
       decoration: BoxDecoration(
-        color: baseColor.withValues(alpha: 0.08),
+        color: baseColor.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: baseColor.withValues(alpha: 0.20)),
       ),
@@ -82,10 +120,13 @@ class _ActivityTypeTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(_iconForSlug(type.slug), size: 34, color: baseColor),
+              _buildActivityIcon(baseColor),
               const Spacer(),
               if (count > 0)
-                Container(
+                Text(
+                  '$count',
+                  style: AppTypography.bodyLMedium.copyWith(color: baseColor),
+                ).container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 4,
@@ -94,17 +135,13 @@ class _ActivityTypeTile extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    '$count',
-                    style: AppTypography.bodyLMedium.copyWith(color: baseColor),
-                  ),
                 ),
             ],
           ),
           const Spacer(),
           Text(
             type.title,
-            style: AppTypography.headingL.copyWith(color: baseColor),
+            style: AppTypography.bodyLMedium.copyWith(color: baseColor),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -137,6 +174,34 @@ class _ActivityTypeTile extends StatelessWidget {
     return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day;
   }
 
+  Widget _buildActivityIcon(Color baseColor) {
+    final fallbackIcon = Icon(
+      _iconForSlug(type.slug),
+      size: 34,
+      color: baseColor,
+    );
+
+    final url = type.iconUrl.trim();
+
+    // if (_isOtherType()) return fallbackIcon;
+    if (url.isEmpty) return fallbackIcon;
+
+    return Image.network(
+      url,
+      width: 32,
+      height: 32,
+      fit: BoxFit.fill,
+      errorBuilder: (_, error, trace) {
+        debugPrint("Failed to load image: $url with error: $error");
+        return fallbackIcon;
+      },
+      loadingBuilder: (_, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return fallbackIcon;
+      },
+    );
+  }
+
   IconData _iconForSlug(String slug) {
     final value = slug.toLowerCase();
 
@@ -157,23 +222,5 @@ class _ActivityTypeTile extends StatelessWidget {
     }
 
     return Icons.more_horiz;
-  }
-
-  Color _parseColor(String rawColor, Color fallback) {
-    var value = rawColor.trim();
-    if (value.isEmpty) return fallback;
-
-    if (value.startsWith('#')) {
-      value = value.substring(1);
-    }
-
-    if (value.length == 6) {
-      value = 'FF$value';
-    }
-
-    final intValue = int.tryParse(value, radix: 16);
-    if (intValue == null) return fallback;
-
-    return Color(intValue);
   }
 }

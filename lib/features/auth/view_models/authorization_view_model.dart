@@ -261,8 +261,8 @@ class AuthorizationViewModel extends BaseViewModel
   }
 
   /// Resolve app theme from the current profile preference.
-  Future<ThemeVariant> resolveThemeVariant() {
-    return services.resolveThemeVariant();
+  Future<ThemeVariant> resolveThemeVariant({int? selectedChildId}) {
+    return services.resolveThemeVariant(selectedChildId: selectedChildId);
   }
 
   /// Clear registration data

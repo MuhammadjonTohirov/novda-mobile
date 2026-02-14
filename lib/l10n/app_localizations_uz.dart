@@ -217,6 +217,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeAddReminder => 'Eslatma qo\'shish';
 
   @override
+  String get addActionSheetTitle => 'Yangi element qo\'shish';
+
+  @override
+  String get addActionSheetDescription =>
+      'Faoliyatni qayd eting yoki keyin uchun eslatma yarating.';
+
+  @override
+  String get addActionTypeActivity => 'Faoliyat';
+
+  @override
+  String get addActionTypeReminder => 'Eslatma';
+
+  @override
   String get homeNoActivityTypes => 'Hozircha faoliyat turlari mavjud emas.';
 
   @override
@@ -248,6 +261,83 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get profileTab => 'Profil';
+
+  @override
+  String get profileTitle => 'Profil';
+
+  @override
+  String get profileParent => 'Ota-ona';
+
+  @override
+  String get profileMyBabies => 'Farzandlarim';
+
+  @override
+  String get profileAdd => 'Qo\'shish';
+
+  @override
+  String get profileSavedArticles => 'Saqlangan maqolalar';
+
+  @override
+  String get profileSettings => 'Sozlamalar';
+
+  @override
+  String get profileChangePhoneNumber => 'Telefon raqamini o\'zgartirish';
+
+  @override
+  String get profileFollowUs => 'Bizni kuzating';
+
+  @override
+  String get profileSupport => 'Yordam';
+
+  @override
+  String get profileLegalDocuments => 'Huquqiy hujjatlar';
+
+  @override
+  String get profileLogoutConfirmTitle => 'Chiqasizmi?';
+
+  @override
+  String get profileLogoutConfirmDescription =>
+      'Hisobingizga kirish uchun qayta login qilishingiz kerak bo\'ladi.';
+
+  @override
+  String get settingsTitle => 'Sozlamalar';
+
+  @override
+  String get settingsAppTheme => 'Ilova mavzusi';
+
+  @override
+  String get settingsLanguage => 'Til';
+
+  @override
+  String get settingsNotifications => 'Bildirishnomalar';
+
+  @override
+  String get settingsSelectLanguage => 'Tilni tanlang';
+
+  @override
+  String get settingsThemeWarm => 'Issiq';
+
+  @override
+  String get settingsThemeCalm => 'Sokin';
+
+  @override
+  String get settingsThemeAutoWarm => 'Avto (issiq)';
+
+  @override
+  String get settingsDeleteAccount => 'Hisobni o\'chirish';
+
+  @override
+  String get settingsDeleteAccountTitle => 'Hisobni o\'chirasizmi?';
+
+  @override
+  String get settingsDeleteAccountDescription =>
+      'Barcha ma\'lumotlaringiz butunlay o\'chiriladi.';
+
+  @override
+  String get settingsCancel => 'Bekor qilish';
+
+  @override
+  String get settingsDelete => 'O\'chirish';
 
   @override
   String get homeLogOut => 'Chiqish';

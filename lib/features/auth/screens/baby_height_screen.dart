@@ -6,7 +6,7 @@ import '../../../core/app/app.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
-import '../../home/home.dart';
+import '../../main_tab/tabs/home/home.dart';
 
 class BabyHeightScreen extends StatefulWidget {
   const BabyHeightScreen({super.key});
@@ -55,13 +55,15 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
 
       if (!mounted) return;
 
-      final resolvedTheme = await viewModel.resolveThemeVariant();
+      final resolvedTheme = await viewModel.resolveThemeVariant(
+        selectedChildId: viewModel.createdChild!.id,
+      );
       if (!mounted) return;
       context.appController.setThemeVariant(resolvedTheme);
 
       // Navigate to home screen, clearing the navigation stack
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const MainTabScreen()),
         (route) => false,
       );
     } else {

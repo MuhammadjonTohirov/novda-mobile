@@ -16,8 +16,8 @@ class ServiceLocator {
     return _instance!;
   }
 
-  static const _baseUrl =
-      'http://94.158.51.9:8000'; //'https://kidscare.uzyol.uz';
+  static const _baseUrl = 'http://94.158.51.9:8000';
+  // static const _baseUrl = 'https://kidscare.uzyol.uz';
   static const _apiKey = 'KIDS_CARE_API_KEY_9839283ad98asdj123j23a0s9dia9d';
 
   late final SharedPreferences _prefs;
@@ -62,9 +62,29 @@ class ServiceLocator {
   }
 
   /// Check if user is authenticated
+  ///
+  /// Note: this only checks token presence, not token validity.
   bool get isAuthenticated {
     _assertInitialized();
     return _tokenStorage.hasTokens;
+  }
+
+  /// Validate the current auth session with backend profile endpoint.
+  ///
+  /// Returns `true` only when token exists and `/me` can be fetched.
+  /// If validation fails, stored tokens are cleared.
+  Future<bool> hasValidSession() async {
+    _assertInitialized();
+
+    if (!_tokenStorage.hasTokens) return false;
+
+    try {
+      await _sdk.user.getProfile();
+      return true;
+    } catch (_) {
+      await _tokenStorage.clearTokens();
+      return false;
+    }
   }
 
   /// Set the locale for API requests
@@ -77,7 +97,7 @@ class ServiceLocator {
   ///
   /// warm/calm map directly; auto is resolved by active child gender:
   /// boy -> calm, girl/unknown -> warm.
-  Future<ThemeVariant> resolveThemeVariant() async {
+  Future<ThemeVariant> resolveThemeVariant({int? selectedChildId}) async {
     _assertInitialized();
 
     try {
@@ -91,7 +111,7 @@ class ServiceLocator {
       final children = await _sdk.children.getChildren();
       final activeChild = ThemePreferenceResolver.activeChild(
         children,
-        activeChildId: user.lastActiveChild,
+        activeChildId: selectedChildId ?? user.lastActiveChild,
       );
 
       return ThemePreferenceResolver.resolve(

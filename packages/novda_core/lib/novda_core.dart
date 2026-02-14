@@ -2,6 +2,7 @@ export 'src/app/app.dart';
 export 'src/app/app_controller.dart';
 export 'src/base/base.dart';
 export 'src/base/base_view_model.dart';
+export 'src/extensions/color_extensions.dart';
 export 'src/models/app_language.dart';
 export 'src/models/theme_variant.dart';
 export 'src/services/service_locator.dart';

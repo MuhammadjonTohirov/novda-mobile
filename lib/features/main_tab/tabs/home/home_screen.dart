@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                       onEditDetails: () => _showComingSoon(context),
                     )
                     .safeArea(bottom: false)
-                    .paddingAll(16),
+                    .paddingOnly(left: 16, right: 16, bottom: 16),
                 const SizedBox(height: 14),
 
                 context

@@ -309,37 +309,37 @@ extension ProfileTabUiExtensions on BuildContext {
           children: [
             Expanded(
               child: SizedBox(
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: onCancel,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colors.bgSecondary,
-                    foregroundColor: colors.textPrimary,
-                    shape: RoundedRectangleBorder(
+                height: 48,
+                child: Text(l10n.settingsCancel, style: AppTypography.headingS)
+                    .center()
+                    .container(
+                      decoration: BoxDecoration(
+                        color: colors.bgSecondary,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    )
+                    .inkWell(
+                      onTap: onCancel,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(l10n.settingsCancel),
-                ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: SizedBox(
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: onLogout,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colors.buttonPrimary,
-                    foregroundColor: colors.textOnPrimary,
-                    shape: RoundedRectangleBorder(
+                height: 48,
+                child: Text(l10n.homeLogOut, style: AppTypography.headingS)
+                    .center()
+                    .container(
+                      decoration: BoxDecoration(
+                        color: colors.buttonPressing,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    )
+                    .inkWell(
+                      onTap: onLogout,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(l10n.homeLogOut),
-                ),
               ),
             ),
           ],

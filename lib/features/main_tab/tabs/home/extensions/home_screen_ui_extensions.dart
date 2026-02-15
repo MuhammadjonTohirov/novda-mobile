@@ -35,16 +35,22 @@ extension HomeScreenUiExtensions on BuildContext {
           l10n.homeMyChild,
           style: AppTypography.headingL.copyWith(color: colors.textPrimary),
         ),
-        TextButton(
-          onPressed: onEditDetails,
-          style: TextButton.styleFrom(padding: EdgeInsets.zero),
-          child: Text(
+        Text(
             l10n.homeEditDetails,
             style: AppTypography.bodyLMedium.copyWith(
               color: colors.textPrimary,
-            ),
-          ),
-        ),
+            )
+        ).onTap(onEditDetails),
+        // TextButton(
+        //   onPressed: onEditDetails,
+        //   style: TextButton.styleFrom(padding: EdgeInsets.zero),
+        //   child: Text(
+        //     l10n.homeEditDetails,
+        //     style: AppTypography.bodyLMedium.copyWith(
+        //       color: colors.textPrimary,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

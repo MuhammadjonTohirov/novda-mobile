@@ -24,6 +24,16 @@
             "date": 1770665323325,
             "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-10.log",
             "hash": "d49a78db0d5e2ab053fbe3575e2407233ea6450b4eaee9f0330a1886829d0a2b"
+        },
+        {
+            "date": 1770919637488,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-12.log",
+            "hash": "933a3c9622f2942b95c3c4da75517f0e531ec0caf6f3aafdacaf71fdc6ca9e34"
+        },
+        {
+            "date": 1771049801318,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-14.log",
+            "hash": "f3a10dbe56df0e1714fabcb80776f9c804d3d4e50f94f7958a1b0d4f9a4cc595"
         }
     ],
     "hashType": "sha256"

@@ -89,14 +89,136 @@
   "addActionSheetDescription": "Запишите активность или создайте напоминание на потом.",
   "addActionTypeActivity": "Активность",
   "addActionTypeReminder": "Напоминание",
+  "addActivityTitle": "Добавить: {activity}",
+  "@addActivityTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "addActivityStartTime": "Время начала",
+  "addActivityEndTime": "Время окончания",
+  "addActivityQuality": "Качество",
+  "addActivityQualityGood": "Хорошо",
+  "addActivityQualityNormal": "Нормально",
+  "addActivityQualityBad": "Плохо",
+  "addActivityReminders": "Напоминания по активности",
+  "addActivityComments": "Комментарий",
+  "addActivitySubmit": "Добавить активность",
+  "addActivitySave": "Сохранить",
+  "addActivityAmountMl": "Количество в мл",
+  "addActivityValidationAmount": "Введите корректное количество в мл",
+  "addActivityFeedingBreast": "Грудь",
+  "addActivityFeedingBottle": "Бутылочка",
+  "addActivitySelectReminders": "Выбрать напоминания",
+  "addActivityNoReminders": "Нет ожидающих напоминаний для этой активности.",
+  "addActivityNoChildSelected": "Добавьте или выберите ребёнка, чтобы создать активность.",
+  "addActivityCreated": "Активность успешно добавлена.",
+  "addActivitySelectedCount": "Выбрано: {count}",
+  "@addActivitySelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addActivityConditions": "Состояния",
+  "addActivityNoConditions": "Типы состояний недоступны.",
+  "addActivityConditionsCount": "Выбрано: {count}",
+  "@addActivityConditionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeNoActivityTypes": "Типы активностей пока недоступны.",
+  "activityHistoryNoActivities": "Активностей пока нет.",
   "homeNoReminders": "Напоминаний пока нет.",
   "homeComingSoon": "Скоро будет",
   "homeFailedLoad": "Не удалось загрузить данные главной страницы.",
   "homeRetry": "Повторить",
   "homeTomorrow": "Завтра",
+  "homeYesterday": "Вчера",
   "homeTab": "Главная",
   "progressTab": "Прогресс",
+  "progressCalendar": "Календарь",
+  "progressNoChildSelected": "Выберите ребёнка, чтобы увидеть прогресс.",
+  "progressFailedLoad": "Не удалось загрузить данные прогресса.",
+  "progressDefaultCallout": "Ваш малыш растёт каждый день.",
+  "progressWeekNumber": "Неделя {number}",
+  "@progressWeekNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressMonthNumber": "Месяц {number}",
+  "@progressMonthNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressYearNumber": "Год {number}",
+  "@progressYearNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressPeriodNumber": "Период {number}",
+  "@progressPeriodNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressWhatHappensIn": "Что происходит в {period}?",
+  "@progressWhatHappensIn": {
+    "placeholders": {
+      "period": {}
+    }
+  },
+  "progressNoDetails": "Для этого периода пока нет подробностей.",
+  "progressExercisesTitle": "Упражнения на этот период",
+  "progressNoExercises": "Пока нет упражнений.",
+  "progressSuggestionsTitle": "Советы для {name}",
+  "@progressSuggestionsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoSuggestions": "Пока нет советов.",
+  "progressRecommendationsTitle": "Рекомендуем для {name}",
+  "@progressRecommendationsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoRecommendations": "Пока нет рекомендаций.",
+  "progressDayRange": "День {start} - {end}",
+  "@progressDayRange": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "progressItemFallback": "Пункт {index}",
+  "@progressItemFallback": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "addTab": "Добавить",
   "learnTab": "Обучение",
   "profileTab": "Профиль",

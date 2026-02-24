@@ -229,7 +229,88 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addActionTypeReminder => 'Напоминание';
 
   @override
+  String addActivityTitle(Object activity) {
+    return 'Добавить: $activity';
+  }
+
+  @override
+  String get addActivityStartTime => 'Время начала';
+
+  @override
+  String get addActivityEndTime => 'Время окончания';
+
+  @override
+  String get addActivityQuality => 'Качество';
+
+  @override
+  String get addActivityQualityGood => 'Хорошо';
+
+  @override
+  String get addActivityQualityNormal => 'Нормально';
+
+  @override
+  String get addActivityQualityBad => 'Плохо';
+
+  @override
+  String get addActivityReminders => 'Напоминания по активности';
+
+  @override
+  String get addActivityComments => 'Комментарий';
+
+  @override
+  String get addActivitySubmit => 'Добавить активность';
+
+  @override
+  String get addActivitySave => 'Сохранить';
+
+  @override
+  String get addActivityAmountMl => 'Количество в мл';
+
+  @override
+  String get addActivityValidationAmount =>
+      'Введите корректное количество в мл';
+
+  @override
+  String get addActivityFeedingBreast => 'Грудь';
+
+  @override
+  String get addActivityFeedingBottle => 'Бутылочка';
+
+  @override
+  String get addActivitySelectReminders => 'Выбрать напоминания';
+
+  @override
+  String get addActivityNoReminders =>
+      'Нет ожидающих напоминаний для этой активности.';
+
+  @override
+  String get addActivityNoChildSelected =>
+      'Добавьте или выберите ребёнка, чтобы создать активность.';
+
+  @override
+  String get addActivityCreated => 'Активность успешно добавлена.';
+
+  @override
+  String addActivitySelectedCount(int count) {
+    return 'Выбрано: $count';
+  }
+
+  @override
+  String get addActivityConditions => 'Состояния';
+
+  @override
+  String get addActivityNoConditions => 'Типы состояний недоступны.';
+
+  @override
+  String addActivityConditionsCount(int count) {
+    return 'Выбрано: $count';
+  }
+
+  @override
   String get homeNoActivityTypes => 'Типы активностей пока недоступны.';
+
+  @override
+  String get activityHistoryNoActivities => 'Активностей пока нет.';
 
   @override
   String get homeNoReminders => 'Напоминаний пока нет.';
@@ -247,10 +328,86 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeTomorrow => 'Завтра';
 
   @override
+  String get homeYesterday => 'Вчера';
+
+  @override
   String get homeTab => 'Главная';
 
   @override
   String get progressTab => 'Прогресс';
+
+  @override
+  String get progressCalendar => 'Календарь';
+
+  @override
+  String get progressNoChildSelected =>
+      'Выберите ребёнка, чтобы увидеть прогресс.';
+
+  @override
+  String get progressFailedLoad => 'Не удалось загрузить данные прогресса.';
+
+  @override
+  String get progressDefaultCallout => 'Ваш малыш растёт каждый день.';
+
+  @override
+  String progressWeekNumber(int number) {
+    return 'Неделя $number';
+  }
+
+  @override
+  String progressMonthNumber(int number) {
+    return 'Месяц $number';
+  }
+
+  @override
+  String progressYearNumber(int number) {
+    return 'Год $number';
+  }
+
+  @override
+  String progressPeriodNumber(int number) {
+    return 'Период $number';
+  }
+
+  @override
+  String progressWhatHappensIn(Object period) {
+    return 'Что происходит в $period?';
+  }
+
+  @override
+  String get progressNoDetails => 'Для этого периода пока нет подробностей.';
+
+  @override
+  String get progressExercisesTitle => 'Упражнения на этот период';
+
+  @override
+  String get progressNoExercises => 'Пока нет упражнений.';
+
+  @override
+  String progressSuggestionsTitle(Object name) {
+    return 'Советы для $name';
+  }
+
+  @override
+  String get progressNoSuggestions => 'Пока нет советов.';
+
+  @override
+  String progressRecommendationsTitle(Object name) {
+    return 'Рекомендуем для $name';
+  }
+
+  @override
+  String get progressNoRecommendations => 'Пока нет рекомендаций.';
+
+  @override
+  String progressDayRange(int start, int end) {
+    return 'День $start - $end';
+  }
+
+  @override
+  String progressItemFallback(int index) {
+    return 'Пункт $index';
+  }
 
   @override
   String get addTab => 'Добавить';

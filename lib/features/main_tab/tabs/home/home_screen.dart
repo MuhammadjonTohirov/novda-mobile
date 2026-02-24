@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/extensions/extensions.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../add_action/add_activity_screen.dart';
+import 'activity_history/activity_history_screen.dart';
 import 'extensions/home_screen_ui_extensions.dart';
 import 'interactors/home_interactor.dart';
 import 'view_models/home_view_model.dart';
@@ -61,10 +63,15 @@ class HomeScreen extends StatelessWidget {
                     context.homeSectionHeader(
                       title: context.l10n.homeActivities,
                       actionLabel: context.l10n.homeActivityHistory,
-                      onActionTap: () => _showComingSoon(context),
+                      onActionTap: () =>
+                          _openActivityHistory(context, viewModel),
                     ),
                     const SizedBox(height: 12),
-                    _ActivitiesGrid(viewModel: viewModel),
+                    _ActivitiesGrid(
+                      viewModel: viewModel,
+                      onTypeTap: (type) =>
+                          _openAddActivityByType(context, viewModel, type),
+                    ),
                     const SizedBox(height: 22),
                     context.homeSectionHeader(
                       title: context.l10n.homeReminders,
@@ -111,5 +118,55 @@ class HomeScreen extends StatelessWidget {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
+  }
+
+  Future<void> _openActivityHistory(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    final child = viewModel.activeChild;
+    if (child == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text(context.l10n.homeNoActiveChildSelected)),
+        );
+      return;
+    }
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ActivityHistoryScreen(
+          childId: child.id,
+          initialTypes: viewModel.activityTypes,
+        ),
+      ),
+    );
+
+    if (!context.mounted) return;
+    await viewModel.load();
+  }
+
+  Future<void> _openAddActivityByType(
+    BuildContext context,
+    HomeViewModel viewModel,
+    ActivityType type,
+  ) async {
+    if (type.id <= 0) {
+      _showComingSoon(context);
+      return;
+    }
+
+    final createdActivity = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => AddActivityScreen(activityType: type)),
+    );
+
+    if (!context.mounted || createdActivity == null) return;
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(context.l10n.addActivityCreated)));
+
+    await viewModel.load();
   }
 }

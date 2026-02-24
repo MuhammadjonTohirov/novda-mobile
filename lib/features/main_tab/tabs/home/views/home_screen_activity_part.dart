@@ -1,9 +1,10 @@
 part of '../home_screen.dart';
 
 class _ActivitiesGrid extends StatelessWidget {
-  const _ActivitiesGrid({required this.viewModel});
+  const _ActivitiesGrid({required this.viewModel, required this.onTypeTap});
 
   final HomeViewModel viewModel;
+  final ValueChanged<ActivityType> onTypeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,7 @@ class _ActivitiesGrid extends StatelessWidget {
           type: type,
           lastActivity: latest,
           count: count,
+          onTap: () => onTypeTap(type),
         );
       },
     );
@@ -55,14 +57,17 @@ class _ActivitiesGrid extends StatelessWidget {
     if (allTypes.isEmpty) return const [];
 
     final nonOther = <ActivityType>[];
-  
+
     for (final type in allTypes) {
       nonOther.add(type);
     }
 
     final selected = <ActivityType>[...nonOther.take(5)];
     // first where title is other
-    final other = nonOther.firstWhere(_isOtherType, orElse: () => _hardcodedOtherType());
+    final other = nonOther.firstWhere(
+      _isOtherType,
+      orElse: () => _hardcodedOtherType(),
+    );
 
     selected.add(other);
 
@@ -72,7 +77,7 @@ class _ActivitiesGrid extends StatelessWidget {
   bool _isOtherType(ActivityType type) {
     final normalizedSlug = type.slug.trim().toLowerCase();
     final normalizedTitle = type.title.trim().toLowerCase();
-    
+
     return normalizedSlug == 'other' || normalizedTitle == 'other';
   }
 
@@ -97,11 +102,13 @@ class _ActivityTypeTile extends StatelessWidget {
     required this.type,
     required this.lastActivity,
     required this.count,
+    required this.onTap,
   });
 
   final ActivityType type;
   final ActivityItem? lastActivity;
   final int count;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +161,7 @@ class _ActivityTypeTile extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).inkWell(onTap: onTap, borderRadius: BorderRadius.circular(22));
   }
 
   String _formatLastActivity(BuildContext context, DateTime? dateTime) {

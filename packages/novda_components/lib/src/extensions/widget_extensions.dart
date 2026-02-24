@@ -328,4 +328,17 @@ extension WidgetExtensions on Widget {
       child: this,
     );
   }
+
+  // create cliprrect
+  Widget clipRRect({
+    BorderRadius? borderRadius,
+    double? borderRadiusValue,
+    Clip clipBehavior = Clip.antiAlias,
+  }) {
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.circular(borderRadiusValue ?? 0),
+      clipBehavior: clipBehavior,
+      child: this,
+    );
+  }
 }

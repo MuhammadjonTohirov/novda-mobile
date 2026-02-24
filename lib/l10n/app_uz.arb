@@ -89,14 +89,136 @@
   "addActionSheetDescription": "Faoliyatni qayd eting yoki keyin uchun eslatma yarating.",
   "addActionTypeActivity": "Faoliyat",
   "addActionTypeReminder": "Eslatma",
+  "addActivityTitle": "{activity} qo'shish",
+  "@addActivityTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "addActivityStartTime": "Boshlanish vaqti",
+  "addActivityEndTime": "Tugash vaqti",
+  "addActivityQuality": "Sifat",
+  "addActivityQualityGood": "Yaxshi",
+  "addActivityQualityNormal": "O'rtacha",
+  "addActivityQualityBad": "Yomon",
+  "addActivityReminders": "Faoliyat eslatmalari",
+  "addActivityComments": "Izoh",
+  "addActivitySubmit": "Faoliyatni qo'shish",
+  "addActivitySave": "Saqlash",
+  "addActivityAmountMl": "Miqdori (ml)",
+  "addActivityValidationAmount": "Ml miqdorini to'g'ri kiriting",
+  "addActivityFeedingBreast": "Emizish",
+  "addActivityFeedingBottle": "Butilka",
+  "addActivitySelectReminders": "Eslatmalarni tanlash",
+  "addActivityNoReminders": "Bu faoliyat uchun kutilayotgan eslatmalar yo'q.",
+  "addActivityNoChildSelected": "Faoliyat yaratish uchun farzand qo'shing yoki tanlang.",
+  "addActivityCreated": "Faoliyat muvaffaqiyatli qo'shildi.",
+  "addActivitySelectedCount": "{count} ta tanlandi",
+  "@addActivitySelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addActivityConditions": "Holatlar",
+  "addActivityNoConditions": "Holat turlari mavjud emas.",
+  "addActivityConditionsCount": "{count} ta tanlandi",
+  "@addActivityConditionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeNoActivityTypes": "Hozircha faoliyat turlari mavjud emas.",
+  "activityHistoryNoActivities": "Hozircha faoliyatlar yo'q.",
   "homeNoReminders": "Hozircha eslatmalar yo'q.",
   "homeComingSoon": "Tez orada",
   "homeFailedLoad": "Bosh sahifa ma'lumotlarini yuklab bo'lmadi.",
   "homeRetry": "Qayta urinish",
   "homeTomorrow": "Ertaga",
+  "homeYesterday": "Kecha",
   "homeTab": "Asosiy",
   "progressTab": "Rivojlanish",
+  "progressCalendar": "Kalendar",
+  "progressNoChildSelected": "Rivojlanishni ko‘rish uchun farzandni tanlang.",
+  "progressFailedLoad": "Rivojlanish ma'lumotlarini yuklab bo'lmadi.",
+  "progressDefaultCallout": "Farzandingiz har kuni o‘sib bormoqda.",
+  "progressWeekNumber": "Hafta {number}",
+  "@progressWeekNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressMonthNumber": "Oy {number}",
+  "@progressMonthNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressYearNumber": "Yil {number}",
+  "@progressYearNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressPeriodNumber": "Davr {number}",
+  "@progressPeriodNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressWhatHappensIn": "{period}da nima sodir bo‘ladi?",
+  "@progressWhatHappensIn": {
+    "placeholders": {
+      "period": {}
+    }
+  },
+  "progressNoDetails": "Bu davr uchun tafsilotlar hozircha mavjud emas.",
+  "progressExercisesTitle": "Bu davr uchun mashqlar",
+  "progressNoExercises": "Hozircha mashqlar yo‘q.",
+  "progressSuggestionsTitle": "{name} uchun tavsiyalar",
+  "@progressSuggestionsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoSuggestions": "Hozircha tavsiyalar yo‘q.",
+  "progressRecommendationsTitle": "{name} uchun tavsiya etiladi",
+  "@progressRecommendationsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoRecommendations": "Hozircha tavsiyalar mavjud emas.",
+  "progressDayRange": "Kun {start} - {end}",
+  "@progressDayRange": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "progressItemFallback": "Band {index}",
+  "@progressItemFallback": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "addTab": "Qo'shish",
   "learnTab": "O'rganish",
   "profileTab": "Profil",

@@ -228,7 +228,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addActionTypeReminder => 'Reminder';
 
   @override
+  String addActivityTitle(Object activity) {
+    return 'Add $activity';
+  }
+
+  @override
+  String get addActivityStartTime => 'Start time';
+
+  @override
+  String get addActivityEndTime => 'End time';
+
+  @override
+  String get addActivityQuality => 'Quality';
+
+  @override
+  String get addActivityQualityGood => 'Good';
+
+  @override
+  String get addActivityQualityNormal => 'Normal';
+
+  @override
+  String get addActivityQualityBad => 'Bad';
+
+  @override
+  String get addActivityReminders => 'Activity reminders';
+
+  @override
+  String get addActivityComments => 'Comments';
+
+  @override
+  String get addActivitySubmit => 'Add activity';
+
+  @override
+  String get addActivitySave => 'Save';
+
+  @override
+  String get addActivityAmountMl => 'Amount in ml';
+
+  @override
+  String get addActivityValidationAmount => 'Enter a valid amount in ml';
+
+  @override
+  String get addActivityFeedingBreast => 'Breast';
+
+  @override
+  String get addActivityFeedingBottle => 'Bottle';
+
+  @override
+  String get addActivitySelectReminders => 'Select reminders';
+
+  @override
+  String get addActivityNoReminders =>
+      'No pending reminders for this activity.';
+
+  @override
+  String get addActivityNoChildSelected =>
+      'Please add/select a child to create an activity.';
+
+  @override
+  String get addActivityCreated => 'Activity added successfully.';
+
+  @override
+  String addActivitySelectedCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get addActivityConditions => 'Conditions';
+
+  @override
+  String get addActivityNoConditions => 'No condition types available.';
+
+  @override
+  String addActivityConditionsCount(int count) {
+    return '$count selected';
+  }
+
+  @override
   String get homeNoActivityTypes => 'No activity types available yet.';
+
+  @override
+  String get activityHistoryNoActivities => 'No activities yet.';
 
   @override
   String get homeNoReminders => 'No reminders yet.';
@@ -246,10 +326,85 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTomorrow => 'Tomorrow';
 
   @override
+  String get homeYesterday => 'Yesterday';
+
+  @override
   String get homeTab => 'Home';
 
   @override
   String get progressTab => 'Progress';
+
+  @override
+  String get progressCalendar => 'Calendar';
+
+  @override
+  String get progressNoChildSelected => 'Select a child to view progress.';
+
+  @override
+  String get progressFailedLoad => 'Failed to load progress data.';
+
+  @override
+  String get progressDefaultCallout => 'Your baby is growing every day.';
+
+  @override
+  String progressWeekNumber(int number) {
+    return 'Week $number';
+  }
+
+  @override
+  String progressMonthNumber(int number) {
+    return 'Month $number';
+  }
+
+  @override
+  String progressYearNumber(int number) {
+    return 'Year $number';
+  }
+
+  @override
+  String progressPeriodNumber(int number) {
+    return 'Period $number';
+  }
+
+  @override
+  String progressWhatHappensIn(Object period) {
+    return 'What happens in $period?';
+  }
+
+  @override
+  String get progressNoDetails => 'No progress details for this period.';
+
+  @override
+  String get progressExercisesTitle => 'Exercises to do this period';
+
+  @override
+  String get progressNoExercises => 'No exercises available yet.';
+
+  @override
+  String progressSuggestionsTitle(Object name) {
+    return 'Suggestions for $name';
+  }
+
+  @override
+  String get progressNoSuggestions => 'No suggestions available yet.';
+
+  @override
+  String progressRecommendationsTitle(Object name) {
+    return 'Recommended for $name';
+  }
+
+  @override
+  String get progressNoRecommendations => 'No recommendations available yet.';
+
+  @override
+  String progressDayRange(int start, int end) {
+    return 'Day $start - $end';
+  }
+
+  @override
+  String progressItemFallback(int index) {
+    return 'Item $index';
+  }
 
   @override
   String get addTab => 'Add';

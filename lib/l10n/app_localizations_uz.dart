@@ -230,7 +230,87 @@ class AppLocalizationsUz extends AppLocalizations {
   String get addActionTypeReminder => 'Eslatma';
 
   @override
+  String addActivityTitle(Object activity) {
+    return '$activity qo\'shish';
+  }
+
+  @override
+  String get addActivityStartTime => 'Boshlanish vaqti';
+
+  @override
+  String get addActivityEndTime => 'Tugash vaqti';
+
+  @override
+  String get addActivityQuality => 'Sifat';
+
+  @override
+  String get addActivityQualityGood => 'Yaxshi';
+
+  @override
+  String get addActivityQualityNormal => 'O\'rtacha';
+
+  @override
+  String get addActivityQualityBad => 'Yomon';
+
+  @override
+  String get addActivityReminders => 'Faoliyat eslatmalari';
+
+  @override
+  String get addActivityComments => 'Izoh';
+
+  @override
+  String get addActivitySubmit => 'Faoliyatni qo\'shish';
+
+  @override
+  String get addActivitySave => 'Saqlash';
+
+  @override
+  String get addActivityAmountMl => 'Miqdori (ml)';
+
+  @override
+  String get addActivityValidationAmount => 'Ml miqdorini to\'g\'ri kiriting';
+
+  @override
+  String get addActivityFeedingBreast => 'Emizish';
+
+  @override
+  String get addActivityFeedingBottle => 'Butilka';
+
+  @override
+  String get addActivitySelectReminders => 'Eslatmalarni tanlash';
+
+  @override
+  String get addActivityNoReminders =>
+      'Bu faoliyat uchun kutilayotgan eslatmalar yo\'q.';
+
+  @override
+  String get addActivityNoChildSelected =>
+      'Faoliyat yaratish uchun farzand qo\'shing yoki tanlang.';
+
+  @override
+  String get addActivityCreated => 'Faoliyat muvaffaqiyatli qo\'shildi.';
+
+  @override
+  String addActivitySelectedCount(int count) {
+    return '$count ta tanlandi';
+  }
+
+  @override
+  String get addActivityConditions => 'Holatlar';
+
+  @override
+  String get addActivityNoConditions => 'Holat turlari mavjud emas.';
+
+  @override
+  String addActivityConditionsCount(int count) {
+    return '$count ta tanlandi';
+  }
+
+  @override
   String get homeNoActivityTypes => 'Hozircha faoliyat turlari mavjud emas.';
+
+  @override
+  String get activityHistoryNoActivities => 'Hozircha faoliyatlar yo\'q.';
 
   @override
   String get homeNoReminders => 'Hozircha eslatmalar yo\'q.';
@@ -248,10 +328,88 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeTomorrow => 'Ertaga';
 
   @override
+  String get homeYesterday => 'Kecha';
+
+  @override
   String get homeTab => 'Asosiy';
 
   @override
   String get progressTab => 'Rivojlanish';
+
+  @override
+  String get progressCalendar => 'Kalendar';
+
+  @override
+  String get progressNoChildSelected =>
+      'Rivojlanishni ko‘rish uchun farzandni tanlang.';
+
+  @override
+  String get progressFailedLoad =>
+      'Rivojlanish ma\'lumotlarini yuklab bo\'lmadi.';
+
+  @override
+  String get progressDefaultCallout => 'Farzandingiz har kuni o‘sib bormoqda.';
+
+  @override
+  String progressWeekNumber(int number) {
+    return 'Hafta $number';
+  }
+
+  @override
+  String progressMonthNumber(int number) {
+    return 'Oy $number';
+  }
+
+  @override
+  String progressYearNumber(int number) {
+    return 'Yil $number';
+  }
+
+  @override
+  String progressPeriodNumber(int number) {
+    return 'Davr $number';
+  }
+
+  @override
+  String progressWhatHappensIn(Object period) {
+    return '${period}da nima sodir bo‘ladi?';
+  }
+
+  @override
+  String get progressNoDetails =>
+      'Bu davr uchun tafsilotlar hozircha mavjud emas.';
+
+  @override
+  String get progressExercisesTitle => 'Bu davr uchun mashqlar';
+
+  @override
+  String get progressNoExercises => 'Hozircha mashqlar yo‘q.';
+
+  @override
+  String progressSuggestionsTitle(Object name) {
+    return '$name uchun tavsiyalar';
+  }
+
+  @override
+  String get progressNoSuggestions => 'Hozircha tavsiyalar yo‘q.';
+
+  @override
+  String progressRecommendationsTitle(Object name) {
+    return '$name uchun tavsiya etiladi';
+  }
+
+  @override
+  String get progressNoRecommendations => 'Hozircha tavsiyalar mavjud emas.';
+
+  @override
+  String progressDayRange(int start, int end) {
+    return 'Kun $start - $end';
+  }
+
+  @override
+  String progressItemFallback(int index) {
+    return 'Band $index';
+  }
 
   @override
   String get addTab => 'Qo\'shish';

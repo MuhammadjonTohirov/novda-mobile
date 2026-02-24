@@ -89,14 +89,136 @@
   "addActionSheetDescription": "Log an activity or create a reminder for later.",
   "addActionTypeActivity": "Activity",
   "addActionTypeReminder": "Reminder",
+  "addActivityTitle": "Add {activity}",
+  "@addActivityTitle": {
+    "placeholders": {
+      "activity": {}
+    }
+  },
+  "addActivityStartTime": "Start time",
+  "addActivityEndTime": "End time",
+  "addActivityQuality": "Quality",
+  "addActivityQualityGood": "Good",
+  "addActivityQualityNormal": "Normal",
+  "addActivityQualityBad": "Bad",
+  "addActivityReminders": "Activity reminders",
+  "addActivityComments": "Comments",
+  "addActivitySubmit": "Add activity",
+  "addActivitySave": "Save",
+  "addActivityAmountMl": "Amount in ml",
+  "addActivityValidationAmount": "Enter a valid amount in ml",
+  "addActivityFeedingBreast": "Breast",
+  "addActivityFeedingBottle": "Bottle",
+  "addActivitySelectReminders": "Select reminders",
+  "addActivityNoReminders": "No pending reminders for this activity.",
+  "addActivityNoChildSelected": "Please add/select a child to create an activity.",
+  "addActivityCreated": "Activity added successfully.",
+  "addActivitySelectedCount": "{count} selected",
+  "@addActivitySelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addActivityConditions": "Conditions",
+  "addActivityNoConditions": "No condition types available.",
+  "addActivityConditionsCount": "{count} selected",
+  "@addActivityConditionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeNoActivityTypes": "No activity types available yet.",
+  "activityHistoryNoActivities": "No activities yet.",
   "homeNoReminders": "No reminders yet.",
   "homeComingSoon": "Coming soon",
   "homeFailedLoad": "Failed to load home data.",
   "homeRetry": "Retry",
   "homeTomorrow": "Tomorrow",
+  "homeYesterday": "Yesterday",
   "homeTab": "Home",
   "progressTab": "Progress",
+  "progressCalendar": "Calendar",
+  "progressNoChildSelected": "Select a child to view progress.",
+  "progressFailedLoad": "Failed to load progress data.",
+  "progressDefaultCallout": "Your baby is growing every day.",
+  "progressWeekNumber": "Week {number}",
+  "@progressWeekNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressMonthNumber": "Month {number}",
+  "@progressMonthNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressYearNumber": "Year {number}",
+  "@progressYearNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressPeriodNumber": "Period {number}",
+  "@progressPeriodNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "progressWhatHappensIn": "What happens in {period}?",
+  "@progressWhatHappensIn": {
+    "placeholders": {
+      "period": {}
+    }
+  },
+  "progressNoDetails": "No progress details for this period.",
+  "progressExercisesTitle": "Exercises to do this period",
+  "progressNoExercises": "No exercises available yet.",
+  "progressSuggestionsTitle": "Suggestions for {name}",
+  "@progressSuggestionsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoSuggestions": "No suggestions available yet.",
+  "progressRecommendationsTitle": "Recommended for {name}",
+  "@progressRecommendationsTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "progressNoRecommendations": "No recommendations available yet.",
+  "progressDayRange": "Day {start} - {end}",
+  "@progressDayRange": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "progressItemFallback": "Item {index}",
+  "@progressItemFallback": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "addTab": "Add",
   "learnTab": "Learn",
   "profileTab": "Profile",

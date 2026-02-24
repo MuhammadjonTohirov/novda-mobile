@@ -11,23 +11,26 @@ class NovdaSDK {
     required ChildrenUseCase children,
     required ActivitiesUseCase activities,
     required MeasurementsUseCase measurements,
+    required ProgressUseCase progress,
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
     required ApiClient apiClient,
-  })  : _auth = auth,
-        _user = user,
-        _children = children,
-        _activities = activities,
-        _measurements = measurements,
-        _reminders = reminders,
-        _articles = articles,
-        _apiClient = apiClient;
+  }) : _auth = auth,
+       _user = user,
+       _children = children,
+       _activities = activities,
+       _measurements = measurements,
+       _progress = progress,
+       _reminders = reminders,
+       _articles = articles,
+       _apiClient = apiClient;
 
   final AuthUseCase _auth;
   final UserUseCase _user;
   final ChildrenUseCase _children;
   final ActivitiesUseCase _activities;
   final MeasurementsUseCase _measurements;
+  final ProgressUseCase _progress;
   final RemindersUseCase _reminders;
   final ArticlesUseCase _articles;
   final ApiClient _apiClient;
@@ -46,6 +49,9 @@ class NovdaSDK {
 
   /// Measurements use case
   MeasurementsUseCase get measurements => _measurements;
+
+  /// Progress use case
+  ProgressUseCase get progress => _progress;
 
   /// Reminders use case
   RemindersUseCase get reminders => _reminders;
@@ -82,6 +88,7 @@ class NovdaSDK {
     final childrenGateway = ChildrenGatewayImpl(apiClient);
     final activitiesGateway = ActivitiesGatewayImpl(apiClient);
     final measurementsGateway = MeasurementsGatewayImpl(apiClient);
+    final progressGateway = ProgressGatewayImpl(apiClient);
     final remindersGateway = RemindersGatewayImpl(apiClient);
     final articlesGateway = ArticlesGatewayImpl(apiClient);
 
@@ -91,6 +98,7 @@ class NovdaSDK {
     final childrenUseCase = ChildrenUseCaseImpl(childrenGateway);
     final activitiesUseCase = ActivitiesUseCaseImpl(activitiesGateway);
     final measurementsUseCase = MeasurementsUseCaseImpl(measurementsGateway);
+    final progressUseCase = ProgressUseCaseImpl(progressGateway);
     final remindersUseCase = RemindersUseCaseImpl(remindersGateway);
     final articlesUseCase = ArticlesUseCaseImpl(articlesGateway);
 
@@ -100,6 +108,7 @@ class NovdaSDK {
       children: childrenUseCase,
       activities: activitiesUseCase,
       measurements: measurementsUseCase,
+      progress: progressUseCase,
       reminders: remindersUseCase,
       articles: articlesUseCase,
       apiClient: apiClient,
@@ -114,6 +123,7 @@ class NovdaSDK {
     required ChildrenUseCase children,
     required ActivitiesUseCase activities,
     required MeasurementsUseCase measurements,
+    required ProgressUseCase progress,
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
   }) {
@@ -123,6 +133,7 @@ class NovdaSDK {
       children: children,
       activities: activities,
       measurements: measurements,
+      progress: progress,
       reminders: reminders,
       articles: articles,
       apiClient: _NoOpApiClient(),
@@ -133,32 +144,41 @@ class NovdaSDK {
 /// No-op API client for testing scenarios
 class _NoOpApiClient implements ApiClient {
   @override
-  Future<void> delete(String path,
-      {Map<String, dynamic>? queryParameters, bool requiresAuth = true}) async {}
+  Future<void> delete(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool requiresAuth = true,
+  }) async {}
 
   @override
-  Future<T> get<T>(String path,
-      {Map<String, dynamic>? queryParameters,
-      T Function(Object? json)? fromJson,
-      bool requiresAuth = true}) {
+  Future<T> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    T Function(Object? json)? fromJson,
+    bool requiresAuth = true,
+  }) {
     throw UnimplementedError();
   }
 
   @override
-  Future<T> patch<T>(String path,
-      {Object? data,
-      Map<String, dynamic>? queryParameters,
-      T Function(Object? json)? fromJson,
-      bool requiresAuth = true}) {
+  Future<T> patch<T>(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(Object? json)? fromJson,
+    bool requiresAuth = true,
+  }) {
     throw UnimplementedError();
   }
 
   @override
-  Future<T> post<T>(String path,
-      {Object? data,
-      Map<String, dynamic>? queryParameters,
-      T Function(Object? json)? fromJson,
-      bool requiresAuth = true}) {
+  Future<T> post<T>(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    T Function(Object? json)? fromJson,
+    bool requiresAuth = true,
+  }) {
     throw UnimplementedError();
   }
 

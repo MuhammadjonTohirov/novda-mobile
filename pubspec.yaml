@@ -36,6 +36,7 @@ flutter:
     - assets/images/
     - assets/images/tabs/
     - assets/images/profile/
+    - assets/images/others/
 
   fonts:
     - family: Geist

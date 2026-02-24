@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 import '../../core/extensions/extensions.dart';
 import '../../core/theme/app_theme.dart';
 import '../splash/splash.dart';
+import 'tabs/add_action/add_activity_screen.dart';
 import 'tabs/add_action/add_action_sheet_content.dart';
 import 'tabs/add_action/view_model/add_action_sheet_view_model.dart';
 import 'tabs/home/home_screen.dart';
+import 'tabs/progress/progress_tab_content.dart';
 import 'tabs/profile/profile_tab_content.dart';
 import 'view_model/main_tab_view_model.dart';
 
@@ -29,7 +31,7 @@ class MainTabScreen extends StatelessWidget {
               index: viewModel.selectedTabIndex,
               children: [
                 const HomeScreen(),
-                _TabPlaceholder(title: l10n.progressTab),
+                const ProgressTabContent(),
                 _TabPlaceholder(title: l10n.addTab),
                 _TabPlaceholder(title: l10n.learnTab),
                 ProfileTabContent(onLogout: () => _logout(context, viewModel)),
@@ -52,11 +54,38 @@ class MainTabScreen extends StatelessWidget {
   }
 
   Future<void> _addAction(BuildContext context) async {
-    await AppBottomSheet.show<AddActionSheetSelection>(
+    final selection = await AppBottomSheet.show<AddActionSheetSelection>(
       context: context,
       showDragHandle: true,
       child: const AddActionSheetContent(),
     );
+
+    if (!context.mounted || selection == null) return;
+
+    switch (selection.actionType) {
+      case AddActionType.activity:
+        final createdActivity = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) =>
+                AddActivityScreen(activityType: selection.activityType),
+          ),
+        );
+
+        if (!context.mounted || createdActivity == null) return;
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text(context.l10n.addActivityCreated)),
+          );
+        return;
+
+      case AddActionType.reminder:
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
+        return;
+    }
   }
 
   Future<void> _logout(BuildContext context, MainTabViewModel viewModel) async {

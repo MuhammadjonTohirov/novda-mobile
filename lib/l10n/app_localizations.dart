@@ -526,11 +526,155 @@ abstract class AppLocalizations {
   /// **'Reminder'**
   String get addActionTypeReminder;
 
+  /// No description provided for @addActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {activity}'**
+  String addActivityTitle(Object activity);
+
+  /// No description provided for @addActivityStartTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Start time'**
+  String get addActivityStartTime;
+
+  /// No description provided for @addActivityEndTime.
+  ///
+  /// In en, this message translates to:
+  /// **'End time'**
+  String get addActivityEndTime;
+
+  /// No description provided for @addActivityQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get addActivityQuality;
+
+  /// No description provided for @addActivityQualityGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get addActivityQualityGood;
+
+  /// No description provided for @addActivityQualityNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get addActivityQualityNormal;
+
+  /// No description provided for @addActivityQualityBad.
+  ///
+  /// In en, this message translates to:
+  /// **'Bad'**
+  String get addActivityQualityBad;
+
+  /// No description provided for @addActivityReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity reminders'**
+  String get addActivityReminders;
+
+  /// No description provided for @addActivityComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get addActivityComments;
+
+  /// No description provided for @addActivitySubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add activity'**
+  String get addActivitySubmit;
+
+  /// No description provided for @addActivitySave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get addActivitySave;
+
+  /// No description provided for @addActivityAmountMl.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount in ml'**
+  String get addActivityAmountMl;
+
+  /// No description provided for @addActivityValidationAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid amount in ml'**
+  String get addActivityValidationAmount;
+
+  /// No description provided for @addActivityFeedingBreast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breast'**
+  String get addActivityFeedingBreast;
+
+  /// No description provided for @addActivityFeedingBottle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle'**
+  String get addActivityFeedingBottle;
+
+  /// No description provided for @addActivitySelectReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Select reminders'**
+  String get addActivitySelectReminders;
+
+  /// No description provided for @addActivityNoReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending reminders for this activity.'**
+  String get addActivityNoReminders;
+
+  /// No description provided for @addActivityNoChildSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add/select a child to create an activity.'**
+  String get addActivityNoChildSelected;
+
+  /// No description provided for @addActivityCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity added successfully.'**
+  String get addActivityCreated;
+
+  /// No description provided for @addActivitySelectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String addActivitySelectedCount(int count);
+
+  /// No description provided for @addActivityConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions'**
+  String get addActivityConditions;
+
+  /// No description provided for @addActivityNoConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'No condition types available.'**
+  String get addActivityNoConditions;
+
+  /// No description provided for @addActivityConditionsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String addActivityConditionsCount(int count);
+
   /// No description provided for @homeNoActivityTypes.
   ///
   /// In en, this message translates to:
   /// **'No activity types available yet.'**
   String get homeNoActivityTypes;
+
+  /// No description provided for @activityHistoryNoActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'No activities yet.'**
+  String get activityHistoryNoActivities;
 
   /// No description provided for @homeNoReminders.
   ///
@@ -562,6 +706,12 @@ abstract class AppLocalizations {
   /// **'Tomorrow'**
   String get homeTomorrow;
 
+  /// No description provided for @homeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get homeYesterday;
+
   /// No description provided for @homeTab.
   ///
   /// In en, this message translates to:
@@ -573,6 +723,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Progress'**
   String get progressTab;
+
+  /// No description provided for @progressCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get progressCalendar;
+
+  /// No description provided for @progressNoChildSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a child to view progress.'**
+  String get progressNoChildSelected;
+
+  /// No description provided for @progressFailedLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load progress data.'**
+  String get progressFailedLoad;
+
+  /// No description provided for @progressDefaultCallout.
+  ///
+  /// In en, this message translates to:
+  /// **'Your baby is growing every day.'**
+  String get progressDefaultCallout;
+
+  /// No description provided for @progressWeekNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Week {number}'**
+  String progressWeekNumber(int number);
+
+  /// No description provided for @progressMonthNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Month {number}'**
+  String progressMonthNumber(int number);
+
+  /// No description provided for @progressYearNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Year {number}'**
+  String progressYearNumber(int number);
+
+  /// No description provided for @progressPeriodNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Period {number}'**
+  String progressPeriodNumber(int number);
+
+  /// No description provided for @progressWhatHappensIn.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens in {period}?'**
+  String progressWhatHappensIn(Object period);
+
+  /// No description provided for @progressNoDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'No progress details for this period.'**
+  String get progressNoDetails;
+
+  /// No description provided for @progressExercisesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises to do this period'**
+  String get progressExercisesTitle;
+
+  /// No description provided for @progressNoExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises available yet.'**
+  String get progressNoExercises;
+
+  /// No description provided for @progressSuggestionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions for {name}'**
+  String progressSuggestionsTitle(Object name);
+
+  /// No description provided for @progressNoSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'No suggestions available yet.'**
+  String get progressNoSuggestions;
+
+  /// No description provided for @progressRecommendationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for {name}'**
+  String progressRecommendationsTitle(Object name);
+
+  /// No description provided for @progressNoRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'No recommendations available yet.'**
+  String get progressNoRecommendations;
+
+  /// No description provided for @progressDayRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {start} - {end}'**
+  String progressDayRange(int start, int end);
+
+  /// No description provided for @progressItemFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Item {index}'**
+  String progressItemFallback(int index);
 
   /// No description provided for @addTab.
   ///

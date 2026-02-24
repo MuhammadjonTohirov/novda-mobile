@@ -1,0 +1,3798 @@
+openapi: 3.0.3
+info:
+  title: KidCare API
+  version: 1.0.0
+  description: Backend API for KidCare baby-care mobile application
+paths:
+  /api/v1/activities/{activity_id}:
+    get:
+      operationId: activities_retrieve
+      description: Get details of a specific activity
+      summary: Get Activity
+      parameters:
+      - in: path
+        name: activity_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Activities
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                FeedingActivity:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      activity_type:
+                        slug: feeding
+                        title: Feeding
+                        icon: utensils
+                        color: '#4CAF50'
+                      child_id: 1
+                      start_date: '2024-11-01T08:00:00Z'
+                      end_date: '2024-11-01T08:30:00Z'
+                      quality: good
+                      comments: Fed well
+                      metadata:
+                        feeding_type: breast
+                      created_at: '2024-11-01T08:35:00Z'
+                  summary: Feeding Activity
+                IllnessActivity:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 2
+                      activity_type:
+                        slug: illness
+                        title: Illness
+                        icon: thermometer
+                        color: '#AB47BC'
+                      child_id: 1
+                      start_date: '2024-11-01T10:00:00Z'
+                      end_date: null
+                      quality: null
+                      comments: Started feeling warm
+                      metadata:
+                        conditions:
+                        - temperature
+                        - cough
+                        - runny_nose
+                      created_at: '2024-11-01T10:05:00Z'
+                  summary: Illness Activity
+          description: Activity retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Activity not found
+                    data: null
+                  summary: Not Found
+          description: Activity not found
+  /api/v1/activities/{activity_id}/delete:
+    delete:
+      operationId: activities_delete_destroy
+      description: Soft delete an activity
+      summary: Delete Activity
+      parameters:
+      - in: path
+        name: activity_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Activities
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Activity deleted successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Activity deleted successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Activity not found
+                    data: null
+                  summary: Not Found
+          description: Activity not found
+  /api/v1/activities/{activity_id}/update:
+    patch:
+      operationId: activities_update_partial_update
+      description: Update activity details (cannot change activity_type or child)
+      summary: Update Activity
+      parameters:
+      - in: path
+        name: activity_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Activities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedActivityItemUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedActivityItemUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedActivityItemUpdateRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                UpdatedFeedingActivity:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      activity_type:
+                        slug: feeding
+                        title: Feeding
+                        icon: utensils
+                        color: '#4CAF50'
+                      child_id: 1
+                      start_date: '2024-11-01T08:00:00Z'
+                      end_date: '2024-11-01T08:30:00Z'
+                      quality: good
+                      comments: Updated comment
+                      metadata:
+                        feeding_type: bottle
+                      created_at: '2024-11-01T08:35:00Z'
+                  summary: Updated Feeding Activity
+                UpdatedIllnessActivity:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 2
+                      activity_type:
+                        slug: illness
+                        title: Illness
+                        icon: thermometer
+                        color: '#AB47BC'
+                      child_id: 1
+                      start_date: '2024-11-01T10:00:00Z'
+                      end_date: '2024-11-01T18:00:00Z'
+                      quality: null
+                      comments: Fever subsided
+                      metadata:
+                        conditions:
+                        - temperature
+                      created_at: '2024-11-01T10:05:00Z'
+                  summary: Updated Illness Activity
+          description: Activity updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'start_date: Enter a valid date/time'
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Activity not found
+                    data: null
+                  summary: Not Found
+          description: Activity not found
+  /api/v1/activities/condition-types:
+    get:
+      operationId: activities_condition_types_retrieve
+      description: Get all condition types for multi-select illness tracking
+      summary: List Condition Types
+      tags:
+      - Activity Types
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      condition_types:
+                      - id: 1
+                        slug: temperature
+                        name: Temperature
+                        icon: thermometer
+                      - id: 2
+                        slug: stomach_ache
+                        name: Stomach Ache
+                        icon: stomach
+                      - id: 3
+                        slug: vomiting
+                        name: Vomiting
+                        icon: null
+                  summary: Success Response
+          description: Condition types retrieved successfully
+  /api/v1/activities/types:
+    get:
+      operationId: activities_types_retrieve
+      description: Get all active activity types with icons, colors, and feature flags
+        for UI rendering
+      summary: List Activity Types
+      tags:
+      - Activity Types
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      activity_types:
+                      - id: 1
+                        slug: feeding
+                        title: Feeding
+                        description: Track feeding activities
+                        icon: utensils
+                        color: '#4CAF50'
+                        has_duration: true
+                        has_quality: true
+                        order: 1
+                      - id: 2
+                        slug: sleeping
+                        title: Sleeping
+                        description: Track sleep activities
+                        icon: moon
+                        color: '#6B7FD7'
+                        has_duration: true
+                        has_quality: true
+                        order: 2
+                  summary: Success Response
+          description: Activity types retrieved successfully
+  /api/v1/articles:
+    get:
+      operationId: articles_retrieve
+      description: Get published articles with optional filters
+      summary: List Articles
+      parameters:
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search in title/excerpt
+      - in: query
+        name: topic
+        schema:
+          type: string
+        description: Filter by topic slug
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      articles:
+                      - id: 1
+                        slug: baby-sleep-tips
+                        title: Baby Sleep Tips
+                        excerpt: Essential tips for better baby sleep
+                        hero_image: https://example.com/sleep.jpg
+                        reading_time: 5
+                        view_count: 120
+                        topics:
+                        - slug: sleep
+                          title: Sleep
+                        publish_at: '2024-11-01T10:00:00Z'
+                  summary: Success Response
+          description: Articles retrieved successfully
+  /api/v1/articles/{slug}:
+    get:
+      operationId: articles_retrieve_2
+      description: Get article detail by slug
+      summary: Get Article
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      slug: baby-sleep-tips
+                      title: Baby Sleep Tips
+                      excerpt: Essential tips for better baby sleep
+                      body: <p>Full article content...</p>
+                      hero_image: https://example.com/sleep.jpg
+                      reading_time: 5
+                      view_count: 120
+                      topics:
+                      - slug: sleep
+                        title: Sleep
+                      publish_at: '2024-11-01T10:00:00Z'
+                      created_at: '2024-10-25T08:00:00Z'
+                  summary: Success Response
+          description: Article retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Article not found
+                    data: null
+                  summary: Not Found
+          description: Article not found
+  /api/v1/articles/{slug}/save:
+    post:
+      operationId: articles_save_create
+      description: Bookmark an article for the current user
+      summary: Save Article
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Article saved
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Article saved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Article not found
+                    data: null
+                  summary: Not Found
+          description: Article not found
+    delete:
+      operationId: articles_save_destroy
+      description: Remove an article from bookmarks
+      summary: Unsave Article
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 204
+                    message: null
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Article removed from bookmarks
+  /api/v1/auth/logout:
+    post:
+      operationId: auth_logout_create
+      description: Logout user by blacklisting refresh token. Requires SIMPLE_JWT
+        BLACKLIST enabled in settings.
+      summary: Logout
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Logged out successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Logged out successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidToken:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid refresh token
+                    data: null
+                  summary: Invalid Token
+                MissingToken:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Refresh token is required
+                    data: null
+                  summary: Missing Token
+          description: Invalid refresh token
+  /api/v1/auth/otp/request:
+    post:
+      operationId: auth_otp_request_create
+      description: Request a 6-digit OTP code for phone-based authentication. SMS
+        will be sent in the language specified by Accept-Language header. Rate limited
+        to 3 requests per phone number per 10 minutes.
+      summary: Request OTP
+      parameters:
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+          default: uz
+        description: Language code for SMS message (uz, en, ru)
+      - in: header
+        name: X-API-Key
+        schema:
+          type: string
+        description: API key for client identification
+        required: true
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OTPRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OTPRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OTPRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      expires_in: 300
+                  summary: Success Response
+          description: OTP sent successfully
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                RateLimited:
+                  value:
+                    success: false
+                    code: 429
+                    message: null
+                    error: Rate limit exceeded. Try again in 480 seconds
+                    data: null
+                  summary: Rate Limited
+          description: Rate limit exceeded
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid request data
+  /api/v1/auth/otp/verify:
+    post:
+      operationId: auth_otp_verify_create
+      description: Verify OTP code and issue JWT tokens. Creates user account on first
+        login. Sets preferred_locale from Accept-Language header for new users.
+      summary: Verify OTP
+      parameters:
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+          default: uz
+        description: Language code (sets preferred_locale for new users)
+      - in: header
+        name: X-API-Key
+        schema:
+          type: string
+        description: API key for client identification
+        required: true
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OTPVerifyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OTPVerifyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OTPVerifyRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      access: eyJ0eXAiOiJKV1QiLCJhbGc...
+                      refresh: eyJ0eXAiOiJKV1QiLCJhbGc...
+                      user:
+                        id: 1
+                        phone: '+998901234567'
+                        name: ''
+                        email: null
+                        preferred_locale: uz
+                        theme_preference: auto
+                        notifications_enabled: true
+                  summary: Success Response
+          description: OTP verified successfully, JWT tokens issued
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidOTP:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid OTP code. 2 attempts remaining
+                    data: null
+                  summary: Invalid OTP
+          description: Invalid OTP or validation error
+  /api/v1/auth/token/refresh:
+    post:
+      operationId: auth_token_refresh_create
+      description: Refresh access token using refresh token.
+      summary: Refresh JWT Token
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      access: eyJ0eXAiOiJKV1QiLCJhbGc...
+                      refresh: eyJ0eXAiOiJKV1QiLCJhbGc...
+                  summary: Success Response
+          description: Token refreshed successfully
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidToken:
+                  value:
+                    success: false
+                    code: 401
+                    message: null
+                    error: Invalid or expired refresh token
+                    data: null
+                  summary: Invalid Token
+          description: Invalid or expired refresh token
+  /api/v1/children:
+    get:
+      operationId: children_retrieve
+      description: Get list of all children for the authenticated user
+      summary: List Children
+      tags:
+      - Children
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      children:
+                      - id: 1
+                        name: Ali
+                        gender: boy
+                        birth_date: '2024-01-15'
+                        age_in_weeks: 48
+                        avatar_url: null
+                  summary: Success Response
+          description: Children retrieved successfully
+    post:
+      operationId: children_create
+      description: Create a new child profile
+      summary: Create Child
+      tags:
+      - Children
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChildCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChildCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 201
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      name: Ali
+                      gender: boy
+                      birth_date: '2024-01-15'
+                      age_in_weeks: 48
+                      avatar_url: null
+                      theme_override: null
+                      created_at: '2024-01-15T10:00:00Z'
+                  summary: Success Response
+          description: Child created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'name: This field is required'
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+  /api/v1/children/{child_id}:
+    get:
+      operationId: children_retrieve_2
+      description: Retrieve detailed information about a specific child
+      summary: Get Child Details
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Children
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      name: Ali
+                      gender: boy
+                      birth_date: '2024-01-15'
+                      age_in_weeks: 48
+                      avatar_url: null
+                      theme_override: null
+                      created_at: '2024-01-15T10:00:00Z'
+                  summary: Success Response
+          description: Child details retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+    patch:
+      operationId: children_partial_update
+      description: Update child profile information
+      summary: Update Child
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Children
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedChildUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedChildUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedChildUpdateRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      name: Ali Updated
+                      gender: boy
+                      birth_date: '2024-01-15'
+                      age_in_weeks: 48
+                      avatar_url: null
+                      theme_override: warm
+                      created_at: '2024-01-15T10:00:00Z'
+                  summary: Success Response
+          description: Child updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid gender value
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+    delete:
+      operationId: children_destroy
+      description: Soft delete a child profile
+      summary: Delete Child
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Children
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Child deleted successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Child deleted successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/activities:
+    get:
+      operationId: children_activities_retrieve
+      description: Get activity timeline for a child with optional filters
+      summary: List Activities
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: from
+        schema:
+          type: string
+        description: Start date (ISO 8601 format)
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: 'Max number of results (default: 50)'
+      - in: query
+        name: to
+        schema:
+          type: string
+        description: End date (ISO 8601 format)
+      - in: query
+        name: type
+        schema:
+          type: string
+        description: Filter by activity type slug
+      tags:
+      - Activities
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      activities:
+                      - id: 1
+                        activity_type:
+                          slug: feeding
+                          title: Feeding
+                          icon: utensils
+                          color: '#4CAF50'
+                        child_id: 1
+                        start_date: '2024-11-01T08:00:00Z'
+                        end_date: '2024-11-01T08:30:00Z'
+                        quality: good
+                        comments: Fed well
+                        metadata:
+                          feeding_type: bottle
+                        created_at: '2024-11-01T08:35:00Z'
+                      - id: 2
+                        activity_type:
+                          slug: illness
+                          title: Illness
+                          icon: thermometer
+                          color: '#AB47BC'
+                        child_id: 1
+                        start_date: '2024-11-01T10:00:00Z'
+                        end_date: null
+                        quality: null
+                        comments: null
+                        metadata:
+                          conditions:
+                          - temperature
+                          - cough
+                        created_at: '2024-11-01T10:05:00Z'
+                      - id: 3
+                        activity_type:
+                          slug: sleeping
+                          title: Sleeping
+                          icon: moon
+                          color: '#6B7FD7'
+                        child_id: 1
+                        start_date: '2024-11-01T13:00:00Z'
+                        end_date: '2024-11-01T15:00:00Z'
+                        quality: good
+                        comments: null
+                        metadata: null
+                        created_at: '2024-11-01T15:05:00Z'
+                  summary: Success Response
+          description: Activities retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/activities/create:
+    post:
+      operationId: children_activities_create_create
+      description: Log a new activity for a child...
+      summary: Create Activity
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Activities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityItemCreateRequest'
+            examples:
+              FeedingRequestExample:
+                value:
+                  activity_type: 1
+                  child: 1
+                  start_date: '2024-11-01T08:00:00Z'
+                  end_date: '2024-11-01T08:30:00Z'
+                  quality: good
+                  comments: Fed well
+                  metadata:
+                    feeding_type: breast
+                    conditions:
+                    - hungry
+                    - happy
+                summary: Feeding Request
+                description: Example payload for a feeding activity
+              IllnessRequestExample:
+                value:
+                  activity_type: 2
+                  child: 1
+                  start_date: '2024-11-01T10:00:00Z'
+                  comments: High fever
+                  metadata:
+                    conditions:
+                    - fever
+                    - cough
+                summary: Illness Request
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActivityItemCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActivityItemCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                FeedingActivity:
+                  value:
+                    success: true
+                    code: 201
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      activity_type:
+                        slug: feeding
+                        title: Feeding
+                        icon: utensils
+                        color: '#4CAF50'
+                      child_id: 1
+                      start_date: '2024-11-01T08:00:00Z'
+                      end_date: '2024-11-01T08:30:00Z'
+                      quality: good
+                      comments: Fed well
+                      metadata:
+                        feeding_type: breast
+                      created_at: '2024-11-01T08:35:00Z'
+                  summary: Feeding Activity
+                IllnessActivity:
+                  value:
+                    success: true
+                    code: 201
+                    message: null
+                    error: null
+                    data:
+                      id: 2
+                      activity_type:
+                        slug: illness
+                        title: Illness
+                        icon: thermometer
+                        color: '#AB47BC'
+                      child_id: 1
+                      start_date: '2024-11-01T10:00:00Z'
+                      end_date: null
+                      quality: null
+                      comments: Started feeling warm
+                      metadata:
+                        conditions:
+                        - temperature
+                        - cough
+                      created_at: '2024-11-01T10:05:00Z'
+                  summary: Illness Activity
+          description: Activity created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'activity_type: This field is required'
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/activities/summary:
+    get:
+      operationId: children_activities_summary_retrieve
+      description: 'Get dashboard data: last activities per type, daily counts, and
+        total today'
+      summary: Get Activity Summary
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Activities
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      last_activities:
+                      - id: 1
+                        activity_type:
+                          slug: feeding
+                          title: Feeding
+                          icon: utensils
+                          color: '#4CAF50'
+                        child_id: 1
+                        start_date: '2024-11-01T08:00:00Z'
+                        end_date: '2024-11-01T08:30:00Z'
+                        quality: good
+                        comments: null
+                        metadata:
+                          feeding_type: breast
+                        created_at: '2024-11-01T08:35:00Z'
+                      - id: 2
+                        activity_type:
+                          slug: illness
+                          title: Illness
+                          icon: thermometer
+                          color: '#AB47BC'
+                        child_id: 1
+                        start_date: '2024-11-01T10:00:00Z'
+                        end_date: null
+                        quality: null
+                        comments: null
+                        metadata:
+                          conditions:
+                          - temperature
+                          - cough
+                        created_at: '2024-11-01T10:05:00Z'
+                      - id: 3
+                        activity_type:
+                          slug: sleeping
+                          title: Sleeping
+                          icon: moon
+                          color: '#6B7FD7'
+                        child_id: 1
+                        start_date: '2024-11-01T13:00:00Z'
+                        end_date: '2024-11-01T15:00:00Z'
+                        quality: good
+                        comments: null
+                        metadata: null
+                        created_at: '2024-11-01T15:05:00Z'
+                      daily_counts:
+                        feeding: 3
+                        sleeping: 2
+                        diapers: 5
+                        bath: 1
+                        medication: 0
+                        crying: 1
+                        illness: 0
+                      total_today: 12
+                  summary: Success Response
+          description: Summary retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/measurements:
+    post:
+      operationId: children_measurements_create
+      description: Log a new measurement (weight, height, or head circumference) for
+        a child. Always creates a new record to maintain history.
+      summary: Create Measurement
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Measurements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeasurementCreateRequest'
+            examples:
+              CreateWeightMeasurement:
+                value:
+                  type: weight
+                  value: 4.5
+                  taken_at: '2024-11-01T10:00:00Z'
+                  notes: After feeding
+                summary: Create Weight Measurement
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MeasurementCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MeasurementCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 201
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child: 1
+                      child_name: Ali
+                      type: weight
+                      value: '4.50'
+                      unit: kg
+                      taken_at: '2024-11-01T10:00:00Z'
+                      notes: After feeding
+                      created_at: '2024-11-01T10:05:00Z'
+                  summary: Success Response
+          description: Measurement created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error:
+                      value:
+                      - Weight must be between 2.0 and 40.0 kg
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/measurements/chart:
+    get:
+      operationId: children_measurements_chart_retrieve
+      description: Get measurement data formatted for chart rendering with specified
+        time period
+      summary: Get Chart Data
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: period
+        schema:
+          type: string
+          enum:
+          - 1m
+          - 1y
+          - 3m
+          - 6m
+          - all
+          default: 6m
+        description: Time period (1m/3m/6m/1y/all)
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - head_circumference
+          - height
+          - weight
+        description: Measurement type (weight/height/head_circumference)
+        required: true
+      tags:
+      - Measurements
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      labels:
+                      - '2024-09-01'
+                      - '2024-10-01'
+                      - '2024-11-01'
+                      values:
+                      - 3.5
+                      - 4.0
+                      - 4.5
+                      unit: kg
+                      min: 3.5
+                      max: 4.5
+                      average: 4.0
+                  summary: Success Response
+          description: Chart data retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidType:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid measurement type
+                    data: null
+                  summary: Invalid Type
+                InvalidPeriod:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid period. Use 1m, 3m, 6m, 1y, or all
+                    data: null
+                  summary: Invalid Period
+          description: Invalid parameters
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/measurements/latest:
+    get:
+      operationId: children_measurements_latest_retrieve
+      description: Get the most recent measurement of each type (weight, height, head
+        circumference) for a child
+      summary: Get Latest Measurements
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Measurements
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      weight:
+                        id: 1
+                        child: 1
+                        child_name: Ali
+                        type: weight
+                        value: '4.50'
+                        unit: kg
+                        taken_at: '2024-11-01T10:00:00Z'
+                        notes: null
+                        created_at: '2024-11-01T10:05:00Z'
+                      height:
+                        id: 2
+                        child: 1
+                        child_name: Ali
+                        type: height
+                        value: '55.00'
+                        unit: cm
+                        taken_at: '2024-11-01T10:00:00Z'
+                        notes: null
+                        created_at: '2024-11-01T10:05:00Z'
+                      head_circumference: null
+                  summary: Success Response
+          description: Latest measurements retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/measurements/list:
+    get:
+      operationId: children_measurements_list_retrieve
+      description: Get measurement history for a child with optional filters by type
+        and date range
+      summary: List Measurements
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: from
+        schema:
+          type: string
+        description: Start date (ISO 8601 format)
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: 'Max number of results (default: 100)'
+      - in: query
+        name: to
+        schema:
+          type: string
+        description: End date (ISO 8601 format)
+      - in: query
+        name: type
+        schema:
+          type: string
+        description: Filter by measurement type (weight/height/head_circumference)
+      tags:
+      - Measurements
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      measurements:
+                      - id: 1
+                        child: 1
+                        child_name: Ali
+                        type: weight
+                        value: '4.50'
+                        unit: kg
+                        taken_at: '2024-11-01T10:00:00Z'
+                        notes: null
+                        created_at: '2024-11-01T10:05:00Z'
+                  summary: Success Response
+          description: Measurements retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/progress/crisis-calendar:
+    get:
+      operationId: children_progress_crisis_calendar_retrieve
+      description: Get calendar view showing all configured progress periods with
+        stage types
+      summary: Get Crisis Calendar
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      current_period:
+                        period_unit: week
+                        period_index: 12
+                        week_number: 12
+                        date_range: Oct 21 - Oct 27, 2024
+                        start_date: '2024-10-21'
+                        end_date: '2024-10-27'
+                        stage_type: crisis
+                        week_type: crisis
+                        is_current: true
+                        is_past: false
+                        crisis_warning: Growth spurt week
+                      max_period_index: 104
+                      current_week_number: 12
+                      max_week: 104
+                      weeks:
+                      - period_unit: week
+                        period_index: 1
+                        week_number: 1
+                        date_range: Aug 1 - Aug 7, 2024
+                        start_date: '2024-08-01'
+                        end_date: '2024-08-07'
+                        stage_type: normal
+                        week_type: normal
+                        is_current: false
+                        crisis_description: null
+                      - period_unit: week
+                        period_index: 12
+                        week_number: 12
+                        date_range: Oct 21 - Oct 27, 2024
+                        start_date: '2024-10-21'
+                        end_date: '2024-10-27'
+                        stage_type: crisis
+                        week_type: crisis
+                        is_current: true
+                        crisis_description: Growth spurt week
+                  summary: Success Response
+          description: Crisis calendar retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/progress/current:
+    get:
+      operationId: children_progress_current_retrieve
+      description: Get current progress period guide based on child age with exercises,
+        suggestions, and recommendations
+      summary: Get Current Progress
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      deprecated: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      period_unit: week
+                      period_index: 12
+                      week_number: 12
+                      stage_type: normal
+                      week_type: normal
+                      date_range: Nov 1 - Nov 7, 2024
+                      start_date: '2024-11-01'
+                      end_date: '2024-11-07'
+                      headline: Your baby is growing!
+                      summary: This week your baby...
+                      crisis_warning: null
+                      crisis_description: null
+                      exercises: []
+                      suggestions: []
+                      recommendations: []
+                  summary: Success Response
+          description: Current progress retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/progress/periods:
+    get:
+      operationId: children_progress_periods_retrieve
+      description: List surrounding generalized progress periods (week/month/custom)
+        with metadata
+      summary: Get Period Selector
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: integer
+        description: 'Number of periods after current (default: 1)'
+      - in: query
+        name: before
+        schema:
+          type: integer
+        description: 'Number of periods before current (default: 1)'
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      deprecated: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      current_period_index: 12
+                      current_period_unit: week
+                      periods:
+                      - period_unit: week
+                        period_index: 11
+                        week_number: 11
+                        date_range: Oct 25 - Oct 31, 2024
+                        start_date: '2024-10-25'
+                        end_date: '2024-10-31'
+                        stage_type: normal
+                        week_type: normal
+                        is_current: false
+                        is_past: true
+                        crisis_warning: null
+                      - period_unit: week
+                        period_index: 12
+                        week_number: 12
+                        date_range: Nov 1 - Nov 7, 2024
+                        start_date: '2024-11-01'
+                        end_date: '2024-11-07'
+                        stage_type: crisis
+                        week_type: crisis
+                        is_current: true
+                        is_past: false
+                        crisis_warning: Growth spurt week
+                  summary: Success Response
+          description: Period selector data retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Child not found
+  /api/v1/children/{child_id}/progress/weeks:
+    get:
+      operationId: children_progress_weeks_retrieve
+      description: List surrounding progress periods (weekly or monthly) with metadata
+      summary: Get Week Selector
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: integer
+        description: 'Number of periods after current (default: 1)'
+      - in: query
+        name: before
+        schema:
+          type: integer
+        description: 'Number of periods before current (default: 1)'
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      deprecated: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      current_week: 12
+                      weeks:
+                      - period_unit: week
+                        period_index: 11
+                        week_number: 11
+                        date_range: Oct 25 - Oct 31, 2024
+                        start_date: '2024-10-25'
+                        end_date: '2024-10-31'
+                        stage_type: normal
+                        week_type: normal
+                        is_current: false
+                        is_past: true
+                        crisis_warning: null
+                      - period_unit: week
+                        period_index: 12
+                        week_number: 12
+                        date_range: Nov 1 - Nov 7, 2024
+                        start_date: '2024-11-01'
+                        end_date: '2024-11-07'
+                        stage_type: crisis
+                        week_type: crisis
+                        is_current: true
+                        is_past: false
+                        crisis_warning: Growth spurt week
+                  summary: Success Response
+          description: Week selector data retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/reminders:
+    get:
+      operationId: children_reminders_retrieve
+      description: Get reminders for a child with optional filters
+      summary: List Reminders
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: from
+        schema:
+          type: string
+          format: date-time
+        description: Filter reminders from this date
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: Limit number of results
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Filter by status (pending/completed/cancelled)
+      - in: query
+        name: to
+        schema:
+          type: string
+          format: date-time
+        description: Filter reminders until this date
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                    - id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-01T14:00:00Z'
+                      note: Give vitamin D drops
+                      status: pending
+                      completed_at: null
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Reminders retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidDateFormat:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid from date format. Use ISO 8601 format.
+                    data: null
+                  summary: Invalid Date Format
+          description: Invalid filter parameters
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/reminders/calendar:
+    get:
+      operationId: children_reminders_calendar_retrieve
+      description: Get calendar view with reminder counts per day for a specific month
+      summary: Get Reminder Calendar
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: month
+        schema:
+          type: string
+        description: Month in YYYY-MM format
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                    - date: '2024-11-01'
+                      pending_count: 2
+                      completed_count: 1
+                      total_count: 3
+                    - date: '2024-11-05'
+                      pending_count: 1
+                      completed_count: 0
+                      total_count: 1
+                  summary: Success Response
+          description: Calendar data retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                MissingMonth:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'Month parameter is required (format: YYYY-MM)'
+                    data: null
+                  summary: Missing Month
+                InvalidFormat:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid month format. Use YYYY-MM format.
+                    data: null
+                  summary: Invalid Format
+          description: Invalid request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/reminders/create:
+    post:
+      operationId: children_reminders_create_create
+      description: Create a new reminder for a child
+      summary: Create Reminder
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Reminders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReminderCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReminderCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 201
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-01T14:00:00Z'
+                      note: Give vitamin D drops
+                      status: pending
+                      completed_at: null
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Reminder created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'category: This field is required'
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/reminders/search:
+    get:
+      operationId: children_reminders_search_retrieve
+      description: Search reminders by category and note text
+      summary: Search Reminders
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: Limit number of results
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search query (searches category and note)
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                    - id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-01T14:00:00Z'
+                      note: Give vitamin D drops
+                      status: pending
+                      completed_at: null
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Search results retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                MissingQuery:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Search query (q) is required
+                    data: null
+                  summary: Missing Query
+          description: Invalid request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/children/{child_id}/select:
+    post:
+      operationId: children_select_create
+      description: Set a child as the last active child for quick access
+      summary: Select Active Child
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Children
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Child selected successfully
+                    error: null
+                    data:
+                      child_id: 1
+                  summary: Success Response
+          description: Child selected successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Child not found
+                    data: null
+                  summary: Not Found
+          description: Child not found
+  /api/v1/me:
+    get:
+      operationId: me_retrieve
+      description: Get authenticated user profile and preferences.
+      summary: Get Current User Profile
+      parameters:
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+          default: uz
+        description: Language code for response
+      tags:
+      - User
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      phone: '+998901234567'
+                      name: John Doe
+                      email: john@example.com
+                      preferred_locale: uz
+                      theme_preference: warm
+                      notifications_enabled: true
+                      terms_accepted_at: '2024-01-15T10:00:00Z'
+                      last_active_child: 1
+                      age_in_weeks: 12
+                  summary: Success Response
+          description: User profile retrieved successfully
+  /api/v1/me/accept-terms:
+    post:
+      operationId: me_accept_terms_create
+      description: Mark terms and conditions as accepted by the user.
+      summary: Accept Terms and Conditions
+      tags:
+      - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptTermsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AcceptTermsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AcceptTermsRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Terms accepted successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Terms accepted successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: accept field is required
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+  /api/v1/me/delete:
+    delete:
+      operationId: me_delete_destroy
+      description: Soft delete user account. Marks account as deleted and schedules
+        data cleanup.
+      summary: Delete Account
+      tags:
+      - User
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Account deleted successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Account deleted successfully
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ServerError:
+                  value:
+                    success: false
+                    code: 500
+                    message: null
+                    error: Failed to delete account
+                    data: null
+                  summary: Server Error
+          description: Server error
+  /api/v1/me/saved-articles:
+    get:
+      operationId: me_saved_articles_retrieve
+      description: Get all saved/bookmarked articles for the current user
+      summary: List Saved Articles
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      saved_articles:
+                      - id: 1
+                        article:
+                          slug: baby-sleep-tips
+                          title: Baby Sleep Tips
+                        saved_at: '2024-11-01T10:00:00Z'
+                  summary: Success Response
+          description: Saved articles retrieved successfully
+  /api/v1/me/update:
+    patch:
+      operationId: me_update_partial_update
+      description: Update user profile and preferences.
+      summary: Update User Profile
+      tags:
+      - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      phone: '+998901234567'
+                      name: John Doe
+                      email: john@example.com
+                      preferred_locale: uz
+                      theme_preference: warm
+                      notifications_enabled: true
+                  summary: Success Response
+          description: Profile updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid theme_preference value
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+  /api/v1/measurements/{measurement_id}:
+    delete:
+      operationId: measurements_destroy
+      description: Soft delete a specific measurement (for error correction)
+      summary: Delete Measurement
+      parameters:
+      - in: path
+        name: measurement_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Measurements
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: Measurement deleted successfully
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Measurement deleted successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Measurement not found
+                    data: null
+                  summary: Not Found
+          description: Measurement not found
+  /api/v1/progress/current:
+    get:
+      operationId: progress_current_retrieve
+      description: Get current progress guide by age_days and optional gender. Content
+        is shared across children.
+      summary: Get Current Progress (Global)
+      parameters:
+      - in: query
+        name: age_days
+        schema:
+          type: integer
+        description: Age in days (required)
+        required: true
+      - in: query
+        name: gender
+        schema:
+          type: string
+        description: 'Optional gender filter: boy, girl, or all (default: all)'
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      period_unit: week
+                      period_index: 12
+                      week_number: 12
+                      stage_type: normal
+                      week_type: normal
+                      date_range: null
+                      start_date: null
+                      end_date: null
+                      headline: Your baby is growing!
+                      summary: This week your baby...
+                      crisis_warning: null
+                      crisis_description: null
+                      exercises: []
+                      suggestions: []
+                      recommendations: []
+                  summary: Success Response
+          description: Current progress retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid query parameters
+  /api/v1/progress/periods:
+    get:
+      operationId: progress_periods_selector_retrieve
+      description: List surrounding shared periods by age_days or explicit period
+        params. Content is shared across children.
+      summary: Get Period Selector (Global)
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: integer
+        description: 'Number of periods after current (default: 1)'
+      - in: query
+        name: age_days
+        schema:
+          type: integer
+        description: Age in days. Use this or provide period_unit + period_index.
+      - in: query
+        name: before
+        schema:
+          type: integer
+        description: 'Number of periods before current (default: 1)'
+      - in: query
+        name: gender
+        schema:
+          type: string
+        description: 'Optional gender filter: boy, girl, or all (default: all)'
+      - in: query
+        name: period_index
+        schema:
+          type: integer
+        description: Explicit period index (positive integer). Use with period_unit
+          when age_days is omitted.
+      - in: query
+        name: period_unit
+        schema:
+          type: string
+        description: Explicit period unit (week/month/custom). Use with period_index
+          when age_days is omitted.
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      current_period_unit: week
+                      current_period_index: 11
+                      current_week_number: 11
+                      periods:
+                      - period_unit: week
+                        period_index: 10
+                        week_number: 10
+                        age_start_days: 63
+                        age_end_days: 69
+                        stage_type: normal
+                        week_type: normal
+                        is_current: false
+                        is_past: true
+                        crisis_warning: null
+                      - period_unit: week
+                        period_index: 11
+                        week_number: 11
+                        age_start_days: 70
+                        age_end_days: 76
+                        stage_type: crisis
+                        week_type: crisis
+                        is_current: true
+                        is_past: false
+                        crisis_warning: Growth spurt week
+                  summary: Success Response
+          description: Period selector data retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid query parameters
+  /api/v1/progress/periods/{period_unit}/{period_index}:
+    get:
+      operationId: progress_period_detail_retrieve
+      description: Get guide for a specific progress period by period unit and index
+      summary: Get Specific Period
+      parameters:
+      - in: query
+        name: gender
+        schema:
+          type: string
+        description: 'Optional gender filter: boy, girl, or all (default: all)'
+      - in: path
+        name: period_index
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: period_unit
+        schema:
+          type: string
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      period_unit: month
+                      period_index: 27
+                      week_number: null
+                      stage_type: development
+                      week_type: development
+                      date_range: null
+                      start_date: null
+                      end_date: null
+                      headline: Development period
+                      summary: This period focuses on steady development...
+                      crisis_warning: null
+                      crisis_description: null
+                      exercises: []
+                      suggestions: []
+                      recommendations: []
+                  summary: Success Response
+          description: Period guide retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid period unit
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Period guide not found
+  /api/v1/progress/periods/all:
+    get:
+      operationId: progress_periods_all_retrieve
+      description: Get all configured shared progress periods without requiring age
+        or period filters.
+      summary: Get All Periods (Global)
+      parameters:
+      - in: query
+        name: gender
+        schema:
+          type: string
+        description: 'Optional gender filter: boy, girl, or all (default: all)'
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      total: 118
+                      periods:
+                      - period_unit: week
+                        period_index: 1
+                        age_start_days: 0
+                        age_end_days: 6
+                        stage_type: normal
+                        week_type: normal
+                        crisis_warning: null
+                  summary: Success Response
+          description: All periods retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid query parameters
+  /api/v1/progress/weeks/{week_number}:
+    get:
+      operationId: progress_weeks_retrieve
+      description: Get guide for a specific week number (legacy endpoint; maps to
+        weekly periods)
+      summary: Get Specific Week
+      parameters:
+      - in: path
+        name: week_number
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      deprecated: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      period_unit: week
+                      period_index: 12
+                      week_number: 12
+                      stage_type: crisis
+                      week_type: crisis
+                      date_range: null
+                      start_date: null
+                      end_date: null
+                      headline: Growth Spurt Week
+                      summary: Your baby may be fussier...
+                      crisis_warning: Growth spurt expected
+                      crisis_description: During this week...
+                      exercises: []
+                      suggestions: []
+                      recommendations: []
+                  summary: Success Response
+          description: Week guide retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: No guide found for week 12
+                    data: null
+                  summary: Not Found
+          description: Week guide not found
+  /api/v1/reminders/{reminder_id}:
+    get:
+      operationId: reminders_retrieve
+      description: Get details of a specific reminder
+      summary: Get Reminder
+      parameters:
+      - in: path
+        name: reminder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-01T14:00:00Z'
+                      note: Give vitamin D drops
+                      status: pending
+                      completed_at: null
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Reminder retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Reminder not found
+                    data: null
+                  summary: Not Found
+          description: Reminder not found
+  /api/v1/reminders/{reminder_id}/complete:
+    post:
+      operationId: reminders_complete_create
+      description: Mark a reminder as completed manually
+      summary: Complete Reminder
+      parameters:
+      - in: path
+        name: reminder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-01T14:00:00Z'
+                      note: Give vitamin D drops
+                      status: completed
+                      completed_at: '2024-11-01T14:05:00Z'
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Reminder completed successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Reminder not found
+                    data: null
+                  summary: Not Found
+          description: Reminder not found
+  /api/v1/reminders/{reminder_id}/delete:
+    delete:
+      operationId: reminders_delete_destroy
+      description: Delete a reminder permanently
+      summary: Delete Reminder
+      parameters:
+      - in: path
+        name: reminder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Reminders
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 204
+                    message: null
+                    error: null
+                    data: null
+                  summary: Success Response
+          description: Reminder deleted successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Reminder not found
+                    data: null
+                  summary: Not Found
+          description: Reminder not found
+  /api/v1/reminders/{reminder_id}/update:
+    patch:
+      operationId: reminders_update_partial_update
+      description: Update reminder details (reschedule, change note, update status)
+      summary: Update Reminder
+      parameters:
+      - in: path
+        name: reminder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Reminders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReminderUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReminderUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReminderUpdateRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child_id: 1
+                      category: medication
+                      due_at: '2024-11-02T14:00:00Z'
+                      note: Give vitamin D drops - updated
+                      status: pending
+                      completed_at: null
+                      created_at: '2024-10-30T10:00:00Z'
+                  summary: Success Response
+          description: Reminder updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                ValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: 'due_at: Enter a valid date/time'
+                    data: null
+                  summary: Validation Error
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Reminder not found
+                    data: null
+                  summary: Not Found
+          description: Reminder not found
+  /api/v1/topics:
+    get:
+      operationId: topics_retrieve
+      description: Get all topics (optionally filter by popular only)
+      summary: List Topics
+      parameters:
+      - in: query
+        name: popular
+        schema:
+          type: string
+        description: Filter by popular topics only
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      topics:
+                      - id: 1
+                        slug: nutrition
+                        title: Nutrition
+                        description: Feeding and nutrition tips
+                        position: 1
+                        is_popular: true
+                        cover_image: https://example.com/nutrition.jpg
+                  summary: Success Response
+          description: Topics retrieved successfully
+components:
+  schemas:
+    AcceptTermsRequest:
+      type: object
+      description: Serializer for accepting terms and conditions.
+      properties:
+        accept:
+          type: boolean
+          default: true
+          description: Must be true to accept terms
+    ActivityItemCreateRequest:
+      type: object
+      description: Serializer for creating ActivityItem.
+      properties:
+        activity_type:
+          type: integer
+        start_date:
+          type: string
+          format: date-time
+          description: Primary timestamp - when activity started or occurred (UTC)
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: When activity ended (for duration-based activities like sleep,
+            feeding, bath, illness)
+        quality:
+          allOf:
+          - $ref: '#/components/schemas/QualityEnum'
+          nullable: true
+          description: |-
+            Quality rating (for sleep and feeding activities)
+
+            * `good` - Good
+            * `normal` - Normal
+            * `bad` - Bad
+        comments:
+          type: string
+          description: Free text notes about this activity
+        metadata:
+          nullable: true
+          description: Type-specific data (e.g., illness conditions, medication dosage)
+      required:
+      - activity_type
+      - start_date
+    ChildCreateRequest:
+      type: object
+      description: Serializer for creating a child (user is set from request).
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Child's name
+          maxLength: 100
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/GenderEnum'
+          description: |-
+            Child's gender
+
+            * `boy` - Boy
+            * `girl` - Girl
+            * `undisclosed` - Undisclosed
+        birth_date:
+          type: string
+          format: date
+          description: Child's birth date (cannot be in the future)
+        avatar_image:
+          type: string
+          format: binary
+          nullable: true
+          description: Child's avatar image (max 10MB, jpg/png/webp)
+          pattern: (?:jpg|jpeg|png|webp)$
+        theme_override:
+          allOf:
+          - $ref: '#/components/schemas/ThemeOverrideEnum'
+          nullable: true
+          description: |-
+            Optional theme override for this child (defaults to user preference)
+
+            * `warm` - Warm
+            * `calm` - Calm
+            * `auto` - Auto
+      required:
+      - birth_date
+      - gender
+      - name
+    GenderEnum:
+      enum:
+      - boy
+      - girl
+      - undisclosed
+      type: string
+      description: |-
+        * `boy` - Boy
+        * `girl` - Girl
+        * `undisclosed` - Undisclosed
+    MeasurementCreateRequest:
+      type: object
+      description: Serializer for creating measurements (child is set from URL).
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Measurement type
+          description: |-
+            Type of measurement
+
+            * `weight` - Weight
+            * `height` - Height
+            * `head_circumference` - Head Circumference
+        value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          description: Measurement value
+        taken_at:
+          type: string
+          format: date-time
+          description: When the measurement was taken (UTC, cannot be in the future)
+        notes:
+          type: string
+          description: Optional notes about this measurement
+      required:
+      - taken_at
+      - type
+      - value
+    OTPRequestRequest:
+      type: object
+      description: Serializer for requesting OTP.
+      properties:
+        phone:
+          type: string
+          minLength: 1
+          description: Phone number in international format (e.g., +998901234567)
+          pattern: ^\+?1?\d{9,15}$
+        purpose:
+          allOf:
+          - $ref: '#/components/schemas/PurposeEnum'
+          default: auth
+          description: |-
+            Purpose of OTP request
+
+            * `auth` - auth
+            * `change_phone` - change_phone
+      required:
+      - phone
+    OTPVerifyRequest:
+      type: object
+      description: Serializer for verifying OTP and issuing JWT tokens.
+      properties:
+        phone:
+          type: string
+          minLength: 1
+          description: Phone number in international format
+          pattern: ^\+?1?\d{9,15}$
+        code:
+          type: string
+          minLength: 6
+          description: 6-digit OTP code
+          maxLength: 6
+      required:
+      - code
+      - phone
+    PatchedActivityItemUpdateRequest:
+      type: object
+      description: Serializer for updating ActivityItem.
+      properties:
+        start_date:
+          type: string
+          format: date-time
+          description: Primary timestamp - when activity started or occurred (UTC)
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: When activity ended (for duration-based activities like sleep,
+            feeding, bath, illness)
+        quality:
+          allOf:
+          - $ref: '#/components/schemas/QualityEnum'
+          nullable: true
+          description: |-
+            Quality rating (for sleep and feeding activities)
+
+            * `good` - Good
+            * `normal` - Normal
+            * `bad` - Bad
+        comments:
+          type: string
+          description: Free text notes about this activity
+        metadata:
+          nullable: true
+          description: Type-specific data (e.g., illness conditions, medication dosage)
+    PatchedChildUpdateRequest:
+      type: object
+      description: Serializer for updating a child.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Child's name
+          maxLength: 100
+        gender:
+          allOf:
+          - $ref: '#/components/schemas/GenderEnum'
+          description: |-
+            Child's gender
+
+            * `boy` - Boy
+            * `girl` - Girl
+            * `undisclosed` - Undisclosed
+        birth_date:
+          type: string
+          format: date
+          description: Child's birth date (cannot be in the future)
+        avatar_image:
+          type: string
+          format: binary
+          nullable: true
+          description: Child's avatar image (max 10MB, jpg/png/webp)
+          pattern: (?:jpg|jpeg|png|webp)$
+        theme_override:
+          allOf:
+          - $ref: '#/components/schemas/ThemeOverrideEnum'
+          nullable: true
+          description: |-
+            Optional theme override for this child (defaults to user preference)
+
+            * `warm` - Warm
+            * `calm` - Calm
+            * `auto` - Auto
+    PatchedReminderUpdateRequest:
+      type: object
+      description: Serializer for updating Reminder.
+      properties:
+        activity_type:
+          type: integer
+          description: Type of activity this reminder is for
+        due_at:
+          type: string
+          format: date-time
+          description: When the reminder is due (UTC)
+        note:
+          type: string
+          description: Additional notes for the reminder
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+    PatchedUserProfileUpdateRequest:
+      type: object
+      description: Serializer for updating user profile.
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          nullable: true
+          title: Email address
+          maxLength: 254
+        preferred_locale:
+          allOf:
+          - $ref: '#/components/schemas/PreferredLocaleEnum'
+          title: Preferred language
+          description: |-
+            Used for future server-initiated notifications (SMS/Email). API responses use Accept-Language header.
+
+            * `en` - English
+            * `uz` - Uzbek
+            * `ru` - Russian
+        theme_preference:
+          $ref: '#/components/schemas/ThemePreferenceEnum'
+        notifications_enabled:
+          type: boolean
+    PreferredLocaleEnum:
+      enum:
+      - en
+      - uz
+      - ru
+      type: string
+      description: |-
+        * `en` - English
+        * `uz` - Uzbek
+        * `ru` - Russian
+    PurposeEnum:
+      enum:
+      - auth
+      - change_phone
+      type: string
+      description: |-
+        * `auth` - auth
+        * `change_phone` - change_phone
+    QualityEnum:
+      enum:
+      - good
+      - normal
+      - bad
+      type: string
+      description: |-
+        * `good` - Good
+        * `normal` - Normal
+        * `bad` - Bad
+    ReminderCreateRequest:
+      type: object
+      description: Serializer for creating Reminder.
+      properties:
+        activity_type:
+          type: integer
+          description: Type of activity this reminder is for
+        due_at:
+          type: string
+          format: date-time
+          description: When the reminder is due (UTC)
+        note:
+          type: string
+          description: Additional notes for the reminder
+      required:
+      - activity_type
+      - due_at
+    StandardResponse:
+      type: object
+      description: |-
+        Standard API response wrapper.
+        All endpoints should return data in this format.
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the operation was successful
+        code:
+          type: integer
+          description: HTTP status code
+        message:
+          type: string
+          nullable: true
+          description: Human-readable message (nullable)
+        error:
+          type: string
+          nullable: true
+          description: Error description (present when success=false)
+        data:
+          nullable: true
+          description: Response payload (present when success=true)
+      required:
+      - code
+      - success
+    StatusEnum:
+      enum:
+      - pending
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `completed` - Completed
+        * `cancelled` - Cancelled
+    ThemeOverrideEnum:
+      enum:
+      - warm
+      - calm
+      - auto
+      type: string
+      description: |-
+        * `warm` - Warm
+        * `calm` - Calm
+        * `auto` - Auto
+    ThemePreferenceEnum:
+      enum:
+      - warm
+      - calm
+      - auto
+      type: string
+      description: |-
+        * `warm` - Warm
+        * `calm` - Calm
+        * `auto` - Auto
+    TokenRefreshRequest:
+      type: object
+      description: Serializer for token refresh request.
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+          description: Refresh token
+      required:
+      - refresh
+    TypeEnum:
+      enum:
+      - weight
+      - height
+      - head_circumference
+      type: string
+      description: |-
+        * `weight` - Weight
+        * `height` - Height
+        * `head_circumference` - Head Circumference
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API Key for client identification and rate limiting
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer
+        {token}"'
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

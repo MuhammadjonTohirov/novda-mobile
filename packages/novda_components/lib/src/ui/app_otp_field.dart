@@ -27,85 +27,99 @@ class AppOtpField extends StatefulWidget {
 }
 
 class _AppOtpFieldState extends State<AppOtpField> {
-  late List<TextEditingController> _controllers;
-  late List<FocusNode> _focusNodes;
+  late final TextEditingController _controller;
+  late final FocusNode _focusNode;
+  bool _isProgrammaticUpdate = false;
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(widget.length, (_) => TextEditingController());
-    _focusNodes = List.generate(widget.length, (_) => FocusNode());
-
-    for (var i = 0; i < widget.length; i++) {
-      _focusNodes[i].addListener(() {
-        if (_focusNodes[i].hasFocus) {
-          setState(() {});
-        }
-      });
-    }
+    _controller = TextEditingController();
+    _focusNode = FocusNode()..addListener(_onFocusChanged);
 
     if (widget.autoFocus) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _focusNodes[0].requestFocus();
+        if (!mounted) return;
+        _focusInput();
       });
     }
   }
 
   @override
+  void didUpdateWidget(covariant AppOtpField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.length == oldWidget.length) return;
+
+    final truncated = _normalizeCode(_controller.text);
+    if (truncated == _controller.text) return;
+
+    _setCode(truncated);
+    _notifyCodeChanged(truncated);
+  }
+
+  @override
   void dispose() {
-    for (final controller in _controllers) {
-      controller.dispose();
-    }
-    for (final focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
+    _focusNode
+      ..removeListener(_onFocusChanged)
+      ..dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  String get _currentCode {
-    return _controllers.map((c) => c.text).join();
+  String get _code => _normalizeCode(_controller.text);
+
+  int get _activeIndex {
+    final index = _code.length;
+    if (index >= widget.length) return widget.length - 1;
+    return index;
   }
 
-  void _onChanged(int index, String value) {
-    if (value.length > 1) {
-      // Handle paste
-      final chars = value.split('');
-      for (var i = 0; i < chars.length && (index + i) < widget.length; i++) {
-        _controllers[index + i].text = chars[i];
-      }
-      final newIndex = (index + chars.length).clamp(0, widget.length - 1);
-      _focusNodes[newIndex].requestFocus();
-    } else if (value.isNotEmpty) {
-      // Single character entered
-      if (index < widget.length - 1) {
-        _focusNodes[index + 1].requestFocus();
-      }
+  void _onFocusChanged() {
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void _onTextChanged(String rawValue) {
+    if (_isProgrammaticUpdate) return;
+
+    final normalized = _normalizeCode(rawValue);
+    if (normalized != rawValue) {
+      _setCode(normalized);
     }
 
-    widget.onChanged?.call(_currentCode);
-
-    if (_currentCode.length == widget.length) {
-      widget.onCompleted(_currentCode);
+    _notifyCodeChanged(normalized);
+    if (mounted) {
+      setState(() {});
     }
   }
 
-  void _onKeyEvent(int index, KeyEvent event) {
-    if (event is KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.backspace &&
-        index > 0) {
-      if (_controllers[index].text.isEmpty) {
-        // Field is empty, move to previous and clear it
-        _focusNodes[index - 1].requestFocus();
-        _controllers[index - 1].clear();
-        widget.onChanged?.call(_currentCode);
-      } else {
-        // Field has content - after deletion, move to previous field
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            _focusNodes[index - 1].requestFocus();
-          }
-        });
-      }
+  String _normalizeCode(String value) {
+    final digitsOnly = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.length <= widget.length) return digitsOnly;
+    return digitsOnly.substring(0, widget.length);
+  }
+
+  void _setCode(String code) {
+    _isProgrammaticUpdate = true;
+    _controller.value = TextEditingValue(
+      text: code,
+      selection: TextSelection.collapsed(offset: code.length),
+    );
+    _isProgrammaticUpdate = false;
+  }
+
+  void _notifyCodeChanged(String code) {
+    widget.onChanged?.call(code);
+    if (code.length == widget.length) {
+      widget.onCompleted(code);
+    }
+  }
+
+  void _focusInput() {
+    if (!_focusNode.hasFocus) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    } else {
+      _controller.selection = TextSelection.collapsed(offset: _code.length);
     }
   }
 
@@ -113,50 +127,73 @@ class _AppOtpFieldState extends State<AppOtpField> {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final hasError = widget.hasError || widget.errorText != null;
+    final code = _code;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.length, (index) {
-            return Padding(
-              padding: EdgeInsets.only(left: index == 0 ? 0 : 8),
-              child: SizedBox(
-                width: 48,
-                height: 48,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colors.bgSecondary,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.transparent),
-                  ),
-                  child: KeyboardListener(
-                    focusNode: FocusNode(),
-                    onKeyEvent: (event) => _onKeyEvent(index, event),
-                    child: TextField(
-                      controller: _controllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
+        SizedBox(
+          width: 1,
+          height: 1,
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            style: const TextStyle(fontSize: 1, color: Colors.transparent),
+            cursorColor: Colors.transparent,
+            showCursor: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(widget.length),
+            ],
+            decoration: const InputDecoration(
+              isCollapsed: true,
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+            ),
+            onChanged: _onTextChanged,
+          ),
+        ),
+        GestureDetector(
+          onTap: _focusInput,
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.length, (index) {
+              final char = index < code.length ? code[index] : '';
+              final isActive = _focusNode.hasFocus && index == _activeIndex;
+
+              return Padding(
+                padding: EdgeInsets.only(left: index == 0 ? 0 : 8),
+                child: InkWell(
+                  onTap: _focusInput,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: colors.bgSecondary,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: hasError
+                            ? colors.error
+                            : (isActive ? colors.accent : Colors.transparent),
+                      ),
+                    ),
+                    child: Text(
+                      char,
                       style: AppTypography.headingM.copyWith(
                         color: hasError ? colors.error : colors.textPrimary,
                       ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: const InputDecoration(
-                        counterText: '',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                      onChanged: (value) => _onChanged(index, value),
                     ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+          ),
         ),
         if (widget.errorText != null) ...[
           const SizedBox(height: 8),

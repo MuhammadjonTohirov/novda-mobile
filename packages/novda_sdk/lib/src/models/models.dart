@@ -4,5 +4,6 @@ export 'auth.dart';
 export 'child.dart';
 export 'enums.dart';
 export 'measurement.dart';
+export 'progress.dart';
 export 'reminder.dart';
 export 'user.dart';

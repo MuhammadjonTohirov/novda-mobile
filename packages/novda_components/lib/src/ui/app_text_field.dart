@@ -7,6 +7,7 @@ class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     this.controller,
+    this.initialValue,
     this.label,
     this.hint,
     this.errorText,
@@ -19,9 +20,12 @@ class AppTextField extends StatefulWidget {
     this.autofocus = false,
     this.maxLines = 1,
     this.focusNode,
+    this.showFocusBorder = true,
+    this.showClearButton = true,
   });
 
   final TextEditingController? controller;
+  final String? initialValue;
   final String? label;
   final String? hint;
   final String? errorText;
@@ -34,6 +38,8 @@ class AppTextField extends StatefulWidget {
   final bool autofocus;
   final int maxLines;
   final FocusNode? focusNode;
+  final bool showFocusBorder;
+  final bool showClearButton;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -48,7 +54,8 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController();
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
     _focusNode = widget.focusNode ?? FocusNode();
     _hasText = _controller.text.isNotEmpty;
     _focusNode.addListener(_onFocusChange);
@@ -93,7 +100,7 @@ class _AppTextFieldState extends State<AppTextField> {
       borderColor = Colors.transparent;
     } else if (hasError) {
       borderColor = colors.error;
-    } else if (_isFocused) {
+    } else if (_isFocused && widget.showFocusBorder) {
       borderColor = colors.accent;
     } else {
       borderColor = Colors.transparent;
@@ -130,7 +137,10 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             border: InputBorder.none,
-            enabledBorder: InputBorder.none,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: borderColor, width: 0),
+            ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
               borderSide: BorderSide(color: borderColor, width: 1.5),
@@ -140,9 +150,13 @@ class _AppTextFieldState extends State<AppTextField> {
             disabledBorder: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 16,
+              vertical: 12,
             ),
-            suffixIcon: _hasText && widget.enabled && !hasError
+            suffixIcon:
+                widget.showClearButton &&
+                    _hasText &&
+                    widget.enabled &&
+                    !hasError
                 ? IconButton(
                     icon: Icon(
                       Icons.cancel,

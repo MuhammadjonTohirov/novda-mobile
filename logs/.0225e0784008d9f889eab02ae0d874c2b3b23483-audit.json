@@ -6,26 +6,6 @@
     "auditLog": "/Users/r/Documents/Development/Personal/Novda/novda/logs/.0225e0784008d9f889eab02ae0d874c2b3b23483-audit.json",
     "files": [
         {
-            "date": 1770189512320,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-04.log",
-            "hash": "e101ce2033ffc70e0c83ebb3e5c73bcb5e6c44091ddab87ef264ab214f1ea076"
-        },
-        {
-            "date": 1770256202351,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-05.log",
-            "hash": "60b4282c98bc45ae83ffd27a7d02096183154a19567810d38ee273efb7c3342a"
-        },
-        {
-            "date": 1770517706562,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-08.log",
-            "hash": "1c6d76634d2388d03a6c0eda7bfcb4b71a7b406539b692a1711ced83fdae5224"
-        },
-        {
-            "date": 1770665323325,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-10.log",
-            "hash": "d49a78db0d5e2ab053fbe3575e2407233ea6450b4eaee9f0330a1886829d0a2b"
-        },
-        {
             "date": 1770919637488,
             "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-12.log",
             "hash": "933a3c9622f2942b95c3c4da75517f0e531ec0caf6f3aafdacaf71fdc6ca9e34"
@@ -34,6 +14,16 @@
             "date": 1771049801318,
             "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-14.log",
             "hash": "f3a10dbe56df0e1714fabcb80776f9c804d3d4e50f94f7958a1b0d4f9a4cc595"
+        },
+        {
+            "date": 1771157379243,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-15.log",
+            "hash": "d851922af8a5acd6b1ec393ada9e34147c5c99cd4147da534c2f1e9929435d8b"
+        },
+        {
+            "date": 1771907405480,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-24.log",
+            "hash": "5a41ae4ac0eaea3bb2f1c3ee14008bc4f596f978473c24503b99e3bd0fbc80a3"
         }
     ],
     "hashType": "sha256"

@@ -33,7 +33,7 @@ extension ProgressTabDetailUiExtensions on BuildContext {
         const SizedBox(height: 10),
         Text(
           guide.summary ?? guide.crisisDescription ?? l10n.progressNoDetails,
-          style: AppTypography.bodyLRegular.copyWith(
+          style: AppTypography.bodyMRegular.copyWith(
             color: colors.textSecondary,
           ),
         ),
@@ -42,8 +42,7 @@ extension ProgressTabDetailUiExtensions on BuildContext {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colors.bgPrimary,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.border),
+        borderRadius: BorderRadius.circular(14),
       ),
     );
   }
@@ -117,8 +116,7 @@ extension ProgressTabDetailUiExtensions on BuildContext {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colors.bgPrimary,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.border),
+        borderRadius: BorderRadius.circular(14),
       ),
     );
   }
@@ -158,13 +156,6 @@ extension ProgressTabDetailUiExtensions on BuildContext {
             ),
           ),
       ],
-    ).container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colors.bgPrimary,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.border),
-      ),
     );
   }
 
@@ -199,13 +190,6 @@ extension ProgressTabDetailUiExtensions on BuildContext {
             ],
           ),
       ],
-    ).container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colors.bgPrimary,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.border),
-      ),
     );
   }
 
@@ -280,16 +264,17 @@ extension ProgressTabDetailUiExtensions on BuildContext {
           style: AppTypography.bodyMRegular.copyWith(
             color: colors.textSecondary,
           ),
-          maxLines: 3,
+          maxLines: 4,
           overflow: TextOverflow.ellipsis,
         ),
       ],
     ).container(
-      width: 220,
-      padding: const EdgeInsets.all(12),
+      width: 160,
+      padding: const EdgeInsets.all(12.5),
       decoration: BoxDecoration(
-        color: colors.bgSecondary,
+        color: colors.bgPrimary,
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.border.withValues(alpha: 0.6)),
       ),
     );
   }
@@ -299,39 +284,88 @@ extension ProgressTabDetailUiExtensions on BuildContext {
     required int index,
   }) {
     final colors = appColors;
+    final coverImage = _contentImage(item);
+    final metaText = _contentMeta(item);
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.menu_book_outlined, color: colors.accent, size: 20),
-        const SizedBox(width: 10),
-        Column(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              _contentTitle(item, index),
-              style: AppTypography.bodyLMedium.copyWith(
-                color: colors.textPrimary,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _contentTitle(item, index),
+                  style: AppTypography.bodyLMedium.copyWith(
+                    color: colors.textPrimary,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _contentDescription(item),
+                  style: AppTypography.bodyMRegular.copyWith(
+                    color: colors.textSecondary,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ).expanded(),
+            if (coverImage != null) ...[
+              const SizedBox(width: 10),
+              Image.network(
+                coverImage,
+                width: 82,
+                height: 54,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) {
+                  return Icon(
+                    Icons.image_outlined,
+                    color: colors.textSecondary,
+                    size: 18,
+                  ).center().container(
+                    width: 82,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: colors.bgSecondary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  );
+                },
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              _contentDescription(item),
-              style: AppTypography.bodyMRegular.copyWith(
-                color: colors.textSecondary,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            if (metaText.isNotEmpty)
+              Text(
+                metaText,
+                style: AppTypography.bodySRegular.copyWith(
+                  color: colors.textSecondary,
+                ),
+              ).expanded()
+            else
+              const SizedBox().expanded(),
+            Icon(
+              Icons.bookmark_border_rounded,
+              color: colors.tabDisabled,
+              size: 18,
             ),
           ],
-        ).expanded(),
+        ),
       ],
     ).container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colors.bgSecondary,
+        color: colors.bgPrimary,
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.border.withValues(alpha: 0.6)),
       ),
     );
   }
@@ -346,5 +380,45 @@ extension ProgressTabDetailUiExtensions on BuildContext {
     final description = item.description?.trim();
     if (description != null && description.isNotEmpty) return description;
     return '';
+  }
+
+  String _contentMeta(ProgressContentItem item) {
+    final subtitle = _dataString(
+      item,
+      keys: const ['subtitle', 'meta', 'stats', 'caption'],
+    );
+    if (subtitle != null) return subtitle;
+
+    final duration = _dataString(
+      item,
+      keys: const ['duration', 'read_time', 'reading_time'],
+    );
+    final views = _dataString(item, keys: const ['views', 'view_count']);
+
+    if (duration != null && views != null) return '$duration · $views';
+    return duration ?? views ?? '';
+  }
+
+  String? _contentImage(ProgressContentItem item) {
+    return _dataString(
+      item,
+      keys: const [
+        'image',
+        'image_url',
+        'thumbnail',
+        'thumbnail_url',
+        'cover',
+        'cover_url',
+      ],
+    );
+  }
+
+  String? _dataString(ProgressContentItem item, {required List<String> keys}) {
+    for (final key in keys) {
+      final raw = item.data[key];
+      final value = raw?.toString().trim();
+      if (value != null && value.isNotEmpty) return value;
+    }
+    return null;
   }
 }

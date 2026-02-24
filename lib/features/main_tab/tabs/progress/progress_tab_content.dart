@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:novda/core/theme/app_theme.dart';
-import 'package:novda_core/novda_core.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/extensions/extensions.dart';
@@ -8,48 +6,29 @@ import 'extensions/progress_tab_ui_extensions.dart';
 import 'interactor/progress_tab_interactor.dart';
 import 'view_model/progress_tab_view_model.dart';
 
-class ProgressTabContent extends StatelessWidget {
+class ProgressTabContent extends StatefulWidget {
   const ProgressTabContent({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    //img_progress_boy_baby.png
-    return Stack(
-      children: [
-        Image.asset('assets/images/image_dots.png', fit: BoxFit.fill),
-        Container(
-          decoration: BoxDecoration(
-            color: context.appColors.iconBoy.withAlpha(130),
-          ),
-          height: 100,
-        ).paddingOnly(top: 250),
-        Image.asset(
-          'assets/images/image_kid_with_toys.png',
-          fit: BoxFit.cover,
-        ).paddingOnly(top: 185),
+  State<ProgressTabContent> createState() => _ProgressTabContentState();
+}
 
-        Stack(
-          children: [
-            Image.asset(
-              'assets/images/img_quote_baby_boy.png',
-              fit: BoxFit.cover,
-            ),
-            Text(
-              "Lorem impsum dolor sit amet, consectetur adipiscing elit. Donec suscipit auctor dui, sed efficitur.",
-              style: AppTypography.bodyMRegular.copyWith(
-                color: context.appColors.textOnly,
-                fontStyle: FontStyle.italic,
-                fontSize: 10,
-              ),
-            ).paddingOnly(left: 12, right: 8, top: 8, bottom: 8),
-          ],
-        ).sized(width: 180, height: 100).paddingOnly(top: 90, left: 200),
-      ],
-    ).decorated(BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))));
+class _ProgressTabContentState extends State<ProgressTabContent> {
+  static const double _periodChipWidth = 110;
+  static const double _periodChipSpacing = 10;
+  static const double _periodListHorizontalPadding = 16;
+
+  final ScrollController _periodScrollController = ScrollController();
+  String? _lastCenteredPeriodKey;
+
+  @override
+  void dispose() {
+    _periodScrollController.dispose();
+    super.dispose();
   }
 
   @override
-  Widget _build(BuildContext context) {
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider<ProgressTabViewModel>(
       create: (_) =>
           ProgressTabViewModel(interactor: ProgressTabInteractor())..load(),
@@ -70,15 +49,59 @@ class ProgressTabContent extends StatelessWidget {
             );
           }
 
+          _centerSelectedPeriodIfNeeded(viewModel);
+
           return context.progressTabBody(
             viewModel: viewModel,
             onRefresh: viewModel.load,
             onPeriodTap: viewModel.selectPeriod,
             onCalendarTap: () => _showComingSoon(context),
+            periodScrollController: _periodScrollController,
           );
         },
       ),
     );
+  }
+
+  void _centerSelectedPeriodIfNeeded(ProgressTabViewModel viewModel) {
+    final selected = viewModel.selectedPeriod;
+    if (selected == null) {
+      _lastCenteredPeriodKey = null;
+      return;
+    }
+    if (viewModel.periods.isEmpty) return;
+
+    final selectedIndex = viewModel.periods.indexWhere((period) {
+      return viewModel.isSelectedPeriod(period);
+    });
+    if (selectedIndex < 0) return;
+
+    final selectedKey =
+        '${selected.periodUnit.name}:${selected.periodIndex}:$selectedIndex:${viewModel.periods.length}';
+    if (_lastCenteredPeriodKey == selectedKey) return;
+    _lastCenteredPeriodKey = selectedKey;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_periodScrollController.hasClients) return;
+
+      final viewportWidth = _periodScrollController.position.viewportDimension;
+      final itemExtent = _periodChipWidth + _periodChipSpacing;
+      final selectedItemCenter =
+          _periodListHorizontalPadding +
+          (selectedIndex * itemExtent) +
+          (_periodChipWidth / 2);
+      final maxScroll = _periodScrollController.position.maxScrollExtent;
+      final targetOffset = (selectedItemCenter - (viewportWidth / 2)).clamp(
+        0.0,
+        maxScroll,
+      );
+
+      _periodScrollController.animateTo(
+        targetOffset,
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOutCubic,
+      );
+    });
   }
 
   void _showActionErrorIfAny(

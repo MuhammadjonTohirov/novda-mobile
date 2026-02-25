@@ -418,6 +418,34 @@ class AppLocalizationsUz extends AppLocalizations {
   String get learnTab => 'O\'rganish';
 
   @override
+  String get learnSearchHint => 'Maqolalarni qidirish';
+
+  @override
+  String get learnPopularTopics => 'Ommabop mavzular';
+
+  @override
+  String get learnAllArticles => 'Barcha maqolalar';
+
+  @override
+  String get learnNoArticles => 'Maqolalar topilmadi.';
+
+  @override
+  String get learnFailedLoad => 'Maqolalarni yuklab bo\'lmadi.';
+
+  @override
+  String learnTopicArticlesCount(int count) {
+    return '$count ta maqola';
+  }
+
+  @override
+  String learnReadMeta(int minutes, Object views) {
+    return '$minutes daqiqa o\'qish • $views ko\'rish';
+  }
+
+  @override
+  String get articleHelpfulQuestion => 'Bu maqola siz uchun foydali bo\'ldimi?';
+
+  @override
   String get profileTab => 'Profil';
 
   @override

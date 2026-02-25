@@ -221,6 +221,29 @@
   },
   "addTab": "Добавить",
   "learnTab": "Обучение",
+  "learnSearchHint": "Искать статьи",
+  "learnPopularTopics": "Популярные темы",
+  "learnAllArticles": "Все статьи",
+  "learnNoArticles": "Статьи не найдены.",
+  "learnFailedLoad": "Не удалось загрузить статьи.",
+  "learnTopicArticlesCount": "{count} статей",
+  "@learnTopicArticlesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnReadMeta": "{minutes} мин чтения • {views} просмотров",
+  "@learnReadMeta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "views": {}
+    }
+  },
+  "articleHelpfulQuestion": "Эта статья была полезной для вас?",
   "profileTab": "Профиль",
   "profileTitle": "Профиль",
   "profileParent": "Родитель",

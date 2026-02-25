@@ -9,6 +9,7 @@ import 'tabs/add_action/add_activity_screen.dart';
 import 'tabs/add_action/add_action_sheet_content.dart';
 import 'tabs/add_action/view_model/add_action_sheet_view_model.dart';
 import 'tabs/home/home_screen.dart';
+import 'tabs/learn/learn_tab_content.dart';
 import 'tabs/progress/progress_tab_content.dart';
 import 'tabs/profile/profile_tab_content.dart';
 import 'view_model/main_tab_view_model.dart';
@@ -33,7 +34,7 @@ class MainTabScreen extends StatelessWidget {
                 const HomeScreen(),
                 const ProgressTabContent(),
                 _TabPlaceholder(title: l10n.addTab),
-                _TabPlaceholder(title: l10n.learnTab),
+                const LearnTabContent(),
                 ProfileTabContent(onLogout: () => _logout(context, viewModel)),
               ],
             ),

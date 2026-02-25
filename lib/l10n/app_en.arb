@@ -221,6 +221,29 @@
   },
   "addTab": "Add",
   "learnTab": "Learn",
+  "learnSearchHint": "Search articles",
+  "learnPopularTopics": "Popular topics",
+  "learnAllArticles": "All articles",
+  "learnNoArticles": "No articles found.",
+  "learnFailedLoad": "Failed to load articles.",
+  "learnTopicArticlesCount": "{count} articles",
+  "@learnTopicArticlesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnReadMeta": "{minutes} min read • {views} views",
+  "@learnReadMeta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "views": {}
+    }
+  },
+  "articleHelpfulQuestion": "Was this article helpful for you?",
   "profileTab": "Profile",
   "profileTitle": "Profile",
   "profileParent": "Parent",

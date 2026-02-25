@@ -221,6 +221,29 @@
   },
   "addTab": "Qo'shish",
   "learnTab": "O'rganish",
+  "learnSearchHint": "Maqolalarni qidirish",
+  "learnPopularTopics": "Ommabop mavzular",
+  "learnAllArticles": "Barcha maqolalar",
+  "learnNoArticles": "Maqolalar topilmadi.",
+  "learnFailedLoad": "Maqolalarni yuklab bo'lmadi.",
+  "learnTopicArticlesCount": "{count} ta maqola",
+  "@learnTopicArticlesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "learnReadMeta": "{minutes} daqiqa o'qish • {views} ko'rish",
+  "@learnReadMeta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "views": {}
+    }
+  },
+  "articleHelpfulQuestion": "Bu maqola siz uchun foydali bo'ldimi?",
   "profileTab": "Profil",
   "profileTitle": "Profil",
   "profileParent": "Ota-ona",

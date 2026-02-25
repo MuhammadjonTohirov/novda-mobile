@@ -413,6 +413,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnTab => 'Learn';
 
   @override
+  String get learnSearchHint => 'Search articles';
+
+  @override
+  String get learnPopularTopics => 'Popular topics';
+
+  @override
+  String get learnAllArticles => 'All articles';
+
+  @override
+  String get learnNoArticles => 'No articles found.';
+
+  @override
+  String get learnFailedLoad => 'Failed to load articles.';
+
+  @override
+  String learnTopicArticlesCount(int count) {
+    return '$count articles';
+  }
+
+  @override
+  String learnReadMeta(int minutes, Object views) {
+    return '$minutes min read • $views views';
+  }
+
+  @override
+  String get articleHelpfulQuestion => 'Was this article helpful for you?';
+
+  @override
   String get profileTab => 'Profile';
 
   @override

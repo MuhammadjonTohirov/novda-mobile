@@ -416,6 +416,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get learnTab => 'Обучение';
 
   @override
+  String get learnSearchHint => 'Искать статьи';
+
+  @override
+  String get learnPopularTopics => 'Популярные темы';
+
+  @override
+  String get learnAllArticles => 'Все статьи';
+
+  @override
+  String get learnNoArticles => 'Статьи не найдены.';
+
+  @override
+  String get learnFailedLoad => 'Не удалось загрузить статьи.';
+
+  @override
+  String learnTopicArticlesCount(int count) {
+    return '$count статей';
+  }
+
+  @override
+  String learnReadMeta(int minutes, Object views) {
+    return '$minutes мин чтения • $views просмотров';
+  }
+
+  @override
+  String get articleHelpfulQuestion => 'Эта статья была полезной для вас?';
+
+  @override
   String get profileTab => 'Профиль';
 
   @override

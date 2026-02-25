@@ -844,6 +844,54 @@ abstract class AppLocalizations {
   /// **'Learn'**
   String get learnTab;
 
+  /// No description provided for @learnSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search articles'**
+  String get learnSearchHint;
+
+  /// No description provided for @learnPopularTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular topics'**
+  String get learnPopularTopics;
+
+  /// No description provided for @learnAllArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'All articles'**
+  String get learnAllArticles;
+
+  /// No description provided for @learnNoArticles.
+  ///
+  /// In en, this message translates to:
+  /// **'No articles found.'**
+  String get learnNoArticles;
+
+  /// No description provided for @learnFailedLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load articles.'**
+  String get learnFailedLoad;
+
+  /// No description provided for @learnTopicArticlesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} articles'**
+  String learnTopicArticlesCount(int count);
+
+  /// No description provided for @learnReadMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min read • {views} views'**
+  String learnReadMeta(int minutes, Object views);
+
+  /// No description provided for @articleHelpfulQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Was this article helpful for you?'**
+  String get articleHelpfulQuestion;
+
   /// No description provided for @profileTab.
   ///
   /// In en, this message translates to:

@@ -8,6 +8,7 @@ export 'src/models/models.dart';
 // Use Cases - interfaces only (implementations are internal)
 export 'src/use_cases/activities_use_case.dart' show ActivitiesUseCase;
 export 'src/use_cases/articles_use_case.dart' show ArticlesUseCase;
+export 'src/use_cases/articles_v2_use_case.dart' show ArticlesV2UseCase;
 export 'src/use_cases/auth_use_case.dart' show AuthUseCase;
 export 'src/use_cases/children_use_case.dart' show ChildrenUseCase;
 export 'src/use_cases/measurements_use_case.dart' show MeasurementsUseCase;

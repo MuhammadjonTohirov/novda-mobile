@@ -856,6 +856,12 @@ abstract class AppLocalizations {
   /// **'Popular topics'**
   String get learnPopularTopics;
 
+  /// No description provided for @learnAllTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'All topics'**
+  String get learnAllTopics;
+
   /// No description provided for @learnAllArticles.
   ///
   /// In en, this message translates to:
@@ -867,6 +873,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No articles found.'**
   String get learnNoArticles;
+
+  /// No description provided for @learnNoTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No topics found.'**
+  String get learnNoTopics;
 
   /// No description provided for @learnFailedLoad.
   ///

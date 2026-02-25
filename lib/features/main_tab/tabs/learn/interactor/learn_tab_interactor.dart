@@ -10,10 +10,10 @@ class LearnTabData {
 }
 
 class LearnTabInteractor {
-  LearnTabInteractor({ArticlesUseCase? articlesUseCase})
-    : _articlesUseCase = articlesUseCase ?? services.sdk.articles;
+  LearnTabInteractor({ArticlesV2UseCase? articlesUseCase})
+    : _articlesUseCase = articlesUseCase ?? services.sdk.articlesV2;
 
-  final ArticlesUseCase _articlesUseCase;
+  final ArticlesV2UseCase _articlesUseCase;
 
   Future<LearnTabData> loadContent({String? query, String? topic}) async {
     final results = await Future.wait([
@@ -21,9 +21,11 @@ class LearnTabInteractor {
       _articlesUseCase.getArticles(query: query, topic: topic),
     ]);
 
+    final page = results[1] as ArticlesV2Page;
+
     return LearnTabData(
       topics: results[0] as List<Topic>,
-      articles: results[1] as List<ArticleListItem>,
+      articles: page.articles,
     );
   }
 

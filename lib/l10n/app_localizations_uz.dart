@@ -424,10 +424,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get learnPopularTopics => 'Ommabop mavzular';
 
   @override
+  String get learnAllTopics => 'Barcha mavzular';
+
+  @override
   String get learnAllArticles => 'Barcha maqolalar';
 
   @override
   String get learnNoArticles => 'Maqolalar topilmadi.';
+
+  @override
+  String get learnNoTopics => 'Mavzular topilmadi.';
 
   @override
   String get learnFailedLoad => 'Maqolalarni yuklab bo\'lmadi.';

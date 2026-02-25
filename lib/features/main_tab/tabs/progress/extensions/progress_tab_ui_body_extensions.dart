@@ -103,7 +103,7 @@ extension ProgressTabUiBodyExtensions on BuildContext {
                 const SizedBox(height: 12),
                 progressRecommendationsSection(
                   name: child.name,
-                  recommendations: guide.recommendations,
+                  recommendations: viewModel.recommendedArticles,
                 ).paddingOnly(left: 16, right: 16),
               ],
             ),

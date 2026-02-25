@@ -3384,6 +3384,101 @@ paths:
                         cover_image: https://example.com/nutrition.jpg
                   summary: Success Response
           description: Topics retrieved successfully
+  /api/v2/articles:
+    get:
+      operationId: api_v2_articles_retrieve
+      description: Get published articles with user bookmark flag, view count, and
+        pagination metadata.
+      summary: List Articles (v2)
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: 1-based page number
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Items per page (max 100)
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search in title/excerpt
+      - in: query
+        name: topic
+        schema:
+          type: string
+        description: Filter by topic slug
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Articles retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid query parameters
+  /api/v2/children/{child_id}/recommended-articles:
+    get:
+      operationId: api_v2_children_recommended_articles_retrieve
+      description: Get up to 5 recommended articles for a child and selected progress
+        period.
+      summary: List Recommended Articles (v2)
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: progress_index
+        schema:
+          type: integer
+        description: Progress period index
+        required: true
+      - in: query
+        name: progress_type
+        schema:
+          type: string
+        description: Progress period type (week, month, custom)
+        required: true
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Recommended articles retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid query parameters
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Child or guide not found
 components:
   schemas:
     AcceptTermsRequest:

@@ -3,6 +3,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/extensions/extensions.dart';
+import 'all_topics/all_topics_screen.dart';
 import 'article/article_screen.dart';
 import 'extensions/learn_tab_ui_extensions.dart';
 import 'interactor/learn_tab_interactor.dart';
@@ -36,7 +37,7 @@ class LearnTabContent extends StatelessWidget {
             viewModel: viewModel,
             onRefresh: viewModel.refresh,
             onSearchChanged: viewModel.searchArticles,
-            onSeeAllTap: viewModel.clearTopicFilter,
+            onSeeAllTap: () => _openAllTopics(context, viewModel),
             onTopicTap: (topic) =>
                 _openTopicArticles(context, viewModel, topic),
             onBookmarkTap: viewModel.toggleArticleSaved,
@@ -72,6 +73,18 @@ class LearnTabContent extends StatelessWidget {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => TopicArticlesScreen(topic: topic)),
     );
+
+    if (!context.mounted) return;
+    await viewModel.refresh();
+  }
+
+  Future<void> _openAllTopics(
+    BuildContext context,
+    LearnTabViewModel viewModel,
+  ) async {
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const AllTopicsScreen()));
 
     if (!context.mounted) return;
     await viewModel.refresh();

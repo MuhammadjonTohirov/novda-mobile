@@ -223,8 +223,10 @@
   "learnTab": "Learn",
   "learnSearchHint": "Search articles",
   "learnPopularTopics": "Popular topics",
+  "learnAllTopics": "All topics",
   "learnAllArticles": "All articles",
   "learnNoArticles": "No articles found.",
+  "learnNoTopics": "No topics found.",
   "learnFailedLoad": "Failed to load articles.",
   "learnTopicArticlesCount": "{count} articles",
   "@learnTopicArticlesCount": {

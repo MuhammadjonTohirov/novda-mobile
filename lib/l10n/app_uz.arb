@@ -223,8 +223,10 @@
   "learnTab": "O'rganish",
   "learnSearchHint": "Maqolalarni qidirish",
   "learnPopularTopics": "Ommabop mavzular",
+  "learnAllTopics": "Barcha mavzular",
   "learnAllArticles": "Barcha maqolalar",
   "learnNoArticles": "Maqolalar topilmadi.",
+  "learnNoTopics": "Mavzular topilmadi.",
   "learnFailedLoad": "Maqolalarni yuklab bo'lmadi.",
   "learnTopicArticlesCount": "{count} ta maqola",
   "@learnTopicArticlesCount": {

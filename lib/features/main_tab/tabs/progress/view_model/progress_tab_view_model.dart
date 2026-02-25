@@ -13,6 +13,7 @@ class ProgressTabViewModel extends BaseViewModel {
   List<ProgressPeriod> _periods = const [];
   ProgressPeriod? _selectedPeriod;
   ProgressGuide? _guide;
+  List<ProgressContentItem> _recommendedArticles = const [];
   bool _isDetailLoading = false;
   String? _actionErrorMessage;
 
@@ -21,6 +22,7 @@ class ProgressTabViewModel extends BaseViewModel {
   List<ProgressPeriod> get periods => _periods;
   ProgressPeriod? get selectedPeriod => _selectedPeriod;
   ProgressGuide? get guide => _guide;
+  List<ProgressContentItem> get recommendedArticles => _recommendedArticles;
   bool get isDetailLoading => _isDetailLoading;
 
   bool get hasChild => _activeChild != null;
@@ -46,6 +48,7 @@ class ProgressTabViewModel extends BaseViewModel {
       _periods = const [];
       _selectedPeriod = null;
       _guide = null;
+      _recommendedArticles = const [];
 
       final child = _activeChild;
       if (child == null) {
@@ -67,18 +70,30 @@ class ProgressTabViewModel extends BaseViewModel {
       );
 
       if (_selectedPeriod != null) {
-        _guide = await _interactor.loadPeriodDetail(
+        final selectedPeriod = _selectedPeriod!;
+        final guideFuture = _interactor.loadPeriodDetail(
           child: child,
-          period: _selectedPeriod!,
+          period: selectedPeriod,
         );
+        final recommendedFuture = _interactor.loadRecommendedArticles(
+          child: child,
+          period: selectedPeriod,
+        );
+        _guide = await guideFuture;
+        _recommendedArticles = await recommendedFuture;
       } else {
         _guide = await _interactor.loadCurrentProgress(child: child);
         _selectedPeriod = _periodFromGuide(_guide!);
         if (_selectedPeriod != null) {
+          final selectedPeriod = _selectedPeriod!;
           _periods = _windowPeriods(
-            periods: _sortPeriods([...sortedAllPeriods, _selectedPeriod!]),
+            periods: _sortPeriods([...sortedAllPeriods, selectedPeriod]),
             selected: _selectedPeriod,
             sideCount: 2,
+          );
+          _recommendedArticles = await _interactor.loadRecommendedArticles(
+            child: child,
+            period: selectedPeriod,
           );
         }
       }
@@ -96,14 +111,25 @@ class ProgressTabViewModel extends BaseViewModel {
     if (isSelectedPeriod(period) && _guide != null) return;
 
     final previousGuide = _guide;
+    final previousRecommendedArticles = _recommendedArticles;
     _selectedPeriod = period;
     _isDetailLoading = true;
     notifyListeners();
 
     try {
-      _guide = await _interactor.loadPeriodDetail(child: child, period: period);
+      final guideFuture = _interactor.loadPeriodDetail(
+        child: child,
+        period: period,
+      );
+      final recommendedFuture = _interactor.loadRecommendedArticles(
+        child: child,
+        period: period,
+      );
+      _guide = await guideFuture;
+      _recommendedArticles = await recommendedFuture;
     } catch (error) {
       _guide = previousGuide;
+      _recommendedArticles = previousRecommendedArticles;
       _actionErrorMessage = _errorText(error);
     } finally {
       _isDetailLoading = false;

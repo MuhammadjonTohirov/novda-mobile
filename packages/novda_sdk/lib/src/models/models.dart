@@ -1,5 +1,6 @@
 export 'activity.dart';
 export 'article.dart';
+export 'article_v2.dart';
 export 'auth.dart';
 export 'child.dart';
 export 'enums.dart';

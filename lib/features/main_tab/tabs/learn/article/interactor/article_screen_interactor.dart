@@ -3,10 +3,10 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../../core/services/services.dart';
 
 class ArticleScreenInteractor {
-  ArticleScreenInteractor({ArticlesUseCase? articlesUseCase})
-    : _articlesUseCase = articlesUseCase ?? services.sdk.articles;
+  ArticleScreenInteractor({ArticlesV2UseCase? articlesUseCase})
+    : _articlesUseCase = articlesUseCase ?? services.sdk.articlesV2;
 
-  final ArticlesUseCase _articlesUseCase;
+  final ArticlesV2UseCase _articlesUseCase;
 
   Future<ArticleDetail> loadArticle(String slug) {
     return _articlesUseCase.getArticle(slug);

@@ -223,8 +223,10 @@
   "learnTab": "Обучение",
   "learnSearchHint": "Искать статьи",
   "learnPopularTopics": "Популярные темы",
+  "learnAllTopics": "Все темы",
   "learnAllArticles": "Все статьи",
   "learnNoArticles": "Статьи не найдены.",
+  "learnNoTopics": "Темы не найдены.",
   "learnFailedLoad": "Не удалось загрузить статьи.",
   "learnTopicArticlesCount": "{count} статей",
   "@learnTopicArticlesCount": {

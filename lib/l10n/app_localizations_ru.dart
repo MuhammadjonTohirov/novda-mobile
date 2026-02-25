@@ -422,10 +422,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get learnPopularTopics => 'Популярные темы';
 
   @override
+  String get learnAllTopics => 'Все темы';
+
+  @override
   String get learnAllArticles => 'Все статьи';
 
   @override
   String get learnNoArticles => 'Статьи не найдены.';
+
+  @override
+  String get learnNoTopics => 'Темы не найдены.';
 
   @override
   String get learnFailedLoad => 'Не удалось загрузить статьи.';

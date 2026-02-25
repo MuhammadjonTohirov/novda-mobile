@@ -46,7 +46,7 @@ extension LearnTabUiBodyExtensions on BuildContext {
             ],
           ).safeArea(bottom: false),
           _sectionGap,
-          if (viewModel.popularTopics.isNotEmpty)
+          if (viewModel.popularTopics.isNotEmpty && viewModel.query.isEmpty)
             learnPopularTopicsSection(
               viewModel: viewModel,
               onSeeAllTap: onSeeAllTap,
@@ -126,7 +126,7 @@ extension LearnTabUiBodyExtensions on BuildContext {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
             childAspectRatio: 0.72,
-            mainAxisExtent: 164
+            mainAxisExtent: 156,
           ),
           itemBuilder: (_, index) {
             final topic = viewModel.popularTopics[index];
@@ -222,7 +222,7 @@ extension LearnTabUiBodyExtensions on BuildContext {
               imageUrl: topic.coverImageUrl,
               width: double.infinity,
               height: 90,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
               fallbackIcon: Icons.auto_stories_outlined,
             ),
             const SizedBox(height: 8),

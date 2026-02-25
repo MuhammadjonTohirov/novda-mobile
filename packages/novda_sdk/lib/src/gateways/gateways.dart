@@ -1,5 +1,6 @@
 export 'activities_gateway.dart';
 export 'articles_gateway.dart';
+export 'articles_v2_gateway.dart';
 export 'auth_gateway.dart';
 export 'children_gateway.dart';
 export 'measurements_gateway.dart';

@@ -3,13 +3,14 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../../core/services/services.dart';
 
 class TopicArticlesInteractor {
-  TopicArticlesInteractor({ArticlesUseCase? articlesUseCase})
-    : _articlesUseCase = articlesUseCase ?? services.sdk.articles;
+  TopicArticlesInteractor({ArticlesV2UseCase? articlesUseCase})
+    : _articlesUseCase = articlesUseCase ?? services.sdk.articlesV2;
 
-  final ArticlesUseCase _articlesUseCase;
+  final ArticlesV2UseCase _articlesUseCase;
 
-  Future<List<ArticleListItem>> loadTopicArticles(String topicSlug) {
-    return _articlesUseCase.getArticles(topic: topicSlug);
+  Future<List<ArticleListItem>> loadTopicArticles(String topicSlug) async {
+    final page = await _articlesUseCase.getArticles(topic: topicSlug);
+    return page.articles;
   }
 
   Future<void> saveArticle(String slug) {

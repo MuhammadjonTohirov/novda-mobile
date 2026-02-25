@@ -1,5 +1,7 @@
 import 'core/network/api_client.dart';
 import 'gateways/gateways.dart';
+import 'models/article.dart';
+import 'models/article_v2.dart';
 import 'use_cases/use_cases.dart';
 
 /// Main SDK class that provides access to all use cases.
@@ -14,6 +16,7 @@ class NovdaSDK {
     required ProgressUseCase progress,
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
+    required ArticlesV2UseCase articlesV2,
     required ApiClient apiClient,
   }) : _auth = auth,
        _user = user,
@@ -23,6 +26,7 @@ class NovdaSDK {
        _progress = progress,
        _reminders = reminders,
        _articles = articles,
+       _articlesV2 = articlesV2,
        _apiClient = apiClient;
 
   final AuthUseCase _auth;
@@ -33,6 +37,7 @@ class NovdaSDK {
   final ProgressUseCase _progress;
   final RemindersUseCase _reminders;
   final ArticlesUseCase _articles;
+  final ArticlesV2UseCase _articlesV2;
   final ApiClient _apiClient;
 
   /// Authentication use case
@@ -58,6 +63,9 @@ class NovdaSDK {
 
   /// Articles use case
   ArticlesUseCase get articles => _articles;
+
+  /// Articles v2 use case
+  ArticlesV2UseCase get articlesV2 => _articlesV2;
 
   /// Set the locale for API requests
   void setLocale(String locale) {
@@ -91,6 +99,7 @@ class NovdaSDK {
     final progressGateway = ProgressGatewayImpl(apiClient);
     final remindersGateway = RemindersGatewayImpl(apiClient);
     final articlesGateway = ArticlesGatewayImpl(apiClient);
+    final articlesV2Gateway = ArticlesV2GatewayImpl(apiClient);
 
     // Create use cases
     final authUseCase = AuthUseCaseImpl(authGateway);
@@ -101,6 +110,10 @@ class NovdaSDK {
     final progressUseCase = ProgressUseCaseImpl(progressGateway);
     final remindersUseCase = RemindersUseCaseImpl(remindersGateway);
     final articlesUseCase = ArticlesUseCaseImpl(articlesGateway);
+    final articlesV2UseCase = ArticlesV2UseCaseImpl(
+      articlesV2Gateway: articlesV2Gateway,
+      articlesGateway: articlesGateway,
+    );
 
     return NovdaSDK._(
       auth: authUseCase,
@@ -111,6 +124,7 @@ class NovdaSDK {
       progress: progressUseCase,
       reminders: remindersUseCase,
       articles: articlesUseCase,
+      articlesV2: articlesV2UseCase,
       apiClient: apiClient,
     );
   }
@@ -126,6 +140,7 @@ class NovdaSDK {
     required ProgressUseCase progress,
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
+    ArticlesV2UseCase? articlesV2,
   }) {
     return NovdaSDK._(
       auth: auth,
@@ -136,8 +151,50 @@ class NovdaSDK {
       progress: progress,
       reminders: reminders,
       articles: articles,
+      articlesV2: articlesV2 ?? _NoOpArticlesV2UseCase(),
       apiClient: _NoOpApiClient(),
     );
+  }
+}
+
+class _NoOpArticlesV2UseCase implements ArticlesV2UseCase {
+  @override
+  Future<ArticlesV2Page> getArticles({
+    int? page,
+    int? pageSize,
+    String? query,
+    String? topic,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ArticleListItem>> getRecommendedArticles({
+    required int childId,
+    required int progressIndex,
+    required String progressType,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ArticleDetail> getArticle(String slug) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Topic>> getTopics() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveArticle(String slug) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> unsaveArticle(String slug) {
+    throw UnimplementedError();
   }
 }
 

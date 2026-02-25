@@ -419,10 +419,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnPopularTopics => 'Popular topics';
 
   @override
+  String get learnAllTopics => 'All topics';
+
+  @override
   String get learnAllArticles => 'All articles';
 
   @override
   String get learnNoArticles => 'No articles found.';
+
+  @override
+  String get learnNoTopics => 'No topics found.';
 
   @override
   String get learnFailedLoad => 'Failed to load articles.';

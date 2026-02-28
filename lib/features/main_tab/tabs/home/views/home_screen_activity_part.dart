@@ -66,7 +66,7 @@ class _ActivitiesGrid extends StatelessWidget {
     // first where title is other
     final other = nonOther.firstWhere(
       _isOtherType,
-      orElse: () => _hardcodedOtherType(),
+      orElse: () => HomeInteractor.fallbackOtherType,
     );
 
     selected.add(other);
@@ -81,20 +81,6 @@ class _ActivitiesGrid extends StatelessWidget {
     return normalizedSlug == 'other' || normalizedTitle == 'other';
   }
 
-  ActivityType _hardcodedOtherType() {
-    return const ActivityType(
-      id: -1,
-      slug: 'other',
-      iconUrl: '',
-      color: '#706A93',
-      hasDuration: false,
-      hasQuality: false,
-      isActive: true,
-      order: 999,
-      title: 'Other',
-      description: '',
-    );
-  }
 }
 
 class _ActivityTypeTile extends StatelessWidget {
@@ -170,15 +156,11 @@ class _ActivityTypeTile extends StatelessWidget {
     final local = dateTime.toLocal();
     final now = DateTime.now();
 
-    if (_isSameDate(local, now)) {
+    if (local.isSameDate(now)) {
       return '${context.l10n.today}, ${DateFormat('HH:mm').format(local)}';
     }
 
     return DateFormat('MMM d, HH:mm').format(local);
-  }
-
-  bool _isSameDate(DateTime lhs, DateTime rhs) {
-    return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day;
   }
 
   Widget _buildActivityIcon(Color baseColor) {

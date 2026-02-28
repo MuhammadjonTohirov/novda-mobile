@@ -32,7 +32,7 @@ class ProfileTabContent extends StatelessWidget {
           return context.profileTabBody(
             viewModel: viewModel,
             onLogoutTap: () => _openLogoutSheet(context),
-            onActionTap: () => _showComingSoon(context),
+            onActionTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
             onSettingsTap: () => _openSettings(context),
           );
         },
@@ -44,12 +44,6 @@ class ProfileTabContent extends StatelessWidget {
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
-  }
-
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
   }
 
   Future<void> _openLogoutSheet(BuildContext context) async {

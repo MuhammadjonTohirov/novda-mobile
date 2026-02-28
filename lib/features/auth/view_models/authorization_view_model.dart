@@ -1,4 +1,4 @@
-import 'package:novda/features/auth/models/registrantion_data.dart';
+import 'package:novda/features/auth/models/registration_data.dart';
 import 'package:novda_core/novda_core.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 

@@ -7,6 +7,8 @@ import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
 import '../../main_tab/tabs/home/home.dart';
+import '../widgets/auth_bottom_bar.dart';
+import '../widgets/auth_step_progress_bar.dart';
 
 class BabyHeightScreen extends StatefulWidget {
   const BabyHeightScreen({super.key});
@@ -77,23 +79,6 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
     }
   }
 
-  Widget _linearProgressIndicator(BuildContext context) {
-    final colors = context.appColors;
-
-    return LinearProgressIndicator(
-      value: 7 / 7,
-      backgroundColor: colors.bgSecondary,
-      valueColor: AlwaysStoppedAnimation<Color>(colors.bgBarOnProgress),
-      borderRadius: BorderRadius.circular(2),
-    ).container(
-      height: 4,
-      decoration: BoxDecoration(
-        color: colors.bgSecondary,
-        borderRadius: BorderRadius.circular(2),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
@@ -107,9 +92,9 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
           icon: Icon(Icons.arrow_back, color: colors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: _linearProgressIndicator(context),
+        title: const AuthStepProgressBar(step: 7),
         actions: [
-          const SizedBox(width: 48), // Placeholder for spacing
+          const SizedBox(width: 48),
         ],
       ),
       body: Consumer<AuthorizationViewModel>(
@@ -121,7 +106,7 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
                 onChanged: (_) => setState(() {}),
                 onSubmitted: (_) => _complete(),
               ).expanded(),
-              _BottomBar(
+              AuthBottomBar(
                 onPressed: _complete,
                 isEnabled: _isHeightValid,
                 isLoading: viewModel.isLoading,
@@ -179,34 +164,3 @@ class _HeightInputContent extends StatelessWidget {
   }
 }
 
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({
-    required this.onPressed,
-    required this.isEnabled,
-    this.isLoading = false,
-  });
-
-  final VoidCallback onPressed;
-  final bool isEnabled;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = context.appColors;
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: colors.bgPrimary,
-        border: Border(top: BorderSide(color: colors.bgSecondary, width: 1)),
-      ),
-      child: AppButton(
-        text: l10n.continueButton,
-        onPressed: onPressed,
-        isEnabled: isEnabled,
-        isLoading: isLoading,
-      ).safeArea(top: false),
-    );
-  }
-}

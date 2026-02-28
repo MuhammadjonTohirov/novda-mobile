@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../core/app/app_controller.dart';
 import '../../../core/extensions/extensions.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/ui/ui.dart';
 import '../view_models/authorization_view_model.dart';
+import '../widgets/auth_bottom_bar.dart';
+import '../widgets/auth_step_progress_bar.dart';
 import 'baby_name_screen.dart';
 
 class BabyGenderScreen extends StatelessWidget {
@@ -39,9 +40,9 @@ class BabyGenderScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: colors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: _linearProgressIndicator(context),
+        title: const AuthStepProgressBar(step: 3),
         actions: [
-          const SizedBox(width: 48), // Placeholder for spacing
+          const SizedBox(width: 48),
         ],
       ),
       body: Consumer<AuthorizationViewModel>(
@@ -63,30 +64,13 @@ class BabyGenderScreen extends StatelessWidget {
                   }
                 },
               ).expanded(),
-              _BottomBar(
+              AuthBottomBar(
                 onPressed: () => _continue(context),
                 isEnabled: selectedGender != null,
               ),
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _linearProgressIndicator(BuildContext context) {
-    final colors = context.appColors;
-
-    return LinearProgressIndicator(
-      value: 3 / 7,
-      backgroundColor: colors.bgSecondary,
-      valueColor: AlwaysStoppedAnimation<Color>(colors.bgBarOnProgress),
-      borderRadius: BorderRadius.circular(2),
-    ).container(
-      height: 4,
-      decoration: BoxDecoration(
-        color: colors.bgSecondary,
-        borderRadius: BorderRadius.circular(2),
       ),
     );
   }
@@ -141,37 +125,6 @@ class _GenderSelectionContent extends StatelessWidget {
         const SizedBox(height: 32),
         const _ThemeInfoCard(),
       ],
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({
-    required this.onPressed,
-    required this.isEnabled,
-  });
-
-  final VoidCallback onPressed;
-  final bool isEnabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = context.appColors;
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: colors.bgPrimary,
-        border: Border(
-          top: BorderSide(color: colors.bgSecondary, width: 1),
-        ),
-      ),
-      child: AppButton(
-        text: l10n.continueButton,
-        onPressed: onPressed,
-        isEnabled: isEnabled,
-      ).safeArea(top: false),
     );
   }
 }
@@ -347,14 +300,6 @@ class _GenderCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  String _getIconPath() {
-    return switch (gender) {
-      Gender.boy => 'assets/images/icon_baby_boy.png',
-      Gender.girl => 'assets/images/icon_baby_girl.png',
-      _ => 'assets/images/icon_baby.png',
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -377,7 +322,7 @@ class _GenderCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              _getIconPath(),
+              gender.iconAsset,
               width: 32,
               height: 32,
             ),

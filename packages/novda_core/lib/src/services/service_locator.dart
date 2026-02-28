@@ -3,7 +3,8 @@ import 'package:novda_sdk/novda_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/theme_variant.dart';
-import '../theme/theme_preference_resolver.dart';
+import 'auth_service.dart';
+import 'theme_resolution_service.dart';
 import 'token_storage.dart';
 
 /// Service locator for dependency injection
@@ -23,6 +24,8 @@ class ServiceLocator {
   late final SharedPreferences _prefs;
   late final TokenStorage _tokenStorage;
   late final NovdaSDK _sdk;
+  late final AuthService _authService;
+  late final ThemeResolutionService _themeResolutionService;
 
   bool _initialized = false;
 
@@ -37,6 +40,16 @@ class ServiceLocator {
       baseUrl: _baseUrl,
       apiKey: _apiKey,
       tokenProvider: _tokenStorage,
+    );
+
+    _authService = AuthService(
+      tokenStorage: _tokenStorage,
+      userUseCase: _sdk.user,
+    );
+
+    _themeResolutionService = ThemeResolutionService(
+      userUseCase: _sdk.user,
+      childrenUseCase: _sdk.children,
     );
 
     _initialized = true;
@@ -61,31 +74,26 @@ class ServiceLocator {
     return _prefs;
   }
 
+  /// Get the auth service
+  AuthService get authService {
+    _assertInitialized();
+    return _authService;
+  }
+
+  /// Get the theme resolution service
+  ThemeResolutionService get themeResolutionService {
+    _assertInitialized();
+    return _themeResolutionService;
+  }
+
   /// Check if user is authenticated
-  ///
-  /// Note: this only checks token presence, not token validity.
   bool get isAuthenticated {
     _assertInitialized();
-    return _tokenStorage.hasTokens;
+    return _authService.isAuthenticated;
   }
 
   /// Validate the current auth session with backend profile endpoint.
-  ///
-  /// Returns `true` only when token exists and `/me` can be fetched.
-  /// If validation fails, stored tokens are cleared.
-  Future<bool> hasValidSession() async {
-    _assertInitialized();
-
-    if (!_tokenStorage.hasTokens) return false;
-
-    try {
-      await _sdk.user.getProfile();
-      return true;
-    } catch (_) {
-      await _tokenStorage.clearTokens();
-      return false;
-    }
-  }
+  Future<bool> hasValidSession() => _authService.hasValidSession();
 
   /// Set the locale for API requests
   void setLocale(String locale) {
@@ -94,34 +102,10 @@ class ServiceLocator {
   }
 
   /// Resolve the effective app theme for the current user.
-  ///
-  /// warm/calm map directly; auto is resolved by active child gender:
-  /// boy -> calm, girl/unknown -> warm.
-  Future<ThemeVariant> resolveThemeVariant({int? selectedChildId}) async {
-    _assertInitialized();
-
-    try {
-      final user = await _sdk.user.getProfile();
-      if (user.themePreference != ThemePreference.auto) {
-        return ThemePreferenceResolver.resolve(
-          preference: user.themePreference,
-        );
-      }
-
-      final children = await _sdk.children.getChildren();
-      final activeChild = ThemePreferenceResolver.activeChild(
-        children,
-        activeChildId: selectedChildId ?? user.lastActiveChild,
+  Future<ThemeVariant> resolveThemeVariant({int? selectedChildId}) =>
+      _themeResolutionService.resolveThemeVariant(
+        selectedChildId: selectedChildId,
       );
-
-      return ThemePreferenceResolver.resolve(
-        preference: user.themePreference,
-        activeChildGender: activeChild?.gender,
-      );
-    } catch (_) {
-      return ThemeVariant.warmOrange;
-    }
-  }
 
   void _assertInitialized() {
     assert(_initialized, 'ServiceLocator must be initialized before use');

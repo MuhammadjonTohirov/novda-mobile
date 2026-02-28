@@ -53,7 +53,7 @@ extension HomeScreenUiChildExtensions on BuildContext {
           children: [
             Row(
               children: [
-                Image.asset(_avatarByGender(gender), width: 44, height: 44),
+                Image.asset(gender.avatarAsset, width: 44, height: 44),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,14 +158,6 @@ extension HomeScreenUiChildExtensions on BuildContext {
     ).expanded();
   }
 
-  String _avatarByGender(Gender gender) {
-    return switch (gender) {
-      Gender.boy => 'assets/images/img_boy_avatar.png',
-      Gender.girl => 'assets/images/img_girl_avatar.png',
-      _ => 'assets/images/icon_baby.png',
-    };
-  }
-
   String _genderLabel(Gender gender) {
     return switch (gender) {
       Gender.boy => l10n.boy,
@@ -176,12 +168,6 @@ extension HomeScreenUiChildExtensions on BuildContext {
 
   String _formatMeasurement(Measurement? measurement) {
     if (measurement == null) return '-';
-
-    final value = measurement.value;
-    final formatted = value == value.roundToDouble()
-        ? value.toStringAsFixed(0)
-        : value.toStringAsFixed(1);
-
-    return '$formatted ${measurement.unit}';
+    return '${measurement.value.toCompactString()} ${measurement.unit}';
   }
 }

@@ -1,11 +1,11 @@
 import '../../../core/base/base_view_model.dart';
-import '../../../core/services/services.dart';
+import 'main_tab_interactor.dart';
 
 class MainTabViewModel extends BaseViewModel {
-  MainTabViewModel({TokenStorage? tokenStorage})
-    : _tokenStorage = tokenStorage ?? services.tokenStorage;
+  MainTabViewModel({MainTabInteractor? interactor})
+    : _interactor = interactor ?? MainTabInteractor();
 
-  final TokenStorage _tokenStorage;
+  final MainTabInteractor _interactor;
 
   int _selectedTabIndex = 0;
 
@@ -16,7 +16,7 @@ class MainTabViewModel extends BaseViewModel {
       // Show add activity sheet
       return;
     }
-    
+
     if (_selectedTabIndex == index) return;
 
     _selectedTabIndex = index;
@@ -24,6 +24,6 @@ class MainTabViewModel extends BaseViewModel {
   }
 
   Future<void> logout() async {
-    await _tokenStorage.clearTokens();
+    await _interactor.logout();
   }
 }

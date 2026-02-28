@@ -1,8 +1,11 @@
 import 'core/network/api_client.dart';
 import 'gateways/gateways.dart';
-import 'models/article.dart';
-import 'models/article_v2.dart';
 import 'use_cases/use_cases.dart';
+
+/// Abstraction for locale configuration to avoid exposing [ApiClient].
+abstract interface class LocaleConfigurable {
+  void setLocale(String locale);
+}
 
 /// Main SDK class that provides access to all use cases.
 /// Gateways are internal and not exposed.
@@ -17,8 +20,8 @@ class NovdaSDK {
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
     required ArticlesV2UseCase articlesV2,
-    required ApiClient apiClient,
-  }) : _auth = auth,
+    LocaleConfigurable? localeConfigurable,
+  })  : _auth = auth,
        _user = user,
        _children = children,
        _activities = activities,
@@ -27,7 +30,7 @@ class NovdaSDK {
        _reminders = reminders,
        _articles = articles,
        _articlesV2 = articlesV2,
-       _apiClient = apiClient;
+       _localeConfigurable = localeConfigurable;
 
   final AuthUseCase _auth;
   final UserUseCase _user;
@@ -38,7 +41,7 @@ class NovdaSDK {
   final RemindersUseCase _reminders;
   final ArticlesUseCase _articles;
   final ArticlesV2UseCase _articlesV2;
-  final ApiClient _apiClient;
+  final LocaleConfigurable? _localeConfigurable;
 
   /// Authentication use case
   AuthUseCase get auth => _auth;
@@ -69,7 +72,7 @@ class NovdaSDK {
 
   /// Set the locale for API requests
   void setLocale(String locale) {
-    _apiClient.setLocale(locale);
+    _localeConfigurable?.setLocale(locale);
   }
 
   /// Create a new instance of NovdaSDK with default implementations
@@ -125,7 +128,7 @@ class NovdaSDK {
       reminders: remindersUseCase,
       articles: articlesUseCase,
       articlesV2: articlesV2UseCase,
-      apiClient: apiClient,
+      localeConfigurable: _ApiClientLocaleAdapter(apiClient),
     );
   }
 
@@ -140,7 +143,7 @@ class NovdaSDK {
     required ProgressUseCase progress,
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
-    ArticlesV2UseCase? articlesV2,
+    required ArticlesV2UseCase articlesV2,
   }) {
     return NovdaSDK._(
       auth: auth,
@@ -151,94 +154,16 @@ class NovdaSDK {
       progress: progress,
       reminders: reminders,
       articles: articles,
-      articlesV2: articlesV2 ?? _NoOpArticlesV2UseCase(),
-      apiClient: _NoOpApiClient(),
+      articlesV2: articlesV2,
     );
   }
 }
 
-class _NoOpArticlesV2UseCase implements ArticlesV2UseCase {
-  @override
-  Future<ArticlesV2Page> getArticles({
-    int? page,
-    int? pageSize,
-    String? query,
-    String? topic,
-  }) {
-    throw UnimplementedError();
-  }
+/// Adapts [ApiClient.setLocale] to [LocaleConfigurable].
+class _ApiClientLocaleAdapter implements LocaleConfigurable {
+  _ApiClientLocaleAdapter(this._client);
+  final ApiClient _client;
 
   @override
-  Future<List<ArticleListItem>> getRecommendedArticles({
-    required int childId,
-    required int progressIndex,
-    required String progressType,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<ArticleDetail> getArticle(String slug) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Topic>> getTopics() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> saveArticle(String slug) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> unsaveArticle(String slug) {
-    throw UnimplementedError();
-  }
-}
-
-/// No-op API client for testing scenarios
-class _NoOpApiClient implements ApiClient {
-  @override
-  Future<void> delete(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    bool requiresAuth = true,
-  }) async {}
-
-  @override
-  Future<T> get<T>(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    T Function(Object? json)? fromJson,
-    bool requiresAuth = true,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<T> patch<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    T Function(Object? json)? fromJson,
-    bool requiresAuth = true,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<T> post<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    T Function(Object? json)? fromJson,
-    bool requiresAuth = true,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  void setLocale(String locale) {}
+  void setLocale(String locale) => _client.setLocale(locale);
 }

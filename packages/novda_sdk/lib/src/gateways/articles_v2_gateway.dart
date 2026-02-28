@@ -1,4 +1,5 @@
 import '../core/network/api_client.dart';
+import '../core/network/json_helpers.dart';
 import '../models/article.dart';
 import '../models/article_v2.dart';
 
@@ -17,7 +18,8 @@ class ArticlesV2GatewayImpl implements ArticlesV2Gateway {
 
   final ApiClient _client;
 
-  Map<String, dynamic> _extractMap(Object? json) {
+  /// Variant of [extractMap] that unwraps a nested `data` key first.
+  Map<String, dynamic> _extractV2Map(Object? json) {
     if (json is Map<String, dynamic>) {
       final nestedData = json['data'];
       if (nestedData is Map<String, dynamic>) return nestedData;
@@ -31,7 +33,8 @@ class ArticlesV2GatewayImpl implements ArticlesV2Gateway {
     throw const FormatException('Expected a map or list response');
   }
 
-  List<dynamic> _extractList(
+  /// Variant of [extractList] that also looks inside a nested `data` key.
+  List<dynamic> _extractV2List(
     Object? json, {
     required List<String> candidateKeys,
   }) {
@@ -67,7 +70,7 @@ class ArticlesV2GatewayImpl implements ArticlesV2Gateway {
     return _client.get(
       '/api/v2/articles',
       queryParameters: query.toQueryParams(),
-      fromJson: (json) => ArticlesV2Page.fromJson(_extractMap(json)),
+      fromJson: (json) => ArticlesV2Page.fromJson(_extractV2Map(json)),
     );
   }
 
@@ -79,7 +82,7 @@ class ArticlesV2GatewayImpl implements ArticlesV2Gateway {
       '/api/v2/children/${query.childId}/recommended-articles',
       queryParameters: query.toQueryParams(),
       fromJson: (json) =>
-          _extractList(
+          _extractV2List(
                 json,
                 candidateKeys: const [
                   'recommended_articles',

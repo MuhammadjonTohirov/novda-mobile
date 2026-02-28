@@ -58,7 +58,7 @@ class HomeViewModel extends BaseViewModel {
     try {
       final updatedReminder = await _interactor.completeReminder(reminderId);
       currentReminders[index] = updatedReminder;
-      currentReminders.sort(_sortReminders);
+      currentReminders.sort(_interactor.sortReminders);
       _dashboard = HomeDashboardData(
         activeChild: _dashboard.activeChild,
         activeChildDetails: _dashboard.activeChildDetails,
@@ -73,17 +73,6 @@ class HomeViewModel extends BaseViewModel {
       _updatingReminderIds.remove(reminderId);
       notifyListeners();
     }
-  }
-
-  int _sortReminders(Reminder a, Reminder b) {
-    final aCompleted = a.status == ReminderStatus.completed;
-    final bCompleted = b.status == ReminderStatus.completed;
-
-    if (aCompleted != bCompleted) {
-      return aCompleted ? 1 : -1;
-    }
-
-    return a.dueAt.compareTo(b.dueAt);
   }
 
   String _actionErrorText(Object error) {

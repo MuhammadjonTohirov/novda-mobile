@@ -3,7 +3,8 @@
     "allow": [
       "Bash(flutter gen-l10n:*)",
       "Bash(flutter pub get:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(flutter analyze:*)"
     ]
   }
 }

@@ -1,4 +1,5 @@
 import '../core/network/api_client.dart';
+import '../core/network/json_helpers.dart';
 import '../models/article.dart';
 
 /// Gateway interface for article operations
@@ -16,57 +17,13 @@ class ArticlesGatewayImpl implements ArticlesGateway {
 
   final ApiClient _client;
 
-  List<dynamic> _extractList(
-    Object? json, {
-    required List<String> candidateKeys,
-  }) {
-    if (json is List<dynamic>) {
-      return json;
-    }
-
-    if (json is Map<String, dynamic>) {
-      for (final key in candidateKeys) {
-        final value = json[key];
-        if (value is List<dynamic>) {
-          return value;
-        }
-      }
-
-      for (final value in json.values) {
-        if (value is List<dynamic>) {
-          return value;
-        }
-      }
-    }
-
-    throw const FormatException('Expected a list response');
-  }
-
-  Map<String, dynamic> _extractMap(
-    Object? json, {
-    List<String> candidateKeys = const [],
-  }) {
-    if (json is Map<String, dynamic>) {
-      for (final key in candidateKeys) {
-        final value = json[key];
-        if (value is Map<String, dynamic>) {
-          return value;
-        }
-      }
-
-      return json;
-    }
-
-    throw const FormatException('Expected a map response');
-  }
-
   @override
   Future<List<ArticleListItem>> getArticles(ArticleListQuery query) async {
     return _client.get(
       '/api/v1/articles',
       queryParameters: query.toQueryParams(),
       fromJson: (json) =>
-          _extractList(json, candidateKeys: const ['articles', 'results'])
+          extractList(json, candidateKeys: const ['articles', 'results'])
               .map((e) => ArticleListItem.fromJson(e as Map<String, dynamic>))
               .toList(),
     );
@@ -77,7 +34,7 @@ class ArticlesGatewayImpl implements ArticlesGateway {
     return _client.get(
       '/api/v1/articles/$slug',
       fromJson: (json) => ArticleDetail.fromJson(
-        _extractMap(json, candidateKeys: const ['article']),
+        extractMap(json, candidateKeys: const ['article']),
       ),
     );
   }
@@ -96,7 +53,7 @@ class ArticlesGatewayImpl implements ArticlesGateway {
   Future<List<Topic>> getTopics() async {
     return _client.get(
       '/api/v1/topics',
-      fromJson: (json) => _extractList(
+      fromJson: (json) => extractList(
         json,
         candidateKeys: const ['topics', 'results'],
       ).map((e) => Topic.fromJson(e as Map<String, dynamic>)).toList(),

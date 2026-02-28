@@ -156,6 +156,7 @@ abstract final class GrayColors {
 }
 
 /// App color scheme that can be themed
+@immutable
 class AppColorScheme {
   const AppColorScheme({
     required this.accent,
@@ -259,4 +260,17 @@ class AppColorScheme {
     textSecondary: AppColorPrimitives.textSecondary,
     error: AppColorPrimitives.error,
   );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppColorScheme &&
+          runtimeType == other.runtimeType &&
+          accent == other.accent &&
+          bgPrimary == other.bgPrimary &&
+          bgSecondary == other.bgSecondary &&
+          textPrimary == other.textPrimary;
+
+  @override
+  int get hashCode => Object.hash(accent, bgPrimary, bgSecondary, textPrimary);
 }

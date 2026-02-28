@@ -17,4 +17,4 @@ export 'src/use_cases/reminders_use_case.dart' show RemindersUseCase;
 export 'src/use_cases/user_use_case.dart' show UserUseCase;
 
 // Main SDK
-export 'src/novda_sdk.dart';
+export 'src/novda_sdk.dart' show NovdaSDK, LocaleConfigurable;

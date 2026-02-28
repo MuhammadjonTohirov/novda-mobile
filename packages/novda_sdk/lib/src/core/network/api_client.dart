@@ -1,9 +1,9 @@
-import 'dart:developer' as developer;
-
 import 'package:dio/dio.dart';
 
 import 'api_exception.dart';
 import 'api_response.dart';
+import 'auth_interceptor.dart';
+import 'logging_interceptor.dart';
 
 /// Token provider interface for authentication
 abstract interface class TokenProvider {
@@ -64,26 +64,27 @@ abstract interface class ApiClient {
   void setLocale(String locale);
 }
 
-/// Dio-based implementation of ApiClient
+/// Dio-based implementation of [ApiClient].
+///
+/// Interceptors are extracted into [LoggingInterceptor] and [AuthInterceptor].
 class DioApiClient implements ApiClient {
-  static const _refreshEndpointPath = '/api/v1/auth/token/refresh';
-  static const _skipAuthRefreshExtraKey = 'skip_auth_refresh';
-  static const _authRetryAttemptedExtraKey = 'auth_retry_attempted';
-
   DioApiClient({
     required ApiClientConfig config,
     required TokenProvider tokenProvider,
     Dio? dio,
-  }) : _config = config,
-       _tokenProvider = tokenProvider,
+  })  : _config = config,
        _dio = dio ?? Dio() {
+    _authInterceptor = AuthInterceptor(
+      apiKey: config.apiKey,
+      tokenProvider: tokenProvider,
+      dio: _dio,
+    );
     _setupDio();
   }
 
   final ApiClientConfig _config;
-  final TokenProvider _tokenProvider;
   final Dio _dio;
-  String _locale = 'en';
+  late final AuthInterceptor _authInterceptor;
 
   void _setupDio() {
     _dio.options = BaseOptions(
@@ -96,130 +97,15 @@ class DioApiClient implements ApiClient {
       },
     );
 
-    // Logging Interceptor
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          developer.log(
-            'REQUEST[${options.method}] => PATH: ${options.path}',
-            name: 'NovdaSDK',
-          );
-          if (options.queryParameters.isNotEmpty) {
-            developer.log(
-              'Query Params: ${options.queryParameters}',
-              name: 'NovdaSDK',
-            );
-          }
-          if (options.data != null) {
-            developer.log('Request Data: ${options.data}', name: 'NovdaSDK');
-          }
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          developer.log(
-            'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
-            name: 'NovdaSDK',
-          );
-          developer.log('Response Data: ${response.data}', name: 'NovdaSDK');
-          handler.next(response);
-        },
-        onError: (DioException error, handler) {
-          developer.log(
-            'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}',
-            name: 'NovdaSDK',
-            error: error.error,
-          );
-          if (error.response != null) {
-            developer.log(
-              'Error Response Data: ${error.response?.data}',
-              name: 'NovdaSDK',
-            );
-          }
-          handler.next(error);
-        },
-      ),
-    );
-
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.headers['X-API-Key'] = _config.apiKey;
-          options.headers['Accept-Language'] = _locale;
-
-          final token = _tokenProvider.accessToken;
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-
-          handler.next(options);
-        },
-        onError: (error, handler) async {
-          if (_shouldTryRefresh(error)) {
-            final refreshed = await _tryRefreshToken();
-            if (refreshed) {
-              error.requestOptions.extra[_authRetryAttemptedExtraKey] = true;
-              final response = await _retry(error.requestOptions);
-              return handler.resolve(response);
-            }
-          }
-          handler.next(error);
-        },
-      ),
-    );
-  }
-
-  Future<bool> _tryRefreshToken() async {
-    final refreshToken = _tokenProvider.refreshToken;
-    if (refreshToken == null) return false;
-
-    try {
-      final response = await _dio.post(
-        _refreshEndpointPath,
-        data: {'refresh': refreshToken},
-        options: Options(
-          headers: {'Authorization': null},
-          extra: {_skipAuthRefreshExtraKey: true},
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        if (data != null) {
-          await _tokenProvider.saveTokens(
-            access: data['access'] as String,
-            refresh: data['refresh'] as String,
-          );
-          return true;
-        }
-      }
-    } catch (_) {
-      await _tokenProvider.clearTokens();
-    }
-    return false;
-  }
-
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) {
-    final token = _tokenProvider.accessToken;
-    if (token != null) {
-      requestOptions.headers['Authorization'] = 'Bearer $token';
-    }
-    return _dio.fetch(requestOptions);
-  }
-
-  bool _shouldTryRefresh(DioException error) {
-    if (error.response?.statusCode != 401) return false;
-
-    final options = error.requestOptions;
-    final isRefreshRequest = options.path.contains(_refreshEndpointPath);
-    final skipRefresh = options.extra[_skipAuthRefreshExtraKey] == true;
-    final alreadyRetried = options.extra[_authRetryAttemptedExtraKey] == true;
-
-    return !isRefreshRequest && !skipRefresh && !alreadyRetried;
+    _dio.interceptors.addAll([
+      LoggingInterceptor(),
+      _authInterceptor,
+    ]);
   }
 
   @override
   void setLocale(String locale) {
-    _locale = locale;
+    _authInterceptor.setLocale(locale);
   }
 
   @override
@@ -290,7 +176,10 @@ class DioApiClient implements ApiClient {
     }
   }
 
-  T _handleResponse<T>(Response response, T Function(Object? json)? fromJson) {
+  T _handleResponse<T>(
+    Response response,
+    T Function(Object? json)? fromJson,
+  ) {
     final data = response.data;
 
     if (data is Map<String, dynamic> && data.containsKey('success')) {

@@ -128,22 +128,16 @@ class _ReminderTile extends StatelessWidget {
 
   String _formatReminderDateTime(BuildContext context, DateTime dateTime) {
     final local = dateTime.toLocal();
-    final now = DateTime.now();
 
-    if (_isSameDate(local, now)) {
+    if (local.isToday) {
       return '${context.l10n.today}, ${DateFormat('HH:mm').format(local)}';
     }
 
-    final tomorrow = now.add(const Duration(days: 1));
-    if (_isSameDate(local, tomorrow)) {
+    if (local.isTomorrow) {
       return '${context.l10n.homeTomorrow}, ${DateFormat('HH:mm').format(local)}';
     }
 
     return DateFormat('MMM d, HH:mm').format(local);
-  }
-
-  bool _isSameDate(DateTime lhs, DateTime rhs) {
-    return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day;
   }
 }
 

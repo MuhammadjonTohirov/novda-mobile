@@ -33,7 +33,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
       )..load(),
       child: Consumer<AddActivityViewModel>(
         builder: (context, viewModel, _) {
-          _showActionErrorIfAny(context, viewModel);
+          context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
           if (viewModel.isLoading && viewModel.startDate == null) {
             return Scaffold(
@@ -365,19 +365,4 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     Navigator.of(context).pop(viewModel.createdActivity);
   }
 
-  void _showActionErrorIfAny(
-    BuildContext context,
-    AddActivityViewModel viewModel,
-  ) {
-    final message = viewModel.consumeActionError();
-    if (message == null || message.isEmpty) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(message)));
-    });
-  }
 }

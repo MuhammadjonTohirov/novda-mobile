@@ -1,5 +1,6 @@
 export 'src/extensions/widget_extensions.dart';
 export 'src/theme/app_colors.dart';
+export 'src/theme/app_dimensions.dart';
 export 'src/theme/app_theme.dart';
 export 'src/theme/app_typography.dart';
 export 'src/ui/activity_card.dart';

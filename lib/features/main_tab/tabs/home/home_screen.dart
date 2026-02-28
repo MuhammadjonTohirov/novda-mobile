@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       create: (_) => HomeViewModel(interactor: HomeInteractor())..load(),
       child: Consumer<HomeViewModel>(
         builder: (context, viewModel, _) {
-          _showActionErrorIfAny(context, viewModel);
+          context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
           if (viewModel.isLoading && !viewModel.hasAnyContent) {
             return const CircularProgressIndicator().center();
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 context
                     .homeMyChildHeader(
-                      onEditDetails: () => _showComingSoon(context),
+                      onEditDetails: () => context.showSnackMessage(context.l10n.homeComingSoon),
                     )
                     .safeArea(bottom: false)
                     .paddingOnly(left: 16, right: 16, bottom: 16),
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                     .homeChildInfoCard(
                       childInfo: viewModel.activeChild,
                       childDetails: viewModel.activeChildDetails,
-                      onTap: () => _showComingSoon(context),
+                      onTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
                     )
                     .paddingOnly(left: 16, right: 16),
                 const SizedBox(height: 20),
@@ -76,12 +76,12 @@ class HomeScreen extends StatelessWidget {
                     context.homeSectionHeader(
                       title: context.l10n.homeReminders,
                       actionLabel: context.l10n.homeSeeAll,
-                      onActionTap: () => _showComingSoon(context),
+                      onActionTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
                     ),
                     const SizedBox(height: 12),
                     _RemindersList(viewModel: viewModel),
                     const SizedBox(height: 14),
-                    _AddReminderButton(onTap: () => _showComingSoon(context)),
+                    _AddReminderButton(onTap: () => context.showSnackMessage(context.l10n.homeComingSoon)),
                   ],
                 ).container(
                   decoration: BoxDecoration(
@@ -99,25 +99,6 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _showActionErrorIfAny(BuildContext context, HomeViewModel viewModel) {
-    final actionError = viewModel.consumeActionError();
-    if (actionError == null || actionError.isEmpty) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(actionError)));
-    });
-  }
-
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
   }
 
   Future<void> _openActivityHistory(
@@ -153,7 +134,7 @@ class HomeScreen extends StatelessWidget {
     ActivityType type,
   ) async {
     if (type.id <= 0) {
-      _showComingSoon(context);
+      context.showSnackMessage(context.l10n.homeComingSoon);
       return;
     }
 

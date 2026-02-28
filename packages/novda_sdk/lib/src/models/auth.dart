@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import 'enums.dart';
 import 'user.dart';
 
 /// Response from OTP request
@@ -48,15 +49,15 @@ class AuthTokens extends Equatable {
 class OtpRequest {
   const OtpRequest({
     required this.phone,
-    this.purpose = 'auth',
+    this.purpose = OtpPurpose.auth,
   });
 
   final String phone;
-  final String purpose;
+  final OtpPurpose purpose;
 
   Map<String, dynamic> toJson() => {
         'phone': phone,
-        'purpose': purpose,
+        'purpose': purpose.value,
       };
 }
 

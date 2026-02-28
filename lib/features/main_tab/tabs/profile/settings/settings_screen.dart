@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
       create: (_) => SettingsViewModel()..load(),
       child: Consumer<SettingsViewModel>(
         builder: (context, viewModel, _) {
-          _showActionErrorIfAny(context, viewModel);
+          context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
           if (viewModel.isLoading && !viewModel.hasLoaded) {
             return Scaffold(
@@ -157,18 +157,4 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showActionErrorIfAny(
-    BuildContext context,
-    SettingsViewModel viewModel,
-  ) {
-    final message = viewModel.consumeActionError();
-    if (message == null || message.isEmpty) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(message)));
-    });
-  }
 }

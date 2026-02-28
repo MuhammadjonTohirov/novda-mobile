@@ -8,6 +8,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/ui.dart';
 import '../../main_tab/tabs/home/home.dart';
 import '../view_models/authorization_view_model.dart';
+import '../widgets/auth_bottom_bar.dart';
+import '../widgets/auth_step_progress_bar.dart';
 import 'baby_gender_screen.dart';
 import 'children_selection_screen.dart';
 import '../../../core/ui/verification/verification_screen.dart';
@@ -122,9 +124,9 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         surfaceTintColor: colors.bgPrimary,
         elevation: 0,
         leading: const SizedBox(width: 48),
-        title: _linearProgressIndicator(context),
+        title: const AuthStepProgressBar(step: 1),
         actions: [
-          const SizedBox(width: 48), // Placeholder for spacing
+          const SizedBox(width: 48),
         ],
       ),
       body: Consumer<AuthorizationViewModel>(
@@ -135,27 +137,14 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               _privacyPolicyView(
                 context,
               ).paddingOnly(left: 16, right: 16, bottom: 16),
-              _continueButton(context, viewModel: viewModel),
+              AuthBottomBar(
+                onPressed: _continue,
+                isEnabled: _isPhoneValid && _isTermsAccepted,
+                isLoading: viewModel.isLoading,
+              ),
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _linearProgressIndicator(BuildContext context) {
-    final colors = context.appColors;
-
-    return LinearProgressIndicator(
-      value: 1 / 7,
-      backgroundColor: colors.bgSecondary,
-      valueColor: AlwaysStoppedAnimation<Color>(colors.bgBarOnProgress),
-      borderRadius: BorderRadius.circular(2),
-    ).container(
-      height: 4,
-      decoration: BoxDecoration(
-        color: colors.bgSecondary,
-        borderRadius: BorderRadius.circular(2),
       ),
     );
   }
@@ -193,28 +182,6 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           ),
         ).padding(const EdgeInsets.only(top: 12)).expanded(),
       ],
-    );
-  }
-
-  Widget _continueButton(
-    BuildContext context, {
-    required AuthorizationViewModel viewModel,
-  }) {
-    final colors = context.appColors;
-    final l10n = context.l10n;
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: colors.bgPrimary,
-        border: Border(top: BorderSide(color: colors.bgSecondary, width: 1)),
-      ),
-      child: AppButton(
-        text: l10n.continueButton,
-        onPressed: _continue,
-        isEnabled: _isPhoneValid && _isTermsAccepted,
-        isLoading: viewModel.isLoading,
-      ).safeArea(top: false),
     );
   }
 

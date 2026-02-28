@@ -23,7 +23,7 @@ class ArticleScreen extends StatelessWidget {
       )..load(),
       child: Consumer<ArticleScreenViewModel>(
         builder: (context, viewModel, _) {
-          _showActionErrorIfAny(context, viewModel);
+          context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
           if (viewModel.isLoading && !viewModel.hasDetail) {
             return Scaffold(
@@ -49,7 +49,7 @@ class ArticleScreen extends StatelessWidget {
               onRefresh: viewModel.load,
               onBackTap: () => Navigator.of(context).pop(),
               onBookmarkTap: viewModel.toggleSaved,
-              onHelpfulTap: () => _showComingSoon(context),
+              onHelpfulTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
             ),
           );
         },
@@ -57,25 +57,4 @@ class ArticleScreen extends StatelessWidget {
     );
   }
 
-  void _showActionErrorIfAny(
-    BuildContext context,
-    ArticleScreenViewModel viewModel,
-  ) {
-    final message = viewModel.consumeActionError();
-    if (message == null || message.isEmpty) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(message)));
-    });
-  }
-
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
-  }
 }

@@ -1,41 +1,9 @@
 import 'package:novda_sdk/novda_sdk.dart';
 
 import '../../../../../core/services/services.dart';
+import '../models/home_dashboard_data.dart';
 
-class HomeDashboardData {
-  const HomeDashboardData({
-    required this.activeChild,
-    required this.activeChildDetails,
-    required this.activityTypes,
-    required this.latestActivitiesByType,
-    required this.todayCountByType,
-    required this.recentReminders,
-  });
-
-  factory HomeDashboardData.empty() {
-    return const HomeDashboardData(
-      activeChild: null,
-      activeChildDetails: null,
-      activityTypes: [],
-      latestActivitiesByType: {},
-      todayCountByType: {},
-      recentReminders: [],
-    );
-  }
-
-  final ChildListItem? activeChild;
-  final Child? activeChildDetails;
-  final List<ActivityType> activityTypes;
-  final Map<int, ActivityItem> latestActivitiesByType;
-  final Map<int, int> todayCountByType;
-  final List<Reminder> recentReminders;
-
-  bool get hasAnyContent {
-    return activeChild != null ||
-        activityTypes.isNotEmpty ||
-        recentReminders.isNotEmpty;
-  }
-}
+export '../models/home_dashboard_data.dart';
 
 class HomeInteractor {
   HomeInteractor({
@@ -122,7 +90,7 @@ class HomeInteractor {
         summary?.lastActivities ?? const [],
       ),
       todayCountByType: _mapTodayCounts(todayActivities),
-      recentReminders: [...reminders]..sort(_sortReminders),
+      recentReminders: [...reminders]..sort(sortReminders),
     );
   }
 
@@ -160,7 +128,20 @@ class HomeInteractor {
     return counts;
   }
 
-  int _sortReminders(Reminder a, Reminder b) {
+  static const ActivityType fallbackOtherType = ActivityType(
+    id: -1,
+    slug: 'other',
+    iconUrl: '',
+    color: '#706A93',
+    hasDuration: false,
+    hasQuality: false,
+    isActive: true,
+    order: 999,
+    title: 'Other',
+    description: '',
+  );
+
+  int sortReminders(Reminder a, Reminder b) {
     final aCompleted = a.status == ReminderStatus.completed;
     final bCompleted = b.status == ReminderStatus.completed;
 

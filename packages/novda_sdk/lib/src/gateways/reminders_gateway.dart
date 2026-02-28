@@ -1,4 +1,5 @@
 import '../core/network/api_client.dart';
+import '../core/network/json_helpers.dart';
 import '../models/reminder.dart';
 
 /// Gateway interface for reminder operations
@@ -26,32 +27,6 @@ class RemindersGatewayImpl implements RemindersGateway {
 
   final ApiClient _client;
 
-  List<dynamic> _extractList(
-    Object? json, {
-    required List<String> candidateKeys,
-  }) {
-    if (json is List<dynamic>) {
-      return json;
-    }
-
-    if (json is Map<String, dynamic>) {
-      for (final key in candidateKeys) {
-        final value = json[key];
-        if (value is List<dynamic>) {
-          return value;
-        }
-      }
-
-      for (final value in json.values) {
-        if (value is List<dynamic>) {
-          return value;
-        }
-      }
-    }
-
-    throw const FormatException('Expected a list response');
-  }
-
   @override
   Future<List<Reminder>> getReminders(
     int childId,
@@ -60,7 +35,7 @@ class RemindersGatewayImpl implements RemindersGateway {
     return _client.get(
       '/api/v1/children/$childId/reminders',
       queryParameters: query.toQueryParams(),
-      fromJson: (json) => _extractList(
+      fromJson: (json) => extractList(
         json,
         candidateKeys: const ['reminders', 'results'],
       ).map((e) => Reminder.fromJson(e as Map<String, dynamic>)).toList(),
@@ -80,7 +55,7 @@ class RemindersGatewayImpl implements RemindersGateway {
     return _client.get(
       '/api/v1/children/$childId/reminders/calendar',
       queryParameters: {'month': month},
-      fromJson: (json) => _extractList(
+      fromJson: (json) => extractList(
         json,
         candidateKeys: const ['calendar', 'days', 'results'],
       ).map((e) => CalendarDay.fromJson(e as Map<String, dynamic>)).toList(),
@@ -99,7 +74,7 @@ class RemindersGatewayImpl implements RemindersGateway {
         'q': query,
         if (limit != null) 'limit': limit.toString(),
       },
-      fromJson: (json) => _extractList(
+      fromJson: (json) => extractList(
         json,
         candidateKeys: const ['reminders', 'results'],
       ).map((e) => Reminder.fromJson(e as Map<String, dynamic>)).toList(),

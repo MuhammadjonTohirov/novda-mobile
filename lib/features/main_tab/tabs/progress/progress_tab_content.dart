@@ -34,7 +34,7 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
           ProgressTabViewModel(interactor: ProgressTabInteractor())..load(),
       child: Consumer<ProgressTabViewModel>(
         builder: (context, viewModel, _) {
-          _showActionErrorIfAny(context, viewModel);
+          context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
           if (viewModel.isLoading && !viewModel.hasContent) {
             return const CircularProgressIndicator().center().safeArea();
@@ -55,7 +55,7 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
             viewModel: viewModel,
             onRefresh: viewModel.load,
             onPeriodTap: viewModel.selectPeriod,
-            onCalendarTap: () => _showComingSoon(context),
+            onCalendarTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
             periodScrollController: _periodScrollController,
           );
         },
@@ -104,25 +104,4 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
     });
   }
 
-  void _showActionErrorIfAny(
-    BuildContext context,
-    ProgressTabViewModel viewModel,
-  ) {
-    final message = viewModel.consumeActionError();
-    if (message == null || message.isEmpty) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(message)));
-    });
-  }
-
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
-  }
 }

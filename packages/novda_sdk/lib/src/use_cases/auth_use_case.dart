@@ -1,12 +1,13 @@
 import '../gateways/auth_gateway.dart';
 import '../models/auth.dart';
+import '../models/enums.dart';
 
 /// Use case interface for authentication operations
 abstract interface class AuthUseCase {
   /// Request OTP code for phone authentication
   Future<OtpRequestResponse> requestOtp({
     required String phone,
-    String purpose,
+    OtpPurpose purpose,
   });
 
   /// Verify OTP code and get authentication tokens
@@ -31,7 +32,7 @@ class AuthUseCaseImpl implements AuthUseCase {
   @override
   Future<OtpRequestResponse> requestOtp({
     required String phone,
-    String purpose = 'auth',
+    OtpPurpose purpose = OtpPurpose.auth,
   }) {
     return _gateway.requestOtp(OtpRequest(phone: phone, purpose: purpose));
   }

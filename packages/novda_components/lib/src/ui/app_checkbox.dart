@@ -21,9 +21,9 @@ class AppCheckbox extends StatelessWidget {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          color: value ? Colors.black12 : Colors.transparent,
+          color: value ? colors.accent.withValues(alpha: 0.12) : Colors.transparent,
           border: Border.all(
-            color: value ? Colors.transparent : Colors.black12,
+            color: value ? Colors.transparent : colors.border,
             width: value ? 0 : 1,
           ),
           borderRadius: BorderRadius.circular(4),

@@ -10,7 +10,6 @@ class ActivityCard extends StatelessWidget {
     required this.title,
     required this.duration,
     required this.time,
-    this.iconColor,
     this.showBackground = true,
     this.onTap,
   });
@@ -19,7 +18,6 @@ class ActivityCard extends StatelessWidget {
   final String title;
   final String duration;
   final String time;
-  final Color? iconColor;
   final bool showBackground;
   final VoidCallback? onTap;
 

@@ -30,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final isAuthenticated = await services.hasValidSession();
     if (!mounted) return;
 
-    final hasCompletedOnboarding =
-        services.prefs.getBool('onboarding_completed') ?? false;
+    final onboarding = SharedPrefsOnboardingRepository(prefs: services.prefs);
+    final hasCompletedOnboarding = onboarding.hasCompletedOnboarding;
 
     if (isAuthenticated) {
       final resolvedTheme = await services.resolveThemeVariant();

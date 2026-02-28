@@ -39,7 +39,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
     } else {
       // Mark onboarding as completed
-      await services.prefs.setBool('onboarding_completed', true);
+      final onboarding = SharedPrefsOnboardingRepository(prefs: services.prefs);
+      await onboarding.completeOnboarding();
 
       if (!mounted) return;
 

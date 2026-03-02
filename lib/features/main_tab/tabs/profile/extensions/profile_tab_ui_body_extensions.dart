@@ -9,6 +9,9 @@ extension ProfileTabUiBodyExtensions on BuildContext {
   Widget profileTabBody({
     required ProfileTabViewModel viewModel,
     required VoidCallback onLogoutTap,
+    required VoidCallback onParentTap,
+    required VoidCallback onAddChildTap,
+    required VoidCallback onChildTap,
     required VoidCallback onActionTap,
     required VoidCallback onSettingsTap,
   }) {
@@ -18,7 +21,12 @@ extension ProfileTabUiBodyExtensions on BuildContext {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
-          profileTopSection(viewModel: viewModel, onActionTap: onActionTap),
+          profileTopSection(
+            viewModel: viewModel,
+            onParentTap: onParentTap,
+            onAddChildTap: onAddChildTap,
+            onChildTap: onChildTap,
+          ),
           const SizedBox(height: 16),
           profileMenuSection(
             items: [

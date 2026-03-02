@@ -3,6 +3,7 @@ import 'package:novda/core/ui/ui.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/extensions/extensions.dart';
+import 'child_details/child_details_screen.dart';
 import 'extensions/profile_tab_ui_extensions.dart';
 import 'settings/settings_screen.dart';
 import 'view_model/profile_tab_view_model.dart';
@@ -32,7 +33,17 @@ class ProfileTabContent extends StatelessWidget {
           return context.profileTabBody(
             viewModel: viewModel,
             onLogoutTap: () => _openLogoutSheet(context),
-            onActionTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
+            onParentTap: () =>
+                context.showSnackMessage(context.l10n.homeComingSoon),
+            onAddChildTap: () =>
+                _openChildDetails(context, viewModel: viewModel),
+            onChildTap: () => _openChildDetails(
+              context,
+              viewModel: viewModel,
+              childId: viewModel.activeChild?.id,
+            ),
+            onActionTap: () =>
+                context.showSnackMessage(context.l10n.homeComingSoon),
             onSettingsTap: () => _openSettings(context),
           );
         },
@@ -62,5 +73,18 @@ class ProfileTabContent extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> _openChildDetails(
+    BuildContext context, {
+    required ProfileTabViewModel viewModel,
+    int? childId,
+  }) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => ChildDetailsScreen(childId: childId)),
+    );
+
+    if (!context.mounted || saved != true) return;
+    await viewModel.load();
   }
 }

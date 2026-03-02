@@ -97,7 +97,7 @@ class ActivityHistoryScreen extends StatelessWidget {
             ],
           ).expanded(),
       ],
-    ).paddingSymmetric(horizontal: 16).safeArea(top: false);
+    ).paddingSymmetric(horizontal: 16).safeArea(bottom: false);
   }
 
   Future<void> _openAddActivityByItem(

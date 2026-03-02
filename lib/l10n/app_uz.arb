@@ -77,6 +77,10 @@
 
   "homeMyChild": "Mening farzandim",
   "homeEditDetails": "Ma'lumotlarni tahrirlash",
+  "childDetailsEditTitle": "Chaqaloq ma'lumotlarini tahrirlash",
+  "childDetailsAddTitle": "Chaqaloq ma'lumotlarini qo'shish",
+  "childDetailsBirthDate": "Tug'ilgan sana",
+  "childDetailsParameters": "Parametrlar",
   "homeNoActiveChildSelected": "Faol farzand tanlanmagan.",
   "homeGender": "Jinsi",
   "homeUndisclosed": "Ko'rsatilmagan",
@@ -89,6 +93,13 @@
   "addActionSheetDescription": "Faoliyatni qayd eting yoki keyin uchun eslatma yarating.",
   "addActionTypeActivity": "Faoliyat",
   "addActionTypeReminder": "Eslatma",
+  "addReminderTitle": "Eslatma qo'shish",
+  "addReminderDateTime": "Sana va vaqt",
+  "addReminderFor": "Eslatma uchun",
+  "addReminderComments": "Izoh",
+  "addReminderSubmit": "Eslatma qo'shish",
+  "addReminderNoChildSelected": "Eslatma yaratish uchun farzand qo'shing yoki tanlang.",
+  "addReminderCreated": "Eslatma muvaffaqiyatli qo'shildi.",
   "addActivityTitle": "{activity} qo'shish",
   "@addActivityTitle": {
     "placeholders": {
@@ -134,6 +145,18 @@
   "homeNoActivityTypes": "Hozircha faoliyat turlari mavjud emas.",
   "activityHistoryNoActivities": "Hozircha faoliyatlar yo'q.",
   "homeNoReminders": "Hozircha eslatmalar yo'q.",
+  "remindersExpandCalendar": "Kalendarni kengaytirish",
+  "remindersCollapseCalendar": "Kalendarni yig'ish",
+  "remindersNoRemindersTitle": "Eslatmalar yo'q",
+  "remindersNoRemindersSubtitle": "Birinchi eslatmangizni qo'shing.",
+  "remindersCount": "{count} ta eslatma",
+  "@remindersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeComingSoon": "Tez orada",
   "homeFailedLoad": "Bosh sahifa ma'lumotlarini yuklab bo'lmadi.",
   "homeRetry": "Qayta urinish",
@@ -222,6 +245,16 @@
   "addTab": "Qo'shish",
   "learnTab": "O'rganish",
   "learnSearchHint": "Maqolalarni qidirish",
+  "learnRecentSearches": "So'nggi qidiruvlar",
+  "learnSearchResults": "Natijalar",
+  "learnSearchFoundCount": "{count} ta topildi",
+  "@learnSearchFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "learnPopularTopics": "Ommabop mavzular",
   "learnAllTopics": "Barcha mavzular",
   "learnAllArticles": "Barcha maqolalar",
@@ -246,6 +279,7 @@
     }
   },
   "articleHelpfulQuestion": "Bu maqola siz uchun foydali bo'ldimi?",
+  "articleContinueReading": "O'qishni davom eting",
   "profileTab": "Profil",
   "profileTitle": "Profil",
   "profileParent": "Ota-ona",

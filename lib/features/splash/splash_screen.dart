@@ -15,6 +15,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  static const _logoLightAsset = 'assets/images/logo.png';
+  static const _logoDarkAsset = 'assets/images/logo_dark.png';
+  static const _darkSplashBackground = Color(0xFF2A2B30);
+
   @override
   void initState() {
     super.initState();
@@ -56,23 +60,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final isGrayTheme = context.appController.themeVariant == ThemeVariant.gray;
+    final logoAsset = isGrayTheme ? _logoDarkAsset : _logoLightAsset;
+    final background = isGrayTheme ? _darkSplashBackground : colors.bgPrimary;
+    final indicatorColor = isGrayTheme
+        ? Colors.white.withValues(alpha: 0.75)
+        : colors.accent;
 
     return Scaffold(
-      backgroundColor: colors.bgPrimary,
+      backgroundColor: background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App logo
-            Image.asset('assets/images/img_onb_1.png', width: 120, height: 120),
-            const SizedBox(height: 24),
-            Text(
-              'Novda',
-              style: AppTypography.headingL.copyWith(color: colors.textPrimary),
-            ),
-            const SizedBox(height: 32),
+            Image.asset(logoAsset, width: 220, height: 220),
+            const SizedBox(height: 28),
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(colors.accent),
+              valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
               strokeWidth: 2,
             ).container(width: 32, height: 32),
           ],

@@ -192,6 +192,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeEditDetails => 'Изменить данные';
 
   @override
+  String get childDetailsEditTitle => 'Изменить данные малыша';
+
+  @override
+  String get childDetailsAddTitle => 'Добавить данные малыша';
+
+  @override
+  String get childDetailsBirthDate => 'Дата рождения';
+
+  @override
+  String get childDetailsParameters => 'Параметры';
+
+  @override
   String get homeNoActiveChildSelected => 'Активный ребёнок не выбран.';
 
   @override
@@ -227,6 +239,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get addActionTypeReminder => 'Напоминание';
+
+  @override
+  String get addReminderTitle => 'Добавить напоминание';
+
+  @override
+  String get addReminderDateTime => 'Дата и время';
+
+  @override
+  String get addReminderFor => 'Напомнить о';
+
+  @override
+  String get addReminderComments => 'Комментарий';
+
+  @override
+  String get addReminderSubmit => 'Добавить напоминание';
+
+  @override
+  String get addReminderNoChildSelected =>
+      'Добавьте или выберите ребёнка, чтобы создать напоминание.';
+
+  @override
+  String get addReminderCreated => 'Напоминание успешно добавлено.';
 
   @override
   String addActivityTitle(Object activity) {
@@ -314,6 +348,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeNoReminders => 'Напоминаний пока нет.';
+
+  @override
+  String get remindersExpandCalendar => 'Развернуть календарь';
+
+  @override
+  String get remindersCollapseCalendar => 'Свернуть календарь';
+
+  @override
+  String get remindersNoRemindersTitle => 'Нет напоминаний';
+
+  @override
+  String get remindersNoRemindersSubtitle => 'Добавьте первое напоминание.';
+
+  @override
+  String remindersCount(int count) {
+    return '$count напоминаний';
+  }
 
   @override
   String get homeComingSoon => 'Скоро будет';
@@ -419,6 +470,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get learnSearchHint => 'Искать статьи';
 
   @override
+  String get learnRecentSearches => 'Недавние запросы';
+
+  @override
+  String get learnSearchResults => 'Результаты';
+
+  @override
+  String learnSearchFoundCount(int count) {
+    return 'Найдено: $count';
+  }
+
+  @override
   String get learnPopularTopics => 'Популярные темы';
 
   @override
@@ -448,6 +510,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get articleHelpfulQuestion => 'Эта статья была полезной для вас?';
+
+  @override
+  String get articleContinueReading => 'Продолжить чтение';
 
   @override
   String get profileTab => 'Профиль';

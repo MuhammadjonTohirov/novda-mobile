@@ -50,7 +50,7 @@ extension ActivityHistoryScreenUiSectionsExtensions on BuildContext {
     return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            activityHistoryTypeIcon(type: type, color: baseColor, size: 34),
+            activityHistoryTypeIcon(type: type, color: baseColor, size: 24),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ extension ActivityHistoryScreenUiSectionsExtensions on BuildContext {
                 const SizedBox(height: 2),
                 Text(
                   activityHistoryItemSubtitle(item),
-                  style: AppTypography.bodyLRegular.copyWith(
+                  style: AppTypography.bodySRegular.copyWith(
                     color: colors.textSecondary,
                   ),
                 ),

@@ -26,41 +26,72 @@ class Measurement extends Equatable {
   final String? notes;
   final DateTime createdAt;
 
-  factory Measurement.fromJson(Map<String, dynamic> json) {
-    return Measurement(
-      id: json['id'] as int,
-      child: json['child'] as int,
-      childName: json['child_name'] as String,
-      type: MeasurementType.fromString(json['type'] as String),
-      value: double.parse(json['value'].toString()),
-      unit: json['unit'] as String,
-      takenAt: DateTime.parse(json['taken_at'] as String),
-      notes: json['notes'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
+  factory Measurement.fromJson(
+    Map<String, dynamic> json, {
+    MeasurementType? fallbackType,
+  }) {
+    final takenAt = _parseDateTime(
+      json['taken_at'],
+      fallback: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
+
+    return Measurement(
+      id: _parseInt(json['id']),
+      child: _parseInt(json['child']),
+      childName: json['child_name'] as String? ?? '',
+      type: _parseMeasurementType(json['type'], fallback: fallbackType),
+      value: double.tryParse(json['value']?.toString() ?? '') ?? 0,
+      unit: json['unit'] as String? ?? '',
+      takenAt: takenAt,
+      notes: json['notes'] as String?,
+      createdAt: _parseDateTime(json['created_at'], fallback: takenAt),
+    );
+  }
+
+  static int _parseInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
+  static DateTime _parseDateTime(Object? value, {required DateTime fallback}) {
+    if (value is DateTime) return value;
+    if (value is String) {
+      final parsed = DateTime.tryParse(value);
+      if (parsed != null) return parsed;
+    }
+    return fallback;
+  }
+
+  static MeasurementType _parseMeasurementType(
+    Object? value, {
+    MeasurementType? fallback,
+  }) {
+    if (value is String && value.isNotEmpty) {
+      return MeasurementType.fromString(value);
+    }
+
+    return fallback ?? MeasurementType.weight;
   }
 
   @override
   List<Object?> get props => [
-        id,
-        child,
-        childName,
-        type,
-        value,
-        unit,
-        takenAt,
-        notes,
-        createdAt,
-      ];
+    id,
+    child,
+    childName,
+    type,
+    value,
+    unit,
+    takenAt,
+    notes,
+    createdAt,
+  ];
 }
 
 /// Latest measurements of each type
 class LatestMeasurements extends Equatable {
-  const LatestMeasurements({
-    this.weight,
-    this.height,
-    this.headCircumference,
-  });
+  const LatestMeasurements({this.weight, this.height, this.headCircumference});
 
   final Measurement? weight;
   final Measurement? height;
@@ -69,14 +100,22 @@ class LatestMeasurements extends Equatable {
   factory LatestMeasurements.fromJson(Map<String, dynamic> json) {
     return LatestMeasurements(
       weight: json['weight'] != null
-          ? Measurement.fromJson(json['weight'] as Map<String, dynamic>)
+          ? Measurement.fromJson(
+              json['weight'] as Map<String, dynamic>,
+              fallbackType: MeasurementType.weight,
+            )
           : null,
       height: json['height'] != null
-          ? Measurement.fromJson(json['height'] as Map<String, dynamic>)
+          ? Measurement.fromJson(
+              json['height'] as Map<String, dynamic>,
+              fallbackType: MeasurementType.height,
+            )
           : null,
       headCircumference: json['head_circumference'] != null
           ? Measurement.fromJson(
-              json['head_circumference'] as Map<String, dynamic>)
+              json['head_circumference'] as Map<String, dynamic>,
+              fallbackType: MeasurementType.headCircumference,
+            )
           : null,
     );
   }
@@ -139,21 +178,16 @@ class MeasurementCreateRequest {
   final String? notes;
 
   Map<String, dynamic> toJson() => {
-        'type': type.value,
-        'value': value.toString(),
-        'taken_at': takenAt.toUtc().toIso8601String(),
-        if (notes != null) 'notes': notes,
-      };
+    'type': type.value,
+    'value': value.toString(),
+    'taken_at': takenAt.toUtc().toIso8601String(),
+    if (notes != null) 'notes': notes,
+  };
 }
 
 /// Query parameters for measurement list
 class MeasurementListQuery {
-  const MeasurementListQuery({
-    this.type,
-    this.from,
-    this.to,
-    this.limit,
-  });
+  const MeasurementListQuery({this.type, this.from, this.to, this.limit});
 
   final MeasurementType? type;
   final DateTime? from;
@@ -161,11 +195,11 @@ class MeasurementListQuery {
   final int? limit;
 
   Map<String, dynamic> toQueryParams() => {
-        if (type != null) 'type': type!.value,
-        if (from != null) 'from': from!.toIso8601String(),
-        if (to != null) 'to': to!.toIso8601String(),
-        if (limit != null) 'limit': limit.toString(),
-      };
+    if (type != null) 'type': type!.value,
+    if (from != null) 'from': from!.toIso8601String(),
+    if (to != null) 'to': to!.toIso8601String(),
+    if (limit != null) 'limit': limit.toString(),
+  };
 }
 
 /// Query parameters for chart data
@@ -179,7 +213,7 @@ class ChartDataQuery {
   final ChartPeriod period;
 
   Map<String, dynamic> toQueryParams() => {
-        'type': type.value,
-        'period': period.value,
-      };
+    'type': type.value,
+    'period': period.value,
+  };
 }

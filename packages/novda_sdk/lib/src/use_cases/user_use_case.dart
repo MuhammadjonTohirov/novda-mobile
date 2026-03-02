@@ -2,6 +2,7 @@ import '../gateways/user_gateway.dart';
 import '../models/article.dart';
 import '../models/enums.dart';
 import '../models/user.dart';
+import 'saved_articles_store.dart';
 
 /// Use case interface for user profile operations
 abstract interface class UserUseCase {
@@ -29,9 +30,11 @@ abstract interface class UserUseCase {
 
 /// Implementation of UserUseCase
 class UserUseCaseImpl implements UserUseCase {
-  UserUseCaseImpl(this._gateway);
+  UserUseCaseImpl(this._gateway, {SavedArticlesStore? savedArticlesStore})
+    : _savedArticlesStore = savedArticlesStore ?? SavedArticlesStore();
 
   final UserGateway _gateway;
+  final SavedArticlesStore _savedArticlesStore;
 
   @override
   Future<User> getProfile() {
@@ -46,13 +49,15 @@ class UserUseCaseImpl implements UserUseCase {
     ThemePreference? themePreference,
     bool? notificationsEnabled,
   }) {
-    return _gateway.updateProfile(UserUpdateRequest(
-      name: name,
-      email: email,
-      preferredLocale: preferredLocale,
-      themePreference: themePreference,
-      notificationsEnabled: notificationsEnabled,
-    ));
+    return _gateway.updateProfile(
+      UserUpdateRequest(
+        name: name,
+        email: email,
+        preferredLocale: preferredLocale,
+        themePreference: themePreference,
+        notificationsEnabled: notificationsEnabled,
+      ),
+    );
   }
 
   @override
@@ -66,7 +71,9 @@ class UserUseCaseImpl implements UserUseCase {
   }
 
   @override
-  Future<List<ArticleListItem>> getSavedArticles() {
-    return _gateway.getSavedArticles();
+  Future<List<ArticleListItem>> getSavedArticles() async {
+    final savedArticles = await _gateway.getSavedArticles();
+    _savedArticlesStore.setFromArticles(savedArticles);
+    return _savedArticlesStore.applyToList(savedArticles);
   }
 }

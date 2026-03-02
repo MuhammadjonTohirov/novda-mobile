@@ -191,6 +191,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeEditDetails => 'Edit details';
 
   @override
+  String get childDetailsEditTitle => 'Edit baby\'s details';
+
+  @override
+  String get childDetailsAddTitle => 'Add baby\'s details';
+
+  @override
+  String get childDetailsBirthDate => 'Date of birth';
+
+  @override
+  String get childDetailsParameters => 'Parameters';
+
+  @override
   String get homeNoActiveChildSelected => 'No active child selected.';
 
   @override
@@ -226,6 +238,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addActionTypeReminder => 'Reminder';
+
+  @override
+  String get addReminderTitle => 'Add reminder';
+
+  @override
+  String get addReminderDateTime => 'Date and time';
+
+  @override
+  String get addReminderFor => 'Reminder for';
+
+  @override
+  String get addReminderComments => 'Comments';
+
+  @override
+  String get addReminderSubmit => 'Add reminder';
+
+  @override
+  String get addReminderNoChildSelected =>
+      'Please add/select a child to create a reminder.';
+
+  @override
+  String get addReminderCreated => 'Reminder added successfully.';
 
   @override
   String addActivityTitle(Object activity) {
@@ -312,6 +346,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeNoReminders => 'No reminders yet.';
+
+  @override
+  String get remindersExpandCalendar => 'Expand calendar';
+
+  @override
+  String get remindersCollapseCalendar => 'Collapse calendar';
+
+  @override
+  String get remindersNoRemindersTitle => 'No reminders';
+
+  @override
+  String get remindersNoRemindersSubtitle => 'Add your first reminder.';
+
+  @override
+  String remindersCount(int count) {
+    return '$count reminders';
+  }
 
   @override
   String get homeComingSoon => 'Coming soon';
@@ -416,6 +467,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnSearchHint => 'Search articles';
 
   @override
+  String get learnRecentSearches => 'Recent searches';
+
+  @override
+  String get learnSearchResults => 'Results';
+
+  @override
+  String learnSearchFoundCount(int count) {
+    return '$count found';
+  }
+
+  @override
   String get learnPopularTopics => 'Popular topics';
 
   @override
@@ -445,6 +507,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get articleHelpfulQuestion => 'Was this article helpful for you?';
+
+  @override
+  String get articleContinueReading => 'Continue reading';
 
   @override
   String get profileTab => 'Profile';

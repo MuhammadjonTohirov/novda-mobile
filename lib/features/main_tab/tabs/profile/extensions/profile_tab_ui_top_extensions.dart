@@ -8,7 +8,9 @@ import '../view_model/profile_tab_view_model.dart';
 extension ProfileTabUiTopExtensions on BuildContext {
   Widget profileTopSection({
     required ProfileTabViewModel viewModel,
-    required VoidCallback onActionTap,
+    required VoidCallback onParentTap,
+    required VoidCallback onAddChildTap,
+    required VoidCallback onChildTap,
   }) {
     final colors = appColors;
     final parentTitle = viewModel.parentName.isEmpty
@@ -51,7 +53,7 @@ extension ProfileTabUiTopExtensions on BuildContext {
                   ),
                 )
                 .inkWell(
-                  onTap: onActionTap,
+                  onTap: onParentTap,
                   borderRadius: BorderRadius.circular(18),
                 ),
             const SizedBox(height: 12),
@@ -71,7 +73,7 @@ extension ProfileTabUiTopExtensions on BuildContext {
                       style: AppTypography.bodyMMedium.copyWith(
                         color: colors.accent,
                       ),
-                    ).inkWell(onTap: onActionTap),
+                    ).inkWell(onTap: onAddChildTap),
                   ],
                 ),
                 const SizedBox(height: 14),
@@ -114,7 +116,7 @@ extension ProfileTabUiTopExtensions on BuildContext {
                         color: colors.textSecondary,
                       ),
                     ],
-                  ).inkWell(onTap: onActionTap),
+                  ).inkWell(onTap: onChildTap),
               ],
             ).container(
               decoration: BoxDecoration(

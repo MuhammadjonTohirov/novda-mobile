@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 import 'package:provider/provider.dart';
@@ -162,7 +161,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
             value: viewModel.quality == null
                 ? null
                 : context.addActivityQualityLabel(viewModel.quality!),
-            trailing: context.addActivityQualityFieldIcon(),
+            trailing: context.addActivityQualityFieldIcon(viewModel.quality),
             onTap: () => _openQualityPicker(context, viewModel),
           ),
           const SizedBox(height: 12),
@@ -218,9 +217,13 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     BuildContext context,
     AddActivityViewModel viewModel,
   ) async {
-    final selected = await _showDateTimePicker(
-      context,
-      initialDate: viewModel.startDate ?? DateTime.now(),
+    final selected = await AppDateTimePicker.show(
+      context: context,
+      initialDateTime: viewModel.startDate ?? DateTime.now(),
+      cancelText: context.l10n.settingsCancel,
+      confirmText: context.l10n.continueButton,
+      safeAreaTop: false,
+      safeAreaBottom: true,
     );
 
     if (selected == null) return;
@@ -237,7 +240,14 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
           const Duration(minutes: 30),
         );
 
-    final selected = await _showDateTimePicker(context, initialDate: initial);
+    final selected = await AppDateTimePicker.show(
+      context: context,
+      initialDateTime: initial,
+      cancelText: context.l10n.settingsCancel,
+      confirmText: context.l10n.continueButton,
+      safeAreaTop: false,
+      safeAreaBottom: true,
+    );
     if (selected == null) return;
 
     viewModel.setEndDate(selected);
@@ -305,56 +315,6 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     );
   }
 
-  Future<DateTime?> _showDateTimePicker(
-    BuildContext context, {
-    required DateTime initialDate,
-  }) async {
-    DateTime selected = initialDate;
-
-    return showCupertinoModalPopup<DateTime>(
-      context: context,
-      builder: (sheetContext) {
-        final colors = sheetContext.appColors;
-
-        return Container(
-          height: 320,
-          decoration: BoxDecoration(
-            color: colors.bgPrimary,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CupertinoButton(
-                    onPressed: () => Navigator.of(sheetContext).pop(),
-                    child: Text(sheetContext.l10n.settingsCancel),
-                  ),
-                  const Spacer(),
-                  CupertinoButton(
-                    onPressed: () => Navigator.of(sheetContext).pop(selected),
-                    child: Text(sheetContext.l10n.continueButton),
-                  ),
-                ],
-              ).paddingSymmetric(horizontal: 8),
-              const Divider(height: 1),
-              Expanded(
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.dateAndTime,
-                  use24hFormat: true,
-                  initialDateTime: initialDate,
-                  onDateTimeChanged: (value) {
-                    selected = value;
-                  },
-                ),
-              ),
-            ],
-          ),
-        ).safeArea(top: false);
-      },
-    );
-  }
-
   Future<void> _submit(
     BuildContext context,
     AddActivityViewModel viewModel,
@@ -364,5 +324,4 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
 
     Navigator.of(context).pop(viewModel.createdActivity);
   }
-
 }

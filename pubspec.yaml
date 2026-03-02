@@ -23,6 +23,7 @@ dependencies:
   provider: ^6.1.2
   modal_bottom_sheet: ^3.0.0
   flutter_html: ^3.0.0
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:

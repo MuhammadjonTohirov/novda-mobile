@@ -75,7 +75,7 @@ extension ProfileTabUiMenuExtensions on BuildContext {
       children: [
         profileIcon(
           iconPath: 'assets/images/profile/icon_logout.png',
-          size: 28,
+          size: 24,
         ),
         const SizedBox(width: 10),
         Text(

@@ -15,6 +15,7 @@ class LearnTabViewModel extends BaseViewModel {
 
   List<Topic> _topics = const [];
   List<ArticleListItem> _articles = const [];
+  List<String> _recentQueries = const [];
   final Set<String> _savingSlugs = <String>{};
   final Set<String> _savedSlugs = <String>{};
 
@@ -25,6 +26,7 @@ class LearnTabViewModel extends BaseViewModel {
 
   List<Topic> get topics => _topics;
   List<ArticleListItem> get articles => _articles;
+  List<String> get recentQueries => _recentQueries;
   String get query => _query;
   String? get selectedTopicSlug => _selectedTopicSlug;
   bool get hasContent => _topics.isNotEmpty || _articles.isNotEmpty;
@@ -62,8 +64,9 @@ class LearnTabViewModel extends BaseViewModel {
     return message;
   }
 
-  Future<void> load() {
-    return _load(withLoading: true);
+  Future<void> load() async {
+    _recentQueries = _interactor.loadRecentQueries();
+    await _load(withLoading: true);
   }
 
   Future<void> refresh() {
@@ -79,6 +82,46 @@ class LearnTabViewModel extends BaseViewModel {
     _searchDebounce = Timer(_searchDebounceDuration, () {
       unawaited(_load(withLoading: !hasContent));
     });
+  }
+
+  void submitSearch([String? value]) {
+    final normalized = (value ?? _query).trim();
+    if (normalized.isEmpty) return;
+
+    final hasPendingDebounce = _searchDebounce?.isActive ?? false;
+    final isQueryChanged = _query != normalized;
+    _query = normalized;
+    _searchDebounce?.cancel();
+
+    if (isQueryChanged || hasPendingDebounce) {
+      unawaited(_load(withLoading: !hasContent));
+    }
+
+    unawaited(_saveRecentQuery(normalized));
+  }
+
+  void clearSearch() {
+    if (_query.isEmpty) return;
+
+    _query = '';
+    _searchDebounce?.cancel();
+    notifyListeners();
+    unawaited(_load(withLoading: !hasContent));
+  }
+
+  void applyRecentQuery(String query) {
+    final normalized = query.trim();
+    if (normalized.isEmpty) return;
+
+    _query = normalized;
+    _searchDebounce?.cancel();
+    notifyListeners();
+    unawaited(_saveRecentQuery(normalized));
+    unawaited(_load(withLoading: !hasContent));
+  }
+
+  void removeRecentQueryAt(int index) {
+    unawaited(_removeRecentQueryAt(index));
   }
 
   void selectTopic(String topicSlug) {
@@ -183,5 +226,24 @@ class LearnTabViewModel extends BaseViewModel {
   String _errorText(Object error) {
     if (error is ApiException) return error.message;
     return error.toString();
+  }
+
+  Future<void> _saveRecentQuery(String query) async {
+    try {
+      _recentQueries = await _interactor.saveRecentQuery(query);
+      notifyListeners();
+    } catch (_) {
+      // Ignore local history persistence issues to avoid disrupting search flow.
+    }
+  }
+
+  Future<void> _removeRecentQueryAt(int index) async {
+    try {
+      _recentQueries = await _interactor.removeRecentQueryAt(index);
+      notifyListeners();
+    } catch (error) {
+      _actionErrorMessage = _errorText(error);
+      notifyListeners();
+    }
   }
 }

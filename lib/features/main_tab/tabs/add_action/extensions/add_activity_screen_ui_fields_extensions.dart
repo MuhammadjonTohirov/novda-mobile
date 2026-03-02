@@ -42,10 +42,16 @@ extension AddActivityScreenUiFieldsExtensions on BuildContext {
     required VoidCallback onTap,
     bool hasError = false,
   }) {
+    final colors = appColors;
+
     return _addActivityFieldShell(
       hasError: hasError,
       onTap: onTap,
-      trailing: addActivityAssetIcon(_iconCalendar, size: 28),
+      trailing: addActivityAssetIcon(
+        _iconCalendar,
+        size: 24,
+        color: colors.accent,
+      ),
       child: _addActivityFieldText(
         label: label,
         value: value == null ? null : addActivityDateTimeLabel(value),

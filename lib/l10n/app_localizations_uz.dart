@@ -193,6 +193,18 @@ class AppLocalizationsUz extends AppLocalizations {
   String get homeEditDetails => 'Ma\'lumotlarni tahrirlash';
 
   @override
+  String get childDetailsEditTitle => 'Chaqaloq ma\'lumotlarini tahrirlash';
+
+  @override
+  String get childDetailsAddTitle => 'Chaqaloq ma\'lumotlarini qo\'shish';
+
+  @override
+  String get childDetailsBirthDate => 'Tug\'ilgan sana';
+
+  @override
+  String get childDetailsParameters => 'Parametrlar';
+
+  @override
   String get homeNoActiveChildSelected => 'Faol farzand tanlanmagan.';
 
   @override
@@ -228,6 +240,28 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get addActionTypeReminder => 'Eslatma';
+
+  @override
+  String get addReminderTitle => 'Eslatma qo\'shish';
+
+  @override
+  String get addReminderDateTime => 'Sana va vaqt';
+
+  @override
+  String get addReminderFor => 'Eslatma uchun';
+
+  @override
+  String get addReminderComments => 'Izoh';
+
+  @override
+  String get addReminderSubmit => 'Eslatma qo\'shish';
+
+  @override
+  String get addReminderNoChildSelected =>
+      'Eslatma yaratish uchun farzand qo\'shing yoki tanlang.';
+
+  @override
+  String get addReminderCreated => 'Eslatma muvaffaqiyatli qo\'shildi.';
 
   @override
   String addActivityTitle(Object activity) {
@@ -314,6 +348,24 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get homeNoReminders => 'Hozircha eslatmalar yo\'q.';
+
+  @override
+  String get remindersExpandCalendar => 'Kalendarni kengaytirish';
+
+  @override
+  String get remindersCollapseCalendar => 'Kalendarni yig\'ish';
+
+  @override
+  String get remindersNoRemindersTitle => 'Eslatmalar yo\'q';
+
+  @override
+  String get remindersNoRemindersSubtitle =>
+      'Birinchi eslatmangizni qo\'shing.';
+
+  @override
+  String remindersCount(int count) {
+    return '$count ta eslatma';
+  }
 
   @override
   String get homeComingSoon => 'Tez orada';
@@ -421,6 +473,17 @@ class AppLocalizationsUz extends AppLocalizations {
   String get learnSearchHint => 'Maqolalarni qidirish';
 
   @override
+  String get learnRecentSearches => 'So\'nggi qidiruvlar';
+
+  @override
+  String get learnSearchResults => 'Natijalar';
+
+  @override
+  String learnSearchFoundCount(int count) {
+    return '$count ta topildi';
+  }
+
+  @override
   String get learnPopularTopics => 'Ommabop mavzular';
 
   @override
@@ -450,6 +513,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get articleHelpfulQuestion => 'Bu maqola siz uchun foydali bo\'ldimi?';
+
+  @override
+  String get articleContinueReading => 'O\'qishni davom eting';
 
   @override
   String get profileTab => 'Profil';

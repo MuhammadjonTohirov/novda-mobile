@@ -29,7 +29,7 @@ extension AddActionSheetContentUiListExtensions on BuildContext {
       primary: false,
       shrinkWrap: true,
       children: [
-        for (final type in viewModel.activityTypes)
+        for (final type in viewModel.currentActivityTypes)
           addActionActivityTypeListItem(
             type: type,
             isSelected: viewModel.selectedActivityTypeId == type.id,

@@ -6,11 +6,6 @@
     "auditLog": "/Users/muhammad/Development/Personal/Startups/novda/novda-mobile/logs/.2c1f7d66ae9d968f9e8e26783f29575748279357-audit.json",
     "files": [
         {
-            "date": 1771164722405,
-            "name": "/Users/muhammad/Development/Personal/Startups/novda/novda-mobile/logs/mcp-puppeteer-2026-02-15.log",
-            "hash": "7c105fbb2010a62758279ffb4d2ff80a4b6cbacfc252e78d0a1d275fd96ebf11"
-        },
-        {
             "date": 1771264207206,
             "name": "/Users/muhammad/Development/Personal/Startups/novda/novda-mobile/logs/mcp-puppeteer-2026-02-16.log",
             "hash": "d12ae752e69dcd72e6951db9ea9323e919c9ad41adfce0b77195c2ff73b01754"
@@ -29,6 +24,11 @@
             "date": 1772356993693,
             "name": "/Users/muhammad/Development/Personal/Startups/novda/novda-mobile/logs/mcp-puppeteer-2026-03-01.log",
             "hash": "cffe04f42cdbaa4d569e443a2a3ac02fcd8811a3baa7a8ee4766e56752dce7c6"
+        },
+        {
+            "date": 1772431500808,
+            "name": "/Users/muhammad/Development/Personal/Startups/novda/novda-mobile/logs/mcp-puppeteer-2026-03-02.log",
+            "hash": "88fbb36060160657fee4521f6063210daa5a2f507430f9ed48bb78bb624a5eab"
         }
     ],
     "hashType": "sha256"

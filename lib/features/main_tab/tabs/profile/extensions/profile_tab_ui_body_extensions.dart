@@ -12,6 +12,10 @@ extension ProfileTabUiBodyExtensions on BuildContext {
     required VoidCallback onParentTap,
     required VoidCallback onAddChildTap,
     required VoidCallback onChildTap,
+    required VoidCallback onSavedArticlesTap,
+    required VoidCallback onFollowUsTap,
+    required VoidCallback onSupportTap,
+    required VoidCallback onLegalDocumentsTap,
     required VoidCallback onActionTap,
     required VoidCallback onSettingsTap,
   }) {
@@ -36,7 +40,7 @@ extension ProfileTabUiBodyExtensions on BuildContext {
                 trailingValue: viewModel.savedArticlesCount > 0
                     ? '${viewModel.savedArticlesCount}'
                     : '',
-                onTap: onActionTap,
+                onTap: onSavedArticlesTap,
               ),
               (
                 title: l10n.profileSettings,
@@ -59,19 +63,19 @@ extension ProfileTabUiBodyExtensions on BuildContext {
                 title: l10n.profileFollowUs,
                 iconPath: 'assets/images/profile/icon_earth.png',
                 trailingValue: '',
-                onTap: onActionTap,
+                onTap: onFollowUsTap,
               ),
               (
                 title: l10n.profileSupport,
                 iconPath: 'assets/images/profile/icon_support.png',
                 trailingValue: '',
-                onTap: onActionTap,
+                onTap: onSupportTap,
               ),
               (
                 title: l10n.profileLegalDocuments,
                 iconPath: 'assets/images/profile/icon_legal_doc.png',
                 trailingValue: '',
-                onTap: onActionTap,
+                onTap: onLegalDocumentsTap,
               ),
             ],
           ).paddingSymmetric(horizontal: 16),

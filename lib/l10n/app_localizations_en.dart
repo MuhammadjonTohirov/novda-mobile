@@ -545,6 +545,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLegalDocuments => 'Legal documents';
 
   @override
+  String get profileFollowUsOnTelegram => 'Follow us on Telegram';
+
+  @override
+  String get profileFollowUsOnX => 'Follow us on X';
+
+  @override
+  String get profileFollowUsOnInstagram => 'Follow us on Instagram';
+
+  @override
+  String get profileSupportTelegram => 'Telegram';
+
+  @override
+  String get profileSupportEmail => 'Email';
+
+  @override
+  String get profileLegalTermsConditions => 'Terms & conditions';
+
+  @override
+  String get profileLegalPrivacyPolicy => 'Privacy policy';
+
+  @override
   String get profileLogoutConfirmTitle => 'Log out?';
 
   @override

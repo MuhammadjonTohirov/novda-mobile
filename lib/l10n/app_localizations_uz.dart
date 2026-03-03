@@ -551,6 +551,27 @@ class AppLocalizationsUz extends AppLocalizations {
   String get profileLegalDocuments => 'Huquqiy hujjatlar';
 
   @override
+  String get profileFollowUsOnTelegram => 'Telegramda bizni kuzating';
+
+  @override
+  String get profileFollowUsOnX => 'X\'da bizni kuzating';
+
+  @override
+  String get profileFollowUsOnInstagram => 'Instagramda bizni kuzating';
+
+  @override
+  String get profileSupportTelegram => 'Telegram';
+
+  @override
+  String get profileSupportEmail => 'Email';
+
+  @override
+  String get profileLegalTermsConditions => 'Foydalanish shartlari';
+
+  @override
+  String get profileLegalPrivacyPolicy => 'Maxfiylik siyosati';
+
+  @override
   String get profileLogoutConfirmTitle => 'Chiqasizmi?';
 
   @override

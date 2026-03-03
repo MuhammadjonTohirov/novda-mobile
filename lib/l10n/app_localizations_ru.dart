@@ -548,6 +548,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLegalDocuments => 'Юридические документы';
 
   @override
+  String get profileFollowUsOnTelegram => 'Подписывайтесь на нас в Telegram';
+
+  @override
+  String get profileFollowUsOnX => 'Подписывайтесь на нас в X';
+
+  @override
+  String get profileFollowUsOnInstagram => 'Подписывайтесь на нас в Instagram';
+
+  @override
+  String get profileSupportTelegram => 'Telegram';
+
+  @override
+  String get profileSupportEmail => 'Email';
+
+  @override
+  String get profileLegalTermsConditions => 'Условия использования';
+
+  @override
+  String get profileLegalPrivacyPolicy => 'Политика конфиденциальности';
+
+  @override
   String get profileLogoutConfirmTitle => 'Выйти?';
 
   @override

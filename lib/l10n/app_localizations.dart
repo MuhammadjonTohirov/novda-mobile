@@ -1090,6 +1090,48 @@ abstract class AppLocalizations {
   /// **'Legal documents'**
   String get profileLegalDocuments;
 
+  /// No description provided for @profileFollowUsOnTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Telegram'**
+  String get profileFollowUsOnTelegram;
+
+  /// No description provided for @profileFollowUsOnX.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on X'**
+  String get profileFollowUsOnX;
+
+  /// No description provided for @profileFollowUsOnInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Instagram'**
+  String get profileFollowUsOnInstagram;
+
+  /// No description provided for @profileSupportTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get profileSupportTelegram;
+
+  /// No description provided for @profileSupportEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileSupportEmail;
+
+  /// No description provided for @profileLegalTermsConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & conditions'**
+  String get profileLegalTermsConditions;
+
+  /// No description provided for @profileLegalPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get profileLegalPrivacyPolicy;
+
   /// No description provided for @profileLogoutConfirmTitle.
   ///
   /// In en, this message translates to:

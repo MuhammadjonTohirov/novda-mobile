@@ -48,23 +48,28 @@ extension ProfileTabUiMenuExtensions on BuildContext {
     final colors = appColors;
 
     return Row(
-      children: [
-        profileIcon(iconPath: iconPath),
-        const SizedBox(width: 14),
-        Text(
-          title,
-          style: AppTypography.bodyLMedium.copyWith(color: colors.textPrimary),
-        ).expanded(),
-        if (trailingValue.isNotEmpty)
-          Text(
-            trailingValue,
-            style: AppTypography.bodyLRegular.copyWith(
-              color: colors.textSecondary,
-            ),
-          ).paddingOnly(right: 8),
-        Icon(Icons.chevron_right, size: 30, color: colors.textSecondary),
-      ],
-    ).paddingSymmetric(horizontal: 16, vertical: 12).inkWell(onTap: onTap);
+          children: [
+            profileIcon(iconPath: iconPath),
+            const SizedBox(width: 14),
+            Text(
+              title,
+              style: AppTypography.bodyLMedium.copyWith(
+                color: colors.textPrimary,
+              ),
+            ).expanded(),
+            if (trailingValue.isNotEmpty)
+              Text(
+                trailingValue,
+                style: AppTypography.bodyLRegular.copyWith(
+                  color: colors.textSecondary,
+                ),
+              ).paddingOnly(right: 8),
+            Icon(Icons.chevron_right, size: 22, color: colors.textSecondary),
+          ],
+        )
+        .paddingSymmetric(horizontal: 16, vertical: 12)
+        .sized(height: 52)
+        .inkWell(onTap: onTap);
   }
 
   Widget profileLogoutButton({required VoidCallback onTap}) {

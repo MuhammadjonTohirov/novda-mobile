@@ -41,19 +41,53 @@ class UserGatewayImpl implements UserGateway {
 
   @override
   Future<void> acceptTerms() async {
-    await _client.post(
-      '/api/v1/me/accept-terms',
-      data: {'accept': true},
-    );
+    await _client.post('/api/v1/me/accept-terms', data: {'accept': true});
   }
 
   @override
   Future<List<ArticleListItem>> getSavedArticles() async {
     return _client.get(
       '/api/v1/me/saved-articles',
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => ArticleListItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: _parseSavedArticles,
     );
+  }
+
+  List<ArticleListItem> _parseSavedArticles(Object? json) {
+    if (json is List<dynamic>) {
+      return _parseSavedArticlesList(json);
+    }
+
+    if (json is Map<String, dynamic>) {
+      final savedArticles = json['saved_articles'];
+      if (savedArticles is List<dynamic>) {
+        return _parseSavedArticlesList(savedArticles);
+      }
+
+      // Fallback when API returns a flat article object in `data`.
+      if (json['slug'] != null) {
+        return [ArticleListItem.fromJson(json)];
+      }
+    }
+
+    return const [];
+  }
+
+  List<ArticleListItem> _parseSavedArticlesList(List<dynamic> source) {
+    final articles = <ArticleListItem>[];
+
+    for (final item in source) {
+      if (item is! Map<String, dynamic>) continue;
+
+      final rawArticle = item['article'];
+      if (rawArticle is Map<String, dynamic>) {
+        articles.add(ArticleListItem.fromJson(rawArticle));
+        continue;
+      }
+
+      // Backward compatible shape: list can be the article objects directly.
+      articles.add(ArticleListItem.fromJson(item));
+    }
+
+    return articles;
   }
 }

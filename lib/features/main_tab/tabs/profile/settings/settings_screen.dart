@@ -156,5 +156,4 @@ class SettingsScreen extends StatelessWidget {
       (route) => false,
     );
   }
-
 }

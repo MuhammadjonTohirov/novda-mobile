@@ -111,6 +111,30 @@ class ArticleListItem extends Equatable {
   final int viewCount;
   final bool isSaved;
 
+  ArticleListItem copyWith({
+    String? slug,
+    String? title,
+    String? excerpt,
+    int? readingTime,
+    DateTime? publishAt,
+    String? heroImageUrl,
+    List<Topic>? topics,
+    int? viewCount,
+    bool? isSaved,
+  }) {
+    return ArticleListItem(
+      slug: slug ?? this.slug,
+      title: title ?? this.title,
+      excerpt: excerpt ?? this.excerpt,
+      readingTime: readingTime ?? this.readingTime,
+      publishAt: publishAt ?? this.publishAt,
+      heroImageUrl: heroImageUrl ?? this.heroImageUrl,
+      topics: topics ?? this.topics,
+      viewCount: viewCount ?? this.viewCount,
+      isSaved: isSaved ?? this.isSaved,
+    );
+  }
+
   factory ArticleListItem.fromJson(Map<String, dynamic> json) {
     return ArticleListItem(
       slug: _asString(json['slug']),
@@ -164,6 +188,32 @@ class ArticleDetail extends Equatable {
   final String body;
   final int viewCount;
   final bool isSaved;
+
+  ArticleDetail copyWith({
+    String? slug,
+    String? title,
+    String? excerpt,
+    int? readingTime,
+    DateTime? publishAt,
+    String? heroImageUrl,
+    List<Topic>? topics,
+    String? body,
+    int? viewCount,
+    bool? isSaved,
+  }) {
+    return ArticleDetail(
+      slug: slug ?? this.slug,
+      title: title ?? this.title,
+      excerpt: excerpt ?? this.excerpt,
+      readingTime: readingTime ?? this.readingTime,
+      publishAt: publishAt ?? this.publishAt,
+      heroImageUrl: heroImageUrl ?? this.heroImageUrl,
+      topics: topics ?? this.topics,
+      body: body ?? this.body,
+      viewCount: viewCount ?? this.viewCount,
+      isSaved: isSaved ?? this.isSaved,
+    );
+  }
 
   factory ArticleDetail.fromJson(Map<String, dynamic> json) {
     return ArticleDetail(

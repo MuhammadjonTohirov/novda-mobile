@@ -135,6 +135,7 @@ class HomeInteractor {
     color: '#706A93',
     hasDuration: false,
     hasQuality: false,
+    isReminderEnabled: true,
     isActive: true,
     order: 999,
     title: 'Other',

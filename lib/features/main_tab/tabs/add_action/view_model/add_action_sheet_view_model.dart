@@ -23,33 +23,40 @@ class AddActionSheetViewModel extends BaseViewModel {
 
   AddActionType _actionType = AddActionType.activity;
   List<ActivityType> _activityTypes = const [];
+  List<ActivityType> _reminderActivityTypes = const [];
   int? _selectedActivityTypeId;
 
   AddActionType get actionType => _actionType;
   List<ActivityType> get activityTypes => _activityTypes;
+  List<ActivityType> get reminderActivityTypes => _reminderActivityTypes;
+  List<ActivityType> get currentActivityTypes =>
+      _actionType == AddActionType.activity
+      ? _activityTypes
+      : _reminderActivityTypes;
   int? get selectedActivityTypeId => _selectedActivityTypeId;
 
   ActivityType? get selectedActivityType {
     final id = _selectedActivityTypeId;
     if (id == null) return null;
 
-    for (final type in _activityTypes) {
+    for (final type in currentActivityTypes) {
       if (type.id == id) return type;
     }
 
     return null;
   }
 
-  bool get hasTypes => _activityTypes.isNotEmpty;
+  bool get hasTypes => currentActivityTypes.isNotEmpty;
 
   Future<void> load() async {
     setLoading();
 
     try {
       _activityTypes = await _interactor.loadActivityTypes();
-      _selectedActivityTypeId = _activityTypes.isEmpty
-          ? null
-          : _activityTypes.first.id;
+      _reminderActivityTypes = _activityTypes
+          .where((type) => type.isReminderEnabled)
+          .toList(growable: false);
+      _ensureSelectedActivityType();
       setSuccess();
     } catch (error) {
       handleException(error);
@@ -59,10 +66,20 @@ class AddActionSheetViewModel extends BaseViewModel {
   void selectActionType(AddActionType type) {
     if (_actionType == type) return;
     _actionType = type;
+    _ensureSelectedActivityType();
     notifyListeners();
   }
 
   void selectActivityType(int activityTypeId) {
+    var exists = false;
+    for (final type in currentActivityTypes) {
+      if (type.id == activityTypeId) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists) return;
+
     if (_selectedActivityTypeId == activityTypeId) return;
     _selectedActivityTypeId = activityTypeId;
     notifyListeners();
@@ -73,5 +90,18 @@ class AddActionSheetViewModel extends BaseViewModel {
     if (type == null) return null;
 
     return AddActionSheetSelection(actionType: _actionType, activityType: type);
+  }
+
+  void _ensureSelectedActivityType() {
+    final selectedId = _selectedActivityTypeId;
+    if (selectedId != null) {
+      for (final type in currentActivityTypes) {
+        if (type.id == selectedId) return;
+      }
+    }
+
+    _selectedActivityTypeId = currentActivityTypes.isEmpty
+        ? null
+        : currentActivityTypes.first.id;
   }
 }

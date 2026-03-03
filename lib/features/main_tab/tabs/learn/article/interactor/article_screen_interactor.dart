@@ -12,6 +12,10 @@ class ArticleScreenInteractor {
     return _articlesUseCase.getArticle(slug);
   }
 
+  Future<List<ArticleListItem>> loadSimilarArticles(String slug) {
+    return _articlesUseCase.getSimilarArticles(slug);
+  }
+
   Future<void> saveArticle(String slug) {
     return _articlesUseCase.saveArticle(slug);
   }

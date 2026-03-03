@@ -6,9 +6,12 @@ import 'package:provider/provider.dart';
 import '../../../../core/extensions/extensions.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../add_action/add_activity_screen.dart';
+import '../add_action/add_reminder_screen.dart';
+import '../profile/child_details/child_details_screen.dart';
 import 'activity_history/activity_history_screen.dart';
 import 'extensions/home_screen_ui_extensions.dart';
 import 'interactors/home_interactor.dart';
+import 'reminders/reminders_screen.dart';
 import 'view_models/home_view_model.dart';
 
 part 'views/home_screen_activity_part.dart';
@@ -43,7 +46,8 @@ class HomeScreen extends StatelessWidget {
               children: [
                 context
                     .homeMyChildHeader(
-                      onEditDetails: () => context.showSnackMessage(context.l10n.homeComingSoon),
+                      onEditDetails: () =>
+                          _openChildDetails(context, viewModel),
                     )
                     .safeArea(bottom: false)
                     .paddingOnly(left: 16, right: 16, bottom: 16),
@@ -53,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                     .homeChildInfoCard(
                       childInfo: viewModel.activeChild,
                       childDetails: viewModel.activeChildDetails,
-                      onTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
+                      onTap: () => _openChildDetails(context, viewModel),
                     )
                     .paddingOnly(left: 16, right: 16),
                 const SizedBox(height: 20),
@@ -76,12 +80,14 @@ class HomeScreen extends StatelessWidget {
                     context.homeSectionHeader(
                       title: context.l10n.homeReminders,
                       actionLabel: context.l10n.homeSeeAll,
-                      onActionTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
+                      onActionTap: () => _openAllReminders(context, viewModel),
                     ),
                     const SizedBox(height: 12),
                     _RemindersList(viewModel: viewModel),
                     const SizedBox(height: 14),
-                    _AddReminderButton(onTap: () => context.showSnackMessage(context.l10n.homeComingSoon)),
+                    _AddReminderButton(
+                      onTap: () => _openAddReminder(context, viewModel),
+                    ),
                   ],
                 ).container(
                   decoration: BoxDecoration(
@@ -148,6 +154,46 @@ class HomeScreen extends StatelessWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(context.l10n.addActivityCreated)));
 
+    await viewModel.load();
+  }
+
+  Future<void> _openChildDetails(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => ChildDetailsScreen(childId: viewModel.activeChild?.id),
+      ),
+    );
+
+    if (!context.mounted || saved != true) return;
+    await viewModel.load();
+  }
+
+  Future<void> _openAllReminders(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const RemindersScreen()));
+
+    if (!context.mounted) return;
+    await viewModel.load();
+  }
+
+  Future<void> _openAddReminder(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    final createdReminder = await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const AddReminderScreen()));
+
+    if (!context.mounted || createdReminder == null) return;
+
+    context.showSnackMessage(context.l10n.addReminderCreated);
     await viewModel.load();
   }
 }

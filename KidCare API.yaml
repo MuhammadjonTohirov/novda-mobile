@@ -1870,230 +1870,6 @@ paths:
                     data: null
                   summary: Not Found
           description: Child not found
-  /api/v1/children/{child_id}/progress/current:
-    get:
-      operationId: children_progress_current_retrieve
-      description: Get current progress period guide based on child age with exercises,
-        suggestions, and recommendations
-      summary: Get Current Progress
-      parameters:
-      - in: path
-        name: child_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Progress
-      security:
-      - jwtAuth: []
-      - Bearer: []
-        ApiKey: []
-      deprecated: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                SuccessResponse:
-                  value:
-                    success: true
-                    code: 200
-                    message: null
-                    error: null
-                    data:
-                      period_unit: week
-                      period_index: 12
-                      week_number: 12
-                      stage_type: normal
-                      week_type: normal
-                      date_range: Nov 1 - Nov 7, 2024
-                      start_date: '2024-11-01'
-                      end_date: '2024-11-07'
-                      headline: Your baby is growing!
-                      summary: This week your baby...
-                      crisis_warning: null
-                      crisis_description: null
-                      exercises: []
-                      suggestions: []
-                      recommendations: []
-                  summary: Success Response
-          description: Current progress retrieved successfully
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                NotFound:
-                  value:
-                    success: false
-                    code: 404
-                    message: null
-                    error: Child not found
-                    data: null
-                  summary: Not Found
-          description: Child not found
-  /api/v1/children/{child_id}/progress/periods:
-    get:
-      operationId: children_progress_periods_retrieve
-      description: List surrounding generalized progress periods (week/month/custom)
-        with metadata
-      summary: Get Period Selector
-      parameters:
-      - in: query
-        name: after
-        schema:
-          type: integer
-        description: 'Number of periods after current (default: 1)'
-      - in: query
-        name: before
-        schema:
-          type: integer
-        description: 'Number of periods before current (default: 1)'
-      - in: path
-        name: child_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Progress
-      security:
-      - jwtAuth: []
-      - Bearer: []
-        ApiKey: []
-      deprecated: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                SuccessResponse:
-                  value:
-                    success: true
-                    code: 200
-                    message: null
-                    error: null
-                    data:
-                      current_period_index: 12
-                      current_period_unit: week
-                      periods:
-                      - period_unit: week
-                        period_index: 11
-                        week_number: 11
-                        date_range: Oct 25 - Oct 31, 2024
-                        start_date: '2024-10-25'
-                        end_date: '2024-10-31'
-                        stage_type: normal
-                        week_type: normal
-                        is_current: false
-                        is_past: true
-                        crisis_warning: null
-                      - period_unit: week
-                        period_index: 12
-                        week_number: 12
-                        date_range: Nov 1 - Nov 7, 2024
-                        start_date: '2024-11-01'
-                        end_date: '2024-11-07'
-                        stage_type: crisis
-                        week_type: crisis
-                        is_current: true
-                        is_past: false
-                        crisis_warning: Growth spurt week
-                  summary: Success Response
-          description: Period selector data retrieved successfully
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-          description: Child not found
-  /api/v1/children/{child_id}/progress/weeks:
-    get:
-      operationId: children_progress_weeks_retrieve
-      description: List surrounding progress periods (weekly or monthly) with metadata
-      summary: Get Week Selector
-      parameters:
-      - in: query
-        name: after
-        schema:
-          type: integer
-        description: 'Number of periods after current (default: 1)'
-      - in: query
-        name: before
-        schema:
-          type: integer
-        description: 'Number of periods before current (default: 1)'
-      - in: path
-        name: child_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Progress
-      security:
-      - jwtAuth: []
-      - Bearer: []
-        ApiKey: []
-      deprecated: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                SuccessResponse:
-                  value:
-                    success: true
-                    code: 200
-                    message: null
-                    error: null
-                    data:
-                      current_week: 12
-                      weeks:
-                      - period_unit: week
-                        period_index: 11
-                        week_number: 11
-                        date_range: Oct 25 - Oct 31, 2024
-                        start_date: '2024-10-25'
-                        end_date: '2024-10-31'
-                        stage_type: normal
-                        week_type: normal
-                        is_current: false
-                        is_past: true
-                        crisis_warning: null
-                      - period_unit: week
-                        period_index: 12
-                        week_number: 12
-                        date_range: Nov 1 - Nov 7, 2024
-                        start_date: '2024-11-01'
-                        end_date: '2024-11-07'
-                        stage_type: crisis
-                        week_type: crisis
-                        is_current: true
-                        is_past: false
-                        crisis_warning: Growth spurt week
-                  summary: Success Response
-          description: Week selector data retrieved successfully
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                NotFound:
-                  value:
-                    success: false
-                    code: 404
-                    message: null
-                    error: Child not found
-                    data: null
-                  summary: Not Found
-          description: Child not found
   /api/v1/children/{child_id}/reminders:
     get:
       operationId: children_reminders_retrieve
@@ -3036,71 +2812,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/StandardResponse'
           description: Invalid query parameters
-  /api/v1/progress/weeks/{week_number}:
-    get:
-      operationId: progress_weeks_retrieve
-      description: Get guide for a specific week number (legacy endpoint; maps to
-        weekly periods)
-      summary: Get Specific Week
-      parameters:
-      - in: path
-        name: week_number
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Progress
-      security:
-      - jwtAuth: []
-      - Bearer: []
-        ApiKey: []
-      deprecated: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                SuccessResponse:
-                  value:
-                    success: true
-                    code: 200
-                    message: null
-                    error: null
-                    data:
-                      period_unit: week
-                      period_index: 12
-                      week_number: 12
-                      stage_type: crisis
-                      week_type: crisis
-                      date_range: null
-                      start_date: null
-                      end_date: null
-                      headline: Growth Spurt Week
-                      summary: Your baby may be fussier...
-                      crisis_warning: Growth spurt expected
-                      crisis_description: During this week...
-                      exercises: []
-                      suggestions: []
-                      recommendations: []
-                  summary: Success Response
-          description: Week guide retrieved successfully
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StandardResponse'
-              examples:
-                NotFound:
-                  value:
-                    success: false
-                    code: 404
-                    message: null
-                    error: No guide found for week 12
-                    data: null
-                  summary: Not Found
-          description: Week guide not found
   /api/v1/reminders/{reminder_id}:
     get:
       operationId: reminders_retrieve
@@ -3343,6 +3054,36 @@ paths:
                     data: null
                   summary: Not Found
           description: Reminder not found
+  /api/v1/similar_articles/{slug}:
+    get:
+      operationId: similar_articles_retrieve
+      description: Get up to 5 similar articles for the provided article slug.
+      summary: List Similar Articles
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Articles
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Similar articles retrieved successfully
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Article not found
   /api/v1/topics:
     get:
       operationId: topics_retrieve
@@ -3387,10 +3128,29 @@ paths:
   /api/v2/articles:
     get:
       operationId: api_v2_articles_retrieve
-      description: Get published articles with user bookmark flag, view count, and
-        pagination metadata.
+      description: Get published articles with view count and pagination metadata.
       summary: List Articles (v2)
       parameters:
+      - in: query
+        name: age_days
+        schema:
+          type: integer
+        description: Filter to articles that include this age in days
+      - in: query
+        name: age_end_days
+        schema:
+          type: integer
+        description: Maximum age boundary in days (used with age_start_days)
+      - in: query
+        name: age_start_days
+        schema:
+          type: integer
+        description: Minimum age boundary in days (used with age_end_days)
+      - in: query
+        name: keywords
+        schema:
+          type: string
+        description: Comma-separated keywords for metadata matching
       - in: query
         name: page
         schema:
@@ -3442,6 +3202,11 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: keywords
+        schema:
+          type: string
+        description: Optional comma-separated keywords to refine recommendation matching
       - in: query
         name: progress_index
         schema:

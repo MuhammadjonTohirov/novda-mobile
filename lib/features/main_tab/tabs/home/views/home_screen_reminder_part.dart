@@ -67,8 +67,8 @@ class _ReminderTile extends StatelessWidget {
               GestureDetector(
                 onTap: isCompleted || isUpdating ? null : onCheckTap,
                 child: Container(
-                  width: 34,
-                  height: 34,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: isCompleted
@@ -98,7 +98,7 @@ class _ReminderTile extends StatelessWidget {
                         : l10n.homeReminderTitle(
                             reminder.activityTypeDetail.title,
                           ),
-                    style: AppTypography.headingL.copyWith(
+                    style: AppTypography.headingS.copyWith(
                       color: colors.textPrimary,
                       decoration: isCompleted
                           ? TextDecoration.lineThrough
@@ -108,7 +108,7 @@ class _ReminderTile extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     '${_formatReminderDateTime(context, reminder.dueAt)} • ${reminder.activityTypeDetail.title}',
-                    style: AppTypography.bodyLRegular.copyWith(
+                    style: AppTypography.bodySRegular.copyWith(
                       color: colors.textSecondary,
                     ),
                   ),

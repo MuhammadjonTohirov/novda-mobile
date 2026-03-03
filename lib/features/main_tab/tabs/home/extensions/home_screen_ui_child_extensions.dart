@@ -76,7 +76,7 @@ extension HomeScreenUiChildExtensions on BuildContext {
                 Icon(
                   Icons.chevron_right,
                   color: colors.textSecondary,
-                  size: 28,
+                  size: 24,
                 ),
               ],
             ),

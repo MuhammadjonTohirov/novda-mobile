@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
-import 'extensions/article_screen_ui_extensions.dart';
+import 'extensions/article_screen_ui_body_extensions.dart';
 import 'extensions/article_screen_ui_state_extensions.dart';
 import 'interactor/article_screen_interactor.dart';
 import 'view_model/article_screen_view_model.dart';
@@ -49,7 +49,11 @@ class ArticleScreen extends StatelessWidget {
               onRefresh: viewModel.load,
               onBackTap: () => Navigator.of(context).pop(),
               onBookmarkTap: viewModel.toggleSaved,
-              onHelpfulTap: () => context.showSnackMessage(context.l10n.homeComingSoon),
+              onHelpfulTap: () =>
+                  context.showSnackMessage(context.l10n.homeComingSoon),
+              onSimilarBookmarkTap: viewModel.toggleSimilarArticleSaved,
+              onSimilarArticleTap: (article) =>
+                  _openSimilarArticle(context, viewModel, article),
             ),
           );
         },
@@ -57,4 +61,16 @@ class ArticleScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _openSimilarArticle(
+    BuildContext context,
+    ArticleScreenViewModel viewModel,
+    ArticleListItem article,
+  ) async {
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => ArticleScreen(article: article)));
+
+    if (!context.mounted) return;
+    await viewModel.load();
+  }
 }

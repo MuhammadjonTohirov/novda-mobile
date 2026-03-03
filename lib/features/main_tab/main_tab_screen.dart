@@ -6,6 +6,7 @@ import '../../core/extensions/extensions.dart';
 import '../../core/theme/app_theme.dart';
 import '../splash/splash.dart';
 import 'tabs/add_action/add_activity_screen.dart';
+import 'tabs/add_action/add_reminder_screen.dart';
 import 'tabs/add_action/add_action_sheet_content.dart';
 import 'tabs/add_action/view_model/add_action_sheet_view_model.dart';
 import 'tabs/home/home_screen.dart';
@@ -82,9 +83,20 @@ class MainTabScreen extends StatelessWidget {
         return;
 
       case AddActionType.reminder:
+        final createdReminder = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) =>
+                AddReminderScreen(initialActivityType: selection.activityType),
+          ),
+        );
+
+        if (!context.mounted || createdReminder == null) return;
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(context.l10n.homeComingSoon)));
+          ..showSnackBar(
+            SnackBar(content: Text(context.l10n.addReminderCreated)),
+          );
         return;
     }
   }

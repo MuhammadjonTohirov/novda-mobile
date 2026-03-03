@@ -1,6 +1,7 @@
 import 'core/network/api_client.dart';
 import 'gateways/gateways.dart';
 import 'use_cases/use_cases.dart';
+import 'use_cases/saved_articles_store.dart';
 
 /// Abstraction for locale configuration to avoid exposing [ApiClient].
 abstract interface class LocaleConfigurable {
@@ -21,7 +22,7 @@ class NovdaSDK {
     required ArticlesUseCase articles,
     required ArticlesV2UseCase articlesV2,
     LocaleConfigurable? localeConfigurable,
-  })  : _auth = auth,
+  }) : _auth = auth,
        _user = user,
        _children = children,
        _activities = activities,
@@ -105,8 +106,12 @@ class NovdaSDK {
     final articlesV2Gateway = ArticlesV2GatewayImpl(apiClient);
 
     // Create use cases
+    final savedArticlesStore = SavedArticlesStore();
     final authUseCase = AuthUseCaseImpl(authGateway);
-    final userUseCase = UserUseCaseImpl(userGateway);
+    final userUseCase = UserUseCaseImpl(
+      userGateway,
+      savedArticlesStore: savedArticlesStore,
+    );
     final childrenUseCase = ChildrenUseCaseImpl(childrenGateway);
     final activitiesUseCase = ActivitiesUseCaseImpl(activitiesGateway);
     final measurementsUseCase = MeasurementsUseCaseImpl(measurementsGateway);
@@ -116,6 +121,8 @@ class NovdaSDK {
     final articlesV2UseCase = ArticlesV2UseCaseImpl(
       articlesV2Gateway: articlesV2Gateway,
       articlesGateway: articlesGateway,
+      userGateway: userGateway,
+      savedArticlesStore: savedArticlesStore,
     );
 
     return NovdaSDK._(

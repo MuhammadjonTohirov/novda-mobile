@@ -454,6 +454,30 @@ abstract class AppLocalizations {
   /// **'Edit details'**
   String get homeEditDetails;
 
+  /// No description provided for @childDetailsEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit baby\'s details'**
+  String get childDetailsEditTitle;
+
+  /// No description provided for @childDetailsAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add baby\'s details'**
+  String get childDetailsAddTitle;
+
+  /// No description provided for @childDetailsBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get childDetailsBirthDate;
+
+  /// No description provided for @childDetailsParameters.
+  ///
+  /// In en, this message translates to:
+  /// **'Parameters'**
+  String get childDetailsParameters;
+
   /// No description provided for @homeNoActiveChildSelected.
   ///
   /// In en, this message translates to:
@@ -525,6 +549,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder'**
   String get addActionTypeReminder;
+
+  /// No description provided for @addReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get addReminderTitle;
+
+  /// No description provided for @addReminderDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and time'**
+  String get addReminderDateTime;
+
+  /// No description provided for @addReminderFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder for'**
+  String get addReminderFor;
+
+  /// No description provided for @addReminderComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get addReminderComments;
+
+  /// No description provided for @addReminderSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get addReminderSubmit;
+
+  /// No description provided for @addReminderNoChildSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add/select a child to create a reminder.'**
+  String get addReminderNoChildSelected;
+
+  /// No description provided for @addReminderCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder added successfully.'**
+  String get addReminderCreated;
 
   /// No description provided for @addActivityTitle.
   ///
@@ -681,6 +747,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No reminders yet.'**
   String get homeNoReminders;
+
+  /// No description provided for @remindersExpandCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand calendar'**
+  String get remindersExpandCalendar;
+
+  /// No description provided for @remindersCollapseCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse calendar'**
+  String get remindersCollapseCalendar;
+
+  /// No description provided for @remindersNoRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders'**
+  String get remindersNoRemindersTitle;
+
+  /// No description provided for @remindersNoRemindersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first reminder.'**
+  String get remindersNoRemindersSubtitle;
+
+  /// No description provided for @remindersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} reminders'**
+  String remindersCount(int count);
 
   /// No description provided for @homeComingSoon.
   ///
@@ -850,6 +946,24 @@ abstract class AppLocalizations {
   /// **'Search articles'**
   String get learnSearchHint;
 
+  /// No description provided for @learnRecentSearches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get learnRecentSearches;
+
+  /// No description provided for @learnSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get learnSearchResults;
+
+  /// No description provided for @learnSearchFoundCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} found'**
+  String learnSearchFoundCount(int count);
+
   /// No description provided for @learnPopularTopics.
   ///
   /// In en, this message translates to:
@@ -903,6 +1017,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Was this article helpful for you?'**
   String get articleHelpfulQuestion;
+
+  /// No description provided for @articleContinueReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue reading'**
+  String get articleContinueReading;
 
   /// No description provided for @profileTab.
   ///
@@ -969,6 +1089,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Legal documents'**
   String get profileLegalDocuments;
+
+  /// No description provided for @profileFollowUsOnTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Telegram'**
+  String get profileFollowUsOnTelegram;
+
+  /// No description provided for @profileFollowUsOnX.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on X'**
+  String get profileFollowUsOnX;
+
+  /// No description provided for @profileFollowUsOnInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Instagram'**
+  String get profileFollowUsOnInstagram;
+
+  /// No description provided for @profileSupportTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get profileSupportTelegram;
+
+  /// No description provided for @profileSupportEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileSupportEmail;
+
+  /// No description provided for @profileLegalTermsConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & conditions'**
+  String get profileLegalTermsConditions;
+
+  /// No description provided for @profileLegalPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get profileLegalPrivacyPolicy;
 
   /// No description provided for @profileLogoutConfirmTitle.
   ///

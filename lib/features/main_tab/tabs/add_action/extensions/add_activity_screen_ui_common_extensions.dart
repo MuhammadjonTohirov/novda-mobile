@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
 import '../../../../../core/extensions/extensions.dart';
+import '../../../../../core/theme/app_theme.dart';
 
 const _iconKid = 'assets/images/others/icon_kid.png';
 const _iconThumbsUp = 'assets/images/others/icon_thumbs-up.png';
@@ -30,27 +31,62 @@ extension AddActivityScreenUiCommonExtensions on BuildContext {
     return l10n.addActivityConditionsCount(count);
   }
 
-  Widget addActivityQualityFieldIcon() =>
-      addActivityAssetIcon(_iconKid, size: 28);
+  Widget addActivityQualityFieldIcon(Quality? quality) {
+    return switch (quality) {
+      Quality.bad => addActivityAssetIcon(
+        _iconThumbsDown,
+        size: 24,
+        color: appColors.error,
+      ),
+      Quality.normal => addActivityAssetIcon(
+        _iconThumbsUp,
+        size: 24,
+        color: appColors.accent.withValues(alpha: 0.75),
+      ),
+      Quality.good => addActivityAssetIcon(
+        _iconKid,
+        size: 24,
+        color: appColors.accent,
+      ),
+      null => addActivityAssetIcon(_iconKid, size: 24, color: appColors.accent),
+    };
+  }
 
-  Widget addActivityReminderFieldIcon() =>
-      addActivityAssetIcon(_iconNotification, size: 28);
+  Widget addActivityReminderFieldIcon() => addActivityAssetIcon(
+    _iconNotification,
+    size: 24,
+    color: appColors.accent,
+  );
 
   Widget addActivityQualityBadIcon() =>
-      addActivityAssetIcon(_iconThumbsDown, size: 24);
+      addActivityAssetIcon(_iconThumbsDown, size: 24, color: appColors.error);
 
-  Widget addActivityQualityNormalIcon() =>
-      addActivityAssetIcon(_iconThumbsUp, size: 24);
+  Widget addActivityQualityNormalIcon() => addActivityAssetIcon(
+    _iconThumbsUp,
+    size: 24,
+    color: appColors.accent.withValues(alpha: 0.75),
+  );
 
   Widget addActivityQualityGoodIcon() =>
-      addActivityAssetIcon(_iconKid, size: 24);
+      addActivityAssetIcon(_iconKid, size: 24, color: appColors.accent);
 
-  Widget addActivityAssetIcon(String assetPath, {double size = 24}) {
-    return Image.asset(
+  Widget addActivityAssetIcon(
+    String assetPath, {
+    double size = 24,
+    Color? color,
+  }) {
+    final icon = Image.asset(
       assetPath,
       width: size,
       height: size,
       fit: BoxFit.contain,
+    );
+
+    if (color == null) return icon;
+
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+      child: icon,
     );
   }
 

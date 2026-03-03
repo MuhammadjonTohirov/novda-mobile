@@ -77,6 +77,10 @@
 
   "homeMyChild": "Мой ребёнок",
   "homeEditDetails": "Изменить данные",
+  "childDetailsEditTitle": "Изменить данные малыша",
+  "childDetailsAddTitle": "Добавить данные малыша",
+  "childDetailsBirthDate": "Дата рождения",
+  "childDetailsParameters": "Параметры",
   "homeNoActiveChildSelected": "Активный ребёнок не выбран.",
   "homeGender": "Пол",
   "homeUndisclosed": "Не указан",
@@ -89,6 +93,13 @@
   "addActionSheetDescription": "Запишите активность или создайте напоминание на потом.",
   "addActionTypeActivity": "Активность",
   "addActionTypeReminder": "Напоминание",
+  "addReminderTitle": "Добавить напоминание",
+  "addReminderDateTime": "Дата и время",
+  "addReminderFor": "Напомнить о",
+  "addReminderComments": "Комментарий",
+  "addReminderSubmit": "Добавить напоминание",
+  "addReminderNoChildSelected": "Добавьте или выберите ребёнка, чтобы создать напоминание.",
+  "addReminderCreated": "Напоминание успешно добавлено.",
   "addActivityTitle": "Добавить: {activity}",
   "@addActivityTitle": {
     "placeholders": {
@@ -134,6 +145,18 @@
   "homeNoActivityTypes": "Типы активностей пока недоступны.",
   "activityHistoryNoActivities": "Активностей пока нет.",
   "homeNoReminders": "Напоминаний пока нет.",
+  "remindersExpandCalendar": "Развернуть календарь",
+  "remindersCollapseCalendar": "Свернуть календарь",
+  "remindersNoRemindersTitle": "Нет напоминаний",
+  "remindersNoRemindersSubtitle": "Добавьте первое напоминание.",
+  "remindersCount": "{count} напоминаний",
+  "@remindersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeComingSoon": "Скоро будет",
   "homeFailedLoad": "Не удалось загрузить данные главной страницы.",
   "homeRetry": "Повторить",
@@ -222,6 +245,16 @@
   "addTab": "Добавить",
   "learnTab": "Обучение",
   "learnSearchHint": "Искать статьи",
+  "learnRecentSearches": "Недавние запросы",
+  "learnSearchResults": "Результаты",
+  "learnSearchFoundCount": "Найдено: {count}",
+  "@learnSearchFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "learnPopularTopics": "Популярные темы",
   "learnAllTopics": "Все темы",
   "learnAllArticles": "Все статьи",
@@ -246,6 +279,7 @@
     }
   },
   "articleHelpfulQuestion": "Эта статья была полезной для вас?",
+  "articleContinueReading": "Продолжить чтение",
   "profileTab": "Профиль",
   "profileTitle": "Профиль",
   "profileParent": "Родитель",
@@ -257,6 +291,13 @@
   "profileFollowUs": "Подписывайтесь на нас",
   "profileSupport": "Поддержка",
   "profileLegalDocuments": "Юридические документы",
+  "profileFollowUsOnTelegram": "Подписывайтесь на нас в Telegram",
+  "profileFollowUsOnX": "Подписывайтесь на нас в X",
+  "profileFollowUsOnInstagram": "Подписывайтесь на нас в Instagram",
+  "profileSupportTelegram": "Telegram",
+  "profileSupportEmail": "Email",
+  "profileLegalTermsConditions": "Условия использования",
+  "profileLegalPrivacyPolicy": "Политика конфиденциальности",
   "profileLogoutConfirmTitle": "Выйти?",
   "profileLogoutConfirmDescription": "Чтобы продолжить, нужно будет снова войти в аккаунт.",
   "settingsTitle": "Настройки",

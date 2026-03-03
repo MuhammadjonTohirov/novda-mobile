@@ -77,6 +77,10 @@
 
   "homeMyChild": "My child",
   "homeEditDetails": "Edit details",
+  "childDetailsEditTitle": "Edit baby's details",
+  "childDetailsAddTitle": "Add baby's details",
+  "childDetailsBirthDate": "Date of birth",
+  "childDetailsParameters": "Parameters",
   "homeNoActiveChildSelected": "No active child selected.",
   "homeGender": "Gender",
   "homeUndisclosed": "Undisclosed",
@@ -89,6 +93,13 @@
   "addActionSheetDescription": "Log an activity or create a reminder for later.",
   "addActionTypeActivity": "Activity",
   "addActionTypeReminder": "Reminder",
+  "addReminderTitle": "Add reminder",
+  "addReminderDateTime": "Date and time",
+  "addReminderFor": "Reminder for",
+  "addReminderComments": "Comments",
+  "addReminderSubmit": "Add reminder",
+  "addReminderNoChildSelected": "Please add/select a child to create a reminder.",
+  "addReminderCreated": "Reminder added successfully.",
   "addActivityTitle": "Add {activity}",
   "@addActivityTitle": {
     "placeholders": {
@@ -134,6 +145,18 @@
   "homeNoActivityTypes": "No activity types available yet.",
   "activityHistoryNoActivities": "No activities yet.",
   "homeNoReminders": "No reminders yet.",
+  "remindersExpandCalendar": "Expand calendar",
+  "remindersCollapseCalendar": "Collapse calendar",
+  "remindersNoRemindersTitle": "No reminders",
+  "remindersNoRemindersSubtitle": "Add your first reminder.",
+  "remindersCount": "{count} reminders",
+  "@remindersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeComingSoon": "Coming soon",
   "homeFailedLoad": "Failed to load home data.",
   "homeRetry": "Retry",
@@ -222,6 +245,16 @@
   "addTab": "Add",
   "learnTab": "Learn",
   "learnSearchHint": "Search articles",
+  "learnRecentSearches": "Recent searches",
+  "learnSearchResults": "Results",
+  "learnSearchFoundCount": "{count} found",
+  "@learnSearchFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "learnPopularTopics": "Popular topics",
   "learnAllTopics": "All topics",
   "learnAllArticles": "All articles",
@@ -246,6 +279,7 @@
     }
   },
   "articleHelpfulQuestion": "Was this article helpful for you?",
+  "articleContinueReading": "Continue reading",
   "profileTab": "Profile",
   "profileTitle": "Profile",
   "profileParent": "Parent",
@@ -257,6 +291,13 @@
   "profileFollowUs": "Follow us",
   "profileSupport": "Support",
   "profileLegalDocuments": "Legal documents",
+  "profileFollowUsOnTelegram": "Follow us on Telegram",
+  "profileFollowUsOnX": "Follow us on X",
+  "profileFollowUsOnInstagram": "Follow us on Instagram",
+  "profileSupportTelegram": "Telegram",
+  "profileSupportEmail": "Email",
+  "profileLegalTermsConditions": "Terms & conditions",
+  "profileLegalPrivacyPolicy": "Privacy policy",
   "profileLogoutConfirmTitle": "Log out?",
   "profileLogoutConfirmDescription": "You'll need to log in again to access your account.",
   "settingsTitle": "Settings",

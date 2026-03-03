@@ -11,6 +11,7 @@ class ActivityType extends Equatable {
     required this.color,
     required this.hasDuration,
     required this.hasQuality,
+    required this.isReminderEnabled,
     required this.isActive,
     required this.order,
     required this.title,
@@ -23,6 +24,7 @@ class ActivityType extends Equatable {
   final String color;
   final bool hasDuration;
   final bool hasQuality;
+  final bool isReminderEnabled;
   final bool isActive;
   final int order;
   final String title;
@@ -36,6 +38,7 @@ class ActivityType extends Equatable {
       color: json['color'] as String,
       hasDuration: json['has_duration'] as bool? ?? false,
       hasQuality: json['has_quality'] as bool? ?? false,
+      isReminderEnabled: json['is_reminder_enabled'] as bool? ?? true,
       isActive: json['is_active'] as bool? ?? true,
       order: json['order'] as int? ?? 0,
       title: json['title'] as String,
@@ -51,6 +54,7 @@ class ActivityType extends Equatable {
         color,
         hasDuration,
         hasQuality,
+        isReminderEnabled,
         isActive,
         order,
         title,

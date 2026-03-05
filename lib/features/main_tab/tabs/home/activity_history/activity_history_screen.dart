@@ -105,12 +105,10 @@ class ActivityHistoryScreen extends StatelessWidget {
     ActivityHistoryViewModel viewModel,
     ActivityItem item,
   ) async {
-    final createdActivity = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => AddActivityScreen(
-          activityType: item.activityTypeDetail,
-          initialActivity: item,
-        ),
+    final createdActivity = await context.pushRoute(
+      AddActivityScreen(
+        activityType: item.activityTypeDetail,
+        initialActivity: item,
       ),
     );
 

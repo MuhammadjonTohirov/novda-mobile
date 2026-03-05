@@ -46,12 +46,10 @@ class _BabyWeightScreenState extends State<BabyWeightScreen> {
     final viewModel = context.read<AuthorizationViewModel>();
     viewModel.setWeight(double.parse(_controller.text));
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyHeightScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyHeightScreen(),
       ),
     );
   }

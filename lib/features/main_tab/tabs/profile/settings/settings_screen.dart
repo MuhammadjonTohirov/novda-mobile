@@ -151,9 +151,6 @@ class SettingsScreen extends StatelessWidget {
     if (!context.mounted || !success) return;
 
     Navigator.of(context).pop();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const SplashScreen()),
-      (route) => false,
-    );
+    context.pushRouteAndRemoveAll(const SplashScreen());
   }
 }

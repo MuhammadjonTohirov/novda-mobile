@@ -32,6 +32,15 @@ abstract interface class MeasurementsUseCase {
     String? notes,
   });
 
+  /// Update an existing measurement
+  Future<Measurement> updateMeasurement(
+    int measurementId, {
+    MeasurementType? type,
+    double? value,
+    DateTime? takenAt,
+    String? notes,
+  });
+
   /// Delete a measurement
   Future<void> deleteMeasurement(int measurementId);
 }
@@ -84,6 +93,25 @@ class MeasurementsUseCaseImpl implements MeasurementsUseCase {
     return _gateway.createMeasurement(
       childId,
       MeasurementCreateRequest(
+        type: type,
+        value: value,
+        takenAt: takenAt,
+        notes: notes,
+      ),
+    );
+  }
+
+  @override
+  Future<Measurement> updateMeasurement(
+    int measurementId, {
+    MeasurementType? type,
+    double? value,
+    DateTime? takenAt,
+    String? notes,
+  }) {
+    return _gateway.updateMeasurement(
+      measurementId,
+      MeasurementPatchRequest(
         type: type,
         value: value,
         takenAt: takenAt,

@@ -64,10 +64,7 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
       context.appController.setThemeVariant(resolvedTheme);
 
       // Navigate to home screen, clearing the navigation stack
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const MainTabScreen()),
-        (route) => false,
-      );
+      context.pushRouteAndRemoveAll(const MainTabScreen());
     } else {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(

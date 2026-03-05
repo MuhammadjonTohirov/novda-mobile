@@ -187,10 +187,48 @@ class AppLocalizationsUz extends AppLocalizations {
   String get addAChild => 'Bola qo\'shish';
 
   @override
-  String get homeMyChild => 'Mening farzandim';
+  String get homeMyChild => 'Farzandim';
 
   @override
-  String get homeEditDetails => 'Ma\'lumotlarni tahrirlash';
+  String get homeEditDetails => 'Tahrirlash';
+
+  @override
+  String get bodyMeasurementsTitle => 'Tana o\'lchovlari';
+
+  @override
+  String get bodyMeasurementsHeightChart => 'Bo\'yi grafigi';
+
+  @override
+  String get bodyMeasurementsWeightChart => 'Vazni grafigi';
+
+  @override
+  String get bodyMeasurementsHistory => 'O\'lchovlar tarixi';
+
+  @override
+  String get bodyMeasurementsNoData => 'Hali o\'lchovlar yo\'q.';
+
+  @override
+  String get bodyMeasurementsActions => 'O\'lchov amallari';
+
+  @override
+  String get bodyMeasurementsEdit => 'Tahrirlash';
+
+  @override
+  String get bodyMeasurementsEditTitle => 'O\'lchovni tahrirlash';
+
+  @override
+  String get bodyMeasurementsDeleteEntry => 'Yozuvni o\'chirish';
+
+  @override
+  String get bodyMeasurementsDeleteTitle => 'Bu yozuv o\'chirilsinmi?';
+
+  @override
+  String get bodyMeasurementsDeleteDescription =>
+      'Ushbu yozuvdagi vazn va bo\'y qiymatlari o\'chiriladi.';
+
+  @override
+  String get bodyMeasurementsAtLeastOneValue =>
+      'Kamida bitta qiymat kiriting (vazn yoki bo\'y).';
 
   @override
   String get childDetailsEditTitle => 'Chaqaloq ma\'lumotlarini tahrirlash';
@@ -525,6 +563,18 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get profileParent => 'Ota-ona';
+
+  @override
+  String get parentDetailsTitle => 'Ota-ona ma\'lumotlari';
+
+  @override
+  String get parentDetailsPhone => 'Telefon';
+
+  @override
+  String get parentDetailsFullName => 'Ota-onaning to\'liq ismi';
+
+  @override
+  String get parentDetailsSaveChanges => 'O\'zgarishlarni saqlash';
 
   @override
   String get profileMyBabies => 'Farzandlarim';

@@ -23,6 +23,7 @@ class ServiceLocator {
 
   late final SharedPreferences _prefs;
   late final TokenStorage _tokenStorage;
+  late final NovdaSDK _rawSdk;
   late final NovdaSDK _sdk;
   late final AuthService _authService;
   late final ThemeResolutionService _themeResolutionService;
@@ -36,11 +37,27 @@ class ServiceLocator {
     _prefs = await SharedPreferences.getInstance();
     _tokenStorage = TokenStorage(_prefs);
 
-    _sdk = NovdaSDK.create(
+    final rawSdk = NovdaSDK.create(
       baseUrl: _baseUrl,
       apiKey: _apiKey,
       tokenProvider: _tokenStorage,
     );
+
+    _sdk = NovdaSDK.withUseCases(
+      auth: rawSdk.auth,
+      user: CachedUserUseCase(rawSdk.user),
+      children: CachedChildrenUseCase(rawSdk.children),
+      activities: CachedActivitiesUseCase(rawSdk.activities),
+      measurements: rawSdk.measurements,
+      progress: rawSdk.progress,
+      reminders: rawSdk.reminders,
+      articles: rawSdk.articles,
+      articlesV2: rawSdk.articlesV2,
+    );
+
+    // Keep reference for locale configuration, since cached wrappers
+    // don't carry the locale-configurable API client.
+    _rawSdk = rawSdk;
 
     _authService = AuthService(
       tokenStorage: _tokenStorage,
@@ -98,7 +115,7 @@ class ServiceLocator {
   /// Set the locale for API requests
   void setLocale(String locale) {
     _assertInitialized();
-    _sdk.setLocale(locale);
+    _rawSdk.setLocale(locale);
   }
 
   /// Resolve the effective app theme for the current user.

@@ -139,9 +139,7 @@ class _LearnTabContentState extends State<LearnTabContent> {
     LearnTabViewModel viewModel,
     Topic topic,
   ) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => TopicArticlesScreen(topic: topic)),
-    );
+    await context.pushRoute(TopicArticlesScreen(topic: topic));
 
     if (!context.mounted) return;
     await viewModel.refresh();
@@ -151,9 +149,7 @@ class _LearnTabContentState extends State<LearnTabContent> {
     BuildContext context,
     LearnTabViewModel viewModel,
   ) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const AllTopicsScreen()));
+    await context.pushRoute(const AllTopicsScreen());
 
     if (!context.mounted) return;
     await viewModel.refresh();
@@ -164,9 +160,7 @@ class _LearnTabContentState extends State<LearnTabContent> {
     LearnTabViewModel viewModel,
     ArticleListItem article,
   ) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => ArticleScreen(article: article)));
+    await context.pushRoute(ArticleScreen(article: article));
 
     if (!context.mounted) return;
     await viewModel.refresh();

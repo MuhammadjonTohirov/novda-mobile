@@ -2,6 +2,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 
 class HomeDashboardData {
   const HomeDashboardData({
+    required this.children,
     required this.activeChild,
     required this.activeChildDetails,
     required this.activityTypes,
@@ -12,6 +13,7 @@ class HomeDashboardData {
 
   factory HomeDashboardData.empty() {
     return const HomeDashboardData(
+      children: [],
       activeChild: null,
       activeChildDetails: null,
       activityTypes: [],
@@ -21,6 +23,7 @@ class HomeDashboardData {
     );
   }
 
+  final List<ChildListItem> children;
   final ChildListItem? activeChild;
   final Child? activeChildDetails;
   final List<ActivityType> activityTypes;
@@ -29,7 +32,8 @@ class HomeDashboardData {
   final List<Reminder> recentReminders;
 
   bool get hasAnyContent {
-    return activeChild != null ||
+    return children.isNotEmpty ||
+        activeChild != null ||
         activityTypes.isNotEmpty ||
         recentReminders.isNotEmpty;
   }

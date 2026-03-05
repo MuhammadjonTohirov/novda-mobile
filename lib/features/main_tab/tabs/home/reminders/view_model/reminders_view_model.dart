@@ -5,7 +5,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../../core/base/base_view_model.dart';
 import '../interactor/reminders_interactor.dart';
 
-class RemindersViewModel extends BaseViewModel {
+class RemindersViewModel extends BaseViewModel with ActionErrorMixin {
   RemindersViewModel({
     RemindersInteractor? interactor,
     DateTime? initialDate,
@@ -29,7 +29,6 @@ class RemindersViewModel extends BaseViewModel {
   Map<DateTime, CalendarDay> _calendarDaysByDate = const {};
   List<Reminder> _selectedDayReminders = const [];
   final Set<int> _updatingReminderIds = <int>{};
-  String? _actionErrorMessage;
 
   int? get childId => _childId;
   DateTime get selectedDate => _selectedDate;
@@ -50,12 +49,6 @@ class RemindersViewModel extends BaseViewModel {
 
   bool isUpdatingReminder(int reminderId) =>
       _updatingReminderIds.contains(reminderId);
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
-  }
 
   Future<void> load() async {
     setLoading();
@@ -150,7 +143,7 @@ class RemindersViewModel extends BaseViewModel {
       _selectedDayReminders = reminders;
       notifyListeners();
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
       notifyListeners();
     } finally {
       _updatingReminderIds.remove(reminderId);
@@ -196,7 +189,7 @@ class RemindersViewModel extends BaseViewModel {
         for (final day in calendarDays) _dateOnly(day.date.toLocal()): day,
       };
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       if (notifyBusy) {
         _isRefreshingCalendar = false;
@@ -220,18 +213,13 @@ class RemindersViewModel extends BaseViewModel {
         _selectedDate,
       );
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       if (notifyBusy) {
         _isRefreshingDayReminders = false;
         notifyListeners();
       }
     }
-  }
-
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
   }
 
   static DateTime _dateOnly(DateTime value) {

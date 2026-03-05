@@ -76,12 +76,10 @@ class _BabyBirthdateScreenState extends State<BabyBirthdateScreen> {
     final viewModel = context.read<AuthorizationViewModel>();
     viewModel.setBirthdate(_selectedDate!);
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyWeightScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyWeightScreen(),
       ),
     );
   }

@@ -1,10 +1,11 @@
 import 'package:novda/core/app/app.dart';
 import 'package:novda/core/base/base_view_model.dart';
+import 'package:novda/core/services/services.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
 import '../interactor/settings_interactor.dart';
 
-class SettingsViewModel extends BaseViewModel {
+class SettingsViewModel extends BaseViewModel with ActionErrorMixin {
   SettingsViewModel({SettingsInteractor? interactor})
     : _interactor = interactor ?? SettingsInteractor();
 
@@ -20,7 +21,6 @@ class SettingsViewModel extends BaseViewModel {
   bool _isUpdatingNotifications = false;
   bool _isDeletingAccount = false;
   bool _hasLoaded = false;
-  String? _actionErrorMessage;
 
   ThemePreference get themePreference => _themePreference;
   PreferredLocale get preferredLocale => _preferredLocale;
@@ -31,12 +31,6 @@ class SettingsViewModel extends BaseViewModel {
   bool get isUpdatingNotifications => _isUpdatingNotifications;
   bool get isDeletingAccount => _isDeletingAccount;
   bool get hasLoaded => _hasLoaded;
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
-  }
 
   Future<void> load() async {
     setLoading();
@@ -60,11 +54,11 @@ class SettingsViewModel extends BaseViewModel {
     try {
       final user = await _interactor.updateThemePreference(preference);
       _applyUser(user);
-      return _interactor.resolveThemeVariant(
+      return services.resolveThemeVariant(
         selectedChildId: _lastActiveChildId,
       );
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
       return null;
     } finally {
       _isUpdatingTheme = false;
@@ -84,7 +78,7 @@ class SettingsViewModel extends BaseViewModel {
       _interactor.setApiLocale(_preferredLocale.name);
       return _preferredLocale;
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
       return null;
     } finally {
       _isUpdatingLanguage = false;
@@ -105,7 +99,7 @@ class SettingsViewModel extends BaseViewModel {
       _applyUser(user);
     } catch (error) {
       _notificationsEnabled = previous;
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       _isUpdatingNotifications = false;
       notifyListeners();
@@ -122,7 +116,7 @@ class SettingsViewModel extends BaseViewModel {
       await _interactor.deleteAccount();
       return true;
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
       return false;
     } finally {
       _isDeletingAccount = false;
@@ -137,8 +131,4 @@ class SettingsViewModel extends BaseViewModel {
     _lastActiveChildId = user.lastActiveChild;
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
-  }
 }

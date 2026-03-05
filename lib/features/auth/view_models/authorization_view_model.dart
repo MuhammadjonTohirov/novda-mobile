@@ -265,6 +265,17 @@ class AuthorizationViewModel extends BaseViewModel
     return services.resolveThemeVariant(selectedChildId: selectedChildId);
   }
 
+  /// Resolve and apply preferred locale from profile for app/API usage.
+  Future<PreferredLocale> resolvePreferredLocale() async {
+    try {
+      final user = await _userUseCase.getProfile();
+      services.setLocale(user.preferredLocale.name);
+      return user.preferredLocale;
+    } catch (_) {
+      return PreferredLocale.en;
+    }
+  }
+
   /// Clear registration data
   void clearRegistrationData() {
     _registrationData

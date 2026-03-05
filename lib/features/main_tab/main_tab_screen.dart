@@ -26,17 +26,21 @@ class MainTabScreen extends StatelessWidget {
         builder: (context, viewModel, _) {
           final l10n = context.l10n;
           final colors = context.appColors;
+          final localeCode = Localizations.localeOf(context).languageCode;
 
           return Scaffold(
             backgroundColor: colors.bgSecondary,
             body: IndexedStack(
               index: viewModel.selectedTabIndex,
               children: [
-                const HomeScreen(),
-                const ProgressTabContent(),
+                HomeScreen(key: ValueKey('home-$localeCode')),
+                ProgressTabContent(key: ValueKey('progress-$localeCode')),
                 _TabPlaceholder(title: l10n.addTab),
-                const LearnTabContent(),
-                ProfileTabContent(onLogout: () => _logout(context, viewModel)),
+                LearnTabContent(key: ValueKey('learn-$localeCode')),
+                ProfileTabContent(
+                  key: ValueKey('profile-$localeCode'),
+                  onLogout: () => _logout(context, viewModel),
+                ),
               ],
             ),
             bottomNavigationBar: _MainTabBar(
@@ -66,11 +70,8 @@ class MainTabScreen extends StatelessWidget {
 
     switch (selection.actionType) {
       case AddActionType.activity:
-        final createdActivity = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) =>
-                AddActivityScreen(activityType: selection.activityType),
-          ),
+        final createdActivity = await context.pushRoute(
+          AddActivityScreen(activityType: selection.activityType),
         );
 
         if (!context.mounted || createdActivity == null) return;
@@ -83,11 +84,8 @@ class MainTabScreen extends StatelessWidget {
         return;
 
       case AddActionType.reminder:
-        final createdReminder = await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) =>
-                AddReminderScreen(initialActivityType: selection.activityType),
-          ),
+        final createdReminder = await context.pushRoute(
+          AddReminderScreen(initialActivityType: selection.activityType),
         );
 
         if (!context.mounted || createdReminder == null) return;
@@ -106,10 +104,7 @@ class MainTabScreen extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const SplashScreen()),
-      (route) => false,
-    );
+    context.pushRouteAndRemoveAll(const SplashScreen());
   }
 }
 

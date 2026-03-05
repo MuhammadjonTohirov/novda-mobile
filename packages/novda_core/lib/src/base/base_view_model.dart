@@ -55,3 +55,21 @@ abstract class BaseViewModel extends ChangeNotifier {
     }
   }
 }
+
+/// Mixin for ViewModels that need action-level error handling
+/// (errors from user-triggered actions that don't change the view state).
+mixin ActionErrorMixin on BaseViewModel {
+  String? _actionErrorMessage;
+
+  String? consumeActionError() {
+    final message = _actionErrorMessage;
+    _actionErrorMessage = null;
+    return message;
+  }
+
+  @protected
+  void setActionError(Object error) {
+    _actionErrorMessage = error is ApiException ? error.message : error.toString();
+    notifyListeners();
+  }
+}

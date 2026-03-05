@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
+enum AppButtonVariant { submit, cancel, delete }
+
 /// Primary button component
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -11,6 +13,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.isEnabled = true,
     this.width,
+    this.variant = AppButtonVariant.submit,
   });
 
   final String text;
@@ -18,10 +21,12 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool isEnabled;
   final double? width;
+  final AppButtonVariant variant;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final style = _resolveStyle(colors);
 
     return SizedBox(
       width: width ?? double.infinity,
@@ -29,10 +34,10 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isEnabled && !isLoading ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: colors.buttonPrimary,
-          foregroundColor: colors.textOnPrimary,
-          disabledBackgroundColor: colors.buttonDisabled,
-          disabledForegroundColor: colors.textSecondary,
+          backgroundColor: style.backgroundColor,
+          foregroundColor: style.foregroundColor,
+          disabledBackgroundColor: style.disabledBackgroundColor,
+          disabledForegroundColor: style.disabledForegroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -44,19 +49,52 @@ class AppButton extends StatelessWidget {
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: colors.textOnPrimary,
+                  color: style.progressColor,
                 ),
               )
             : Text(
                 text,
                 style: AppTypography.bodyLMedium.copyWith(
                   color: isEnabled
-                      ? colors.textOnPrimary
-                      : colors.textSecondary,
+                      ? style.foregroundColor
+                      : style.disabledForegroundColor,
                 ),
               ),
       ),
     );
+  }
+
+  ({
+    Color backgroundColor,
+    Color foregroundColor,
+    Color disabledBackgroundColor,
+    Color disabledForegroundColor,
+    Color progressColor,
+  })
+  _resolveStyle(AppColorScheme colors) {
+    return switch (variant) {
+      AppButtonVariant.submit => (
+        backgroundColor: colors.buttonPrimary,
+        foregroundColor: colors.textOnPrimary,
+        disabledBackgroundColor: colors.buttonDisabled,
+        disabledForegroundColor: colors.textSecondary,
+        progressColor: colors.textOnPrimary,
+      ),
+      AppButtonVariant.cancel => (
+        backgroundColor: colors.bgSecondary,
+        foregroundColor: colors.textPrimary,
+        disabledBackgroundColor: colors.buttonDisabled,
+        disabledForegroundColor: colors.textSecondary,
+        progressColor: colors.textPrimary,
+      ),
+      AppButtonVariant.delete => (
+        backgroundColor: colors.error,
+        foregroundColor: Colors.white,
+        disabledBackgroundColor: colors.buttonDisabled,
+        disabledForegroundColor: colors.textSecondary,
+        progressColor: Colors.white,
+      ),
+    };
   }
 }
 

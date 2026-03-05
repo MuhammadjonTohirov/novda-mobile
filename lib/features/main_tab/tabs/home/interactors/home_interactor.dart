@@ -38,6 +38,7 @@ class HomeInteractor {
 
     if (children.isEmpty) {
       return HomeDashboardData(
+        children: const [],
         activeChild: null,
         activeChildDetails: null,
         activityTypes: sortedActivityTypes,
@@ -83,6 +84,7 @@ class HomeInteractor {
     final reminders = await remindersFuture ?? const <Reminder>[];
 
     return HomeDashboardData(
+      children: children,
       activeChild: activeChild,
       activeChildDetails: activeChildDetails,
       activityTypes: sortedActivityTypes,
@@ -96,6 +98,10 @@ class HomeInteractor {
 
   Future<Reminder> completeReminder(int reminderId) {
     return _remindersUseCase.completeReminder(reminderId);
+  }
+
+  Future<void> selectChild(int childId) {
+    return _childrenUseCase.selectChild(childId);
   }
 
   Future<T?> _runSafely<T>(Future<T> Function() action) async {

@@ -17,12 +17,10 @@ class BabyGenderScreen extends StatelessWidget {
     final viewModel = context.read<AuthorizationViewModel>();
     if (!viewModel.registrationData.hasGender) return;
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyNameScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyNameScreen(),
       ),
     );
   }

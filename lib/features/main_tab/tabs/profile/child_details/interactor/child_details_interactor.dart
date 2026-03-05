@@ -1,4 +1,3 @@
-import 'package:novda/core/app/app.dart';
 import 'package:novda/core/services/services.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
@@ -84,7 +83,4 @@ class ChildDetailsInteractor {
     await Future.wait(tasks);
   }
 
-  Future<ThemeVariant> resolveThemeVariant({required int selectedChildId}) {
-    return services.resolveThemeVariant(selectedChildId: selectedChildId);
-  }
 }

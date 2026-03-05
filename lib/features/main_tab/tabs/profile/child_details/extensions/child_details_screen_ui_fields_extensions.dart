@@ -146,17 +146,17 @@ extension ChildDetailsScreenUiFieldsExtensions on BuildContext {
           children: [
             ColorFiltered(
               colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
-              child: Image.asset(gender.iconAsset, width: 34, height: 34),
+              child: Image.asset(gender.iconAsset, width: 28, height: 28),
             ),
             12.h,
             Text(
               title,
-              style: AppTypography.headingM.copyWith(color: colors.textPrimary),
+              style: AppTypography.bodyMSemiBold.copyWith(color: colors.textPrimary),
               overflow: TextOverflow.ellipsis,
             ),
           ],
         ).container(
-          height: 162,
+          height: 100,
           decoration: BoxDecoration(
             color: isSelected
                 ? colors.bgSoft.withValues(alpha: 0.45)

@@ -5,7 +5,7 @@ import '../interactor/add_activity_interactor.dart';
 
 enum FeedingType { breast, bottle }
 
-class AddActivityViewModel extends BaseViewModel {
+class AddActivityViewModel extends BaseViewModel with ActionErrorMixin {
   AddActivityViewModel({
     required ActivityType activityType,
     ActivityItem? initialActivity,
@@ -30,7 +30,6 @@ class AddActivityViewModel extends BaseViewModel {
   List<ConditionType> _conditionTypes = const [];
   final Set<String> _selectedConditionSlugs = <String>{};
   bool _isSubmitting = false;
-  String? _actionErrorMessage;
   ActivityItem? _createdActivity;
 
   ActivityType get activityType => _activityType;
@@ -83,12 +82,6 @@ class AddActivityViewModel extends BaseViewModel {
     }
 
     return true;
-  }
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
   }
 
   Future<void> load() async {
@@ -237,8 +230,7 @@ class AddActivityViewModel extends BaseViewModel {
 
       return true;
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
-      notifyListeners();
+      setActionError(error);
       return false;
     } finally {
       _isSubmitting = false;
@@ -299,11 +291,4 @@ class AddActivityViewModel extends BaseViewModel {
     }
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) {
-      return error.message;
-    }
-
-    return error.toString();
-  }
 }

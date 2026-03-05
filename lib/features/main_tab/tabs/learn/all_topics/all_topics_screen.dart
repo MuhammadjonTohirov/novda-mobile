@@ -56,9 +56,7 @@ class AllTopicsScreen extends StatelessWidget {
     AllTopicsViewModel viewModel,
     Topic topic,
   ) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => TopicArticlesScreen(topic: topic)),
-    );
+    await context.pushRoute(TopicArticlesScreen(topic: topic));
 
     if (!context.mounted) return;
     await viewModel.load();

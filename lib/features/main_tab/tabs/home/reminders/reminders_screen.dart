@@ -104,11 +104,9 @@ class RemindersScreen extends StatelessWidget {
     BuildContext context,
     RemindersViewModel viewModel,
   ) async {
-    final createdReminder = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => AddReminderScreen(
-          initialDueAt: _initialDueAtFromSelectedDate(viewModel.selectedDate),
-        ),
+    final createdReminder = await context.pushRoute(
+      AddReminderScreen(
+        initialDueAt: _initialDueAtFromSelectedDate(viewModel.selectedDate),
       ),
     );
 

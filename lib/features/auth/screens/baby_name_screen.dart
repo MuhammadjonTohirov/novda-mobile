@@ -40,12 +40,10 @@ class _BabyNameScreenState extends State<BabyNameScreen> {
     final viewModel = context.read<AuthorizationViewModel>();
     viewModel.setBabyName(_controller.text.trim());
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyBirthdateScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyBirthdateScreen(),
       ),
     );
   }

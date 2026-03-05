@@ -16,5 +16,12 @@ export 'src/use_cases/progress_use_case.dart' show ProgressUseCase;
 export 'src/use_cases/reminders_use_case.dart' show RemindersUseCase;
 export 'src/use_cases/user_use_case.dart' show UserUseCase;
 
+// Cached use case decorators
+export 'src/use_cases/cached_activities_use_case.dart'
+    show CachedActivitiesUseCase;
+export 'src/use_cases/cached_children_use_case.dart'
+    show CachedChildrenUseCase;
+export 'src/use_cases/cached_user_use_case.dart' show CachedUserUseCase;
+
 // Main SDK
 export 'src/novda_sdk.dart' show NovdaSDK, LocaleConfigurable;

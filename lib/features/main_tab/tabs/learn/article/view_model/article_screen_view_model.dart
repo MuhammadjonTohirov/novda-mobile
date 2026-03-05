@@ -3,7 +3,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../../core/base/base_view_model.dart';
 import '../interactor/article_screen_interactor.dart';
 
-class ArticleScreenViewModel extends BaseViewModel {
+class ArticleScreenViewModel extends BaseViewModel with ActionErrorMixin {
   ArticleScreenViewModel({
     required this.preview,
     ArticleScreenInteractor? interactor,
@@ -19,7 +19,6 @@ class ArticleScreenViewModel extends BaseViewModel {
   int _viewCount;
   List<ArticleListItem> _similarArticles = const [];
   final Set<String> _savingSlugs = <String>{};
-  String? _actionErrorMessage;
 
   bool get hasDetail => _detail != null;
   bool get isSaved => _isSaved;
@@ -32,12 +31,6 @@ class ArticleScreenViewModel extends BaseViewModel {
   int get readingTime => _detail?.readingTime ?? preview.readingTime;
   int get viewCount => _detail?.viewCount ?? _viewCount;
   String get bodyHtml => _detail?.body ?? '';
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
-  }
 
   Future<void> load() async {
     setLoading();
@@ -99,7 +92,7 @@ class ArticleScreenViewModel extends BaseViewModel {
         _setSavedState(targetSlug, true);
       }
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       _savingSlugs.remove(targetSlug);
       notifyListeners();
@@ -147,8 +140,4 @@ class ArticleScreenViewModel extends BaseViewModel {
     return normalized.toList(growable: false);
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
-  }
 }

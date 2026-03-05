@@ -3,7 +3,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../core/base/base_view_model.dart';
 import '../interactor/progress_tab_interactor.dart';
 
-class ProgressTabViewModel extends BaseViewModel {
+class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   ProgressTabViewModel({ProgressTabInteractor? interactor})
     : _interactor = interactor ?? ProgressTabInteractor();
 
@@ -15,7 +15,6 @@ class ProgressTabViewModel extends BaseViewModel {
   ProgressGuide? _guide;
   List<ProgressContentItem> _recommendedArticles = const [];
   bool _isDetailLoading = false;
-  String? _actionErrorMessage;
 
   ProgressTabChildContext? get activeChild => _activeChild;
   DateTime? get childBirthDate => _activeChild?.birthDate;
@@ -32,12 +31,6 @@ class ProgressTabViewModel extends BaseViewModel {
     final selected = _selectedPeriod;
     if (selected == null) return false;
     return _interactor.isSamePeriod(selected, period);
-  }
-
-  String? consumeActionError() {
-    final error = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return error;
   }
 
   Future<void> load() async {
@@ -130,15 +123,11 @@ class ProgressTabViewModel extends BaseViewModel {
     } catch (error) {
       _guide = previousGuide;
       _recommendedArticles = previousRecommendedArticles;
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       _isDetailLoading = false;
       notifyListeners();
     }
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
-  }
 }

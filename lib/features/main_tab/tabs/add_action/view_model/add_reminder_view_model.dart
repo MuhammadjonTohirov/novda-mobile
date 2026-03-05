@@ -3,7 +3,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../core/base/base_view_model.dart';
 import '../interactor/add_reminder_interactor.dart';
 
-class AddReminderViewModel extends BaseViewModel {
+class AddReminderViewModel extends BaseViewModel with ActionErrorMixin {
   AddReminderViewModel({
     ActivityType? initialActivityType,
     DateTime? initialDueAt,
@@ -23,7 +23,6 @@ class AddReminderViewModel extends BaseViewModel {
   int? _selectedActivityTypeId;
   bool _isSubmitting = false;
   bool _isReady = false;
-  String? _actionErrorMessage;
   Reminder? _createdReminder;
 
   int? get childId => _childId;
@@ -55,12 +54,6 @@ class AddReminderViewModel extends BaseViewModel {
     if (_dueAt == null) return false;
     if (selectedActivityType == null) return false;
     return true;
-  }
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
   }
 
   Future<void> load() async {
@@ -130,8 +123,7 @@ class AddReminderViewModel extends BaseViewModel {
 
       return true;
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
-      notifyListeners();
+      setActionError(error);
       return false;
     } finally {
       _isSubmitting = false;
@@ -150,11 +142,4 @@ class AddReminderViewModel extends BaseViewModel {
     return null;
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) {
-      return error.message;
-    }
-
-    return error.toString();
-  }
 }

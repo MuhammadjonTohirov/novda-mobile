@@ -23,12 +23,18 @@ dependencies:
   provider: ^6.1.2
   modal_bottom_sheet: ^3.0.0
   flutter_html: ^3.0.0
+  cached_network_image: ^3.4.1
+  syncfusion_flutter_charts: 32.2.8
   table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  mocktail: ^1.0.3
+
+dependency_overrides:
+  path_provider_foundation: 2.5.1
 
 flutter:
   uses-material-design: true
@@ -39,6 +45,7 @@ flutter:
     - assets/images/tabs/
     - assets/images/profile/
     - assets/images/others/
+    - assets/images/kid/
 
   fonts:
     - family: Geist

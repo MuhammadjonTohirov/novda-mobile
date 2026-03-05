@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -24,7 +25,63 @@ extension ArticleScreenHtmlExtensions on BuildContext {
     final safeHtml = _sanitizeHtml(normalizedHtml);
 
     final colors = appColors;
-    return Html(data: safeHtml, style: _htmlStyles(colors, imageContentWidth));
+    return Html(
+      data: safeHtml,
+      style: _htmlStyles(colors, imageContentWidth),
+      extensions: [_cachedNetworkImageHtmlExtension(colors)],
+    );
+  }
+
+  ImageExtension _cachedNetworkImageHtmlExtension(AppColorScheme colors) {
+    return ImageExtension(
+      handleAssetImages: false,
+      handleDataImages: false,
+      builder: (context) {
+        final src = context.attributes['src']?.trim() ?? '';
+        final alt = context.attributes['alt'] ?? '';
+        final styled = context.styledElement;
+        final imageElement = styled is ImageElement ? styled : null;
+        final baseImageStyle = Style(
+          width: imageElement?.width,
+          height: imageElement?.height,
+        );
+        final imageStyle = context.style == null
+            ? baseImageStyle
+            : baseImageStyle.merge(context.style!);
+
+        if (src.isEmpty) {
+          return Text(
+            alt,
+            style:
+                context.style?.generateTextStyle() ??
+                AppTypography.bodyMRegular.copyWith(
+                  color: colors.textSecondary,
+                ),
+          );
+        }
+
+        return CssBoxWidget(
+          style: imageStyle,
+          childIsReplaced: true,
+          child: Image(
+            image: CachedNetworkImageProvider(src),
+            width: imageStyle.width?.value,
+            height: imageStyle.height?.value,
+            fit: BoxFit.fill,
+            errorBuilder: (_, __, ___) {
+              return Text(
+                alt,
+                style:
+                    context.style?.generateTextStyle() ??
+                    AppTypography.bodyMRegular.copyWith(
+                      color: colors.textSecondary,
+                    ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Map<String, Style> _htmlStyles(

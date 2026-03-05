@@ -27,6 +27,7 @@ extension HomeScreenUiChildExtensions on BuildContext {
     required ChildListItem? childInfo,
     required Child? childDetails,
     required VoidCallback onTap,
+    required VoidCallback onMetricTap,
   }) {
     final colors = appColors;
 
@@ -47,13 +48,18 @@ extension HomeScreenUiChildExtensions on BuildContext {
     final age = childDetails?.ageDisplay ?? childInfo?.ageDisplay ?? '-';
     final gender =
         childDetails?.gender ?? childInfo?.gender ?? Gender.undisclosed;
+    final ageInWeeks = childDetails?.ageInWeeks ?? childInfo?.ageInWeeks ?? 0;
     final measurements = childDetails?.latestMeasurements;
 
     return Column(
           children: [
             Row(
               children: [
-                Image.asset(gender.avatarAsset, width: 44, height: 44),
+                Image.asset(
+                  gender.avatarAssetByAgeInWeeks(ageInWeeks),
+                  width: 44,
+                  height: 44,
+                ),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +98,8 @@ extension HomeScreenUiChildExtensions on BuildContext {
                     height: 22,
                   ),
                   label: l10n.homeGender,
-                  value: _genderLabel(gender),
+                  value: gender.localizedLabel(l10n),
+                  onTap: onMetricTap,
                 ),
                 _homeInfoMetric(
                   icon: Image.asset(
@@ -102,6 +109,7 @@ extension HomeScreenUiChildExtensions on BuildContext {
                   ),
                   label: l10n.weight,
                   value: _formatMeasurement(measurements?.weight),
+                  onTap: onMetricTap,
                 ),
                 _homeInfoMetric(
                   icon: Image.asset(
@@ -111,6 +119,7 @@ extension HomeScreenUiChildExtensions on BuildContext {
                   ),
                   label: l10n.height,
                   value: _formatMeasurement(measurements?.height),
+                  onTap: onMetricTap,
                 ),
               ],
             ),
@@ -130,10 +139,11 @@ extension HomeScreenUiChildExtensions on BuildContext {
     required Widget icon,
     required String label,
     required String value,
+    VoidCallback? onTap,
   }) {
     final colors = appColors;
 
-    return Row(
+    final content = Row(
       children: [
         icon,
         const SizedBox(width: 8),
@@ -155,15 +165,13 @@ extension HomeScreenUiChildExtensions on BuildContext {
           ],
         ).expanded(),
       ],
-    ).expanded();
-  }
+    );
 
-  String _genderLabel(Gender gender) {
-    return switch (gender) {
-      Gender.boy => l10n.boy,
-      Gender.girl => l10n.girl,
-      _ => l10n.homeUndisclosed,
-    };
+    if (onTap != null) {
+      return content.onTap(onTap).expanded();
+    }
+
+    return content.expanded();
   }
 
   String _formatMeasurement(Measurement? measurement) {

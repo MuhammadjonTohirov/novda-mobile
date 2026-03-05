@@ -38,7 +38,15 @@ class _SplashScreenState extends State<SplashScreen> {
     final hasCompletedOnboarding = onboarding.hasCompletedOnboarding;
 
     if (isAuthenticated) {
-      final resolvedTheme = await services.resolveThemeVariant();
+      final profile = await services.sdk.user.getProfile();
+
+      if (!mounted) return;
+      services.setLocale(profile.preferredLocale.name);
+      context.appController.setLocale(Locale(profile.preferredLocale.name));
+
+      final resolvedTheme = await services.resolveThemeVariant(
+        selectedChildId: profile.lastActiveChild,
+      );
 
       if (!mounted) return;
       context.appController.setThemeVariant(resolvedTheme);

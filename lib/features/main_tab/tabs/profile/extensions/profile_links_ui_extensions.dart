@@ -64,7 +64,7 @@ extension ProfileLinksUiExtensions on BuildContext {
           children: [
             ColorFiltered(
               colorFilter: ColorFilter.mode(colors.accent, BlendMode.srcIn),
-              child: Image.asset(iconPath, width: 28, height: 28),
+              child: Image.asset(iconPath, width: 24, height: 24),
             ),
             const SizedBox(width: 14),
             Text(

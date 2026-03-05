@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
@@ -84,8 +85,8 @@ extension AddActionSheetContentUiListExtensions on BuildContext {
 
     if (url.isEmpty) return fallback;
 
-    return Image.network(
-      url,
+    return Image(
+      image: CachedNetworkImageProvider(url),
       width: 24,
       height: 24,
       fit: BoxFit.contain,

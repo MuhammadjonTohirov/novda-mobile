@@ -454,6 +454,78 @@ abstract class AppLocalizations {
   /// **'Edit details'**
   String get homeEditDetails;
 
+  /// No description provided for @bodyMeasurementsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body measurements'**
+  String get bodyMeasurementsTitle;
+
+  /// No description provided for @bodyMeasurementsHeightChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Height chart'**
+  String get bodyMeasurementsHeightChart;
+
+  /// No description provided for @bodyMeasurementsWeightChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight chart'**
+  String get bodyMeasurementsWeightChart;
+
+  /// No description provided for @bodyMeasurementsHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements history'**
+  String get bodyMeasurementsHistory;
+
+  /// No description provided for @bodyMeasurementsNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No measurements yet.'**
+  String get bodyMeasurementsNoData;
+
+  /// No description provided for @bodyMeasurementsActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurement actions'**
+  String get bodyMeasurementsActions;
+
+  /// No description provided for @bodyMeasurementsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get bodyMeasurementsEdit;
+
+  /// No description provided for @bodyMeasurementsEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit measurement'**
+  String get bodyMeasurementsEditTitle;
+
+  /// No description provided for @bodyMeasurementsDeleteEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete entry'**
+  String get bodyMeasurementsDeleteEntry;
+
+  /// No description provided for @bodyMeasurementsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this entry?'**
+  String get bodyMeasurementsDeleteTitle;
+
+  /// No description provided for @bodyMeasurementsDeleteDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight and height values for this record will be removed.'**
+  String get bodyMeasurementsDeleteDescription;
+
+  /// No description provided for @bodyMeasurementsAtLeastOneValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least one value (weight or height).'**
+  String get bodyMeasurementsAtLeastOneValue;
+
   /// No description provided for @childDetailsEditTitle.
   ///
   /// In en, this message translates to:
@@ -1041,6 +1113,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Parent'**
   String get profileParent;
+
+  /// No description provided for @parentDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent details'**
+  String get parentDetailsTitle;
+
+  /// No description provided for @parentDetailsPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get parentDetailsPhone;
+
+  /// No description provided for @parentDetailsFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent\'s full name'**
+  String get parentDetailsFullName;
+
+  /// No description provided for @parentDetailsSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get parentDetailsSaveChanges;
 
   /// No description provided for @profileMyBabies.
   ///

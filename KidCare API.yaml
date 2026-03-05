@@ -294,7 +294,7 @@ paths:
     get:
       operationId: activities_types_retrieve
       description: Get all active activity types with icons, colors, and feature flags
-        for UI rendering
+        for UI rendering, including reminder availability.
       summary: List Activity Types
       tags:
       - Activity Types
@@ -319,22 +319,37 @@ paths:
                       activity_types:
                       - id: 1
                         slug: feeding
+                        icon_url: https://api.example.com/media/icons/activities/icon_bottle.png
                         title: Feeding
                         description: Track feeding activities
-                        icon: utensils
                         color: '#4CAF50'
                         has_duration: true
                         has_quality: true
+                        is_reminder_enabled: true
+                        is_active: true
                         order: 1
                       - id: 2
                         slug: sleeping
+                        icon_url: https://api.example.com/media/icons/activities/icon_sleeping.png
                         title: Sleeping
                         description: Track sleep activities
-                        icon: moon
                         color: '#6B7FD7'
                         has_duration: true
                         has_quality: true
+                        is_reminder_enabled: true
+                        is_active: true
                         order: 2
+                      - id: 6
+                        slug: crying
+                        icon_url: https://api.example.com/media/icons/activities/icon_crying.png
+                        title: Crying
+                        description: Baby crying event
+                        color: '#FF7043'
+                        has_duration: false
+                        has_quality: false
+                        is_reminder_enabled: false
+                        is_active: true
+                        order: 6
                   summary: Success Response
           description: Activity types retrieved successfully
   /api/v1/articles:
@@ -1436,6 +1451,129 @@ paths:
                   summary: Not Found
           description: Child not found
   /api/v1/children/{child_id}/measurements:
+    get:
+      operationId: children_measurements_retrieve
+      description: Return weight/height chart blocks with grouped body measurement
+        history.
+      summary: Get Body Measurements Dashboard
+      parameters:
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: 'Maximum number of grouped history items (default: 20, max: 100)'
+      - in: query
+        name: period
+        schema:
+          type: string
+          enum:
+          - 1m
+          - 1y
+          - 3m
+          - 6m
+          - all
+          default: 6m
+        description: Chart period (1m/3m/6m/1y/all)
+      tags:
+      - Measurements
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      charts:
+                        weight:
+                          labels:
+                          - '2026-02-10'
+                          - '2026-02-17'
+                          values:
+                          - 12.2
+                          - 12.7
+                          unit: kg
+                          min: 12.2
+                          max: 12.7
+                          average: 12.45
+                        height:
+                          labels:
+                          - '2026-02-10'
+                          - '2026-02-17'
+                          values:
+                          - 87.0
+                          - 88.0
+                          unit: cm
+                          min: 87.0
+                          max: 88.0
+                          average: 87.5
+                      history:
+                      - taken_at: '2026-02-17T08:15:00Z'
+                        measurement_ids:
+                          weight: 10
+                          height: 11
+                          head_circumference: null
+                        weight:
+                          id: 10
+                          value: 12.7
+                          unit: kg
+                          taken_at: '2026-02-17T08:15:00Z'
+                        height:
+                          id: 11
+                          value: 88.0
+                          unit: cm
+                          taken_at: '2026-02-17T08:15:00Z'
+                        head_circumference: null
+                      latest:
+                        weight:
+                          id: 10
+                          value: 12.7
+                          unit: kg
+                          taken_at: '2026-02-17T08:15:00Z'
+                        height:
+                          id: 11
+                          value: 88.0
+                          unit: cm
+                          taken_at: '2026-02-17T08:15:00Z'
+                        head_circumference: null
+                  summary: Success Response
+          description: Measurement dashboard retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                InvalidPeriod:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Invalid period. Use 1m, 3m, 6m, 1y, or all
+                    data: null
+                  summary: Invalid Period
+          description: Invalid period parameter
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Child not found
     post:
       operationId: children_measurements_create
       description: Log a new measurement (weight, height, or head circumference) for
@@ -2091,13 +2229,29 @@ paths:
                     error: null
                     data:
                       id: 1
-                      child_id: 1
-                      category: medication
+                      child: 1
+                      child_name: Usmon
+                      activity_type: 5
+                      activity_type_detail:
+                        id: 5
+                        slug: medication
+                        icon_url: https://api.example.com/media/icons/activities/icon_give_pill.png
+                        color: '#596AB1'
+                        has_duration: false
+                        has_quality: false
+                        is_reminder_enabled: true
+                        is_active: true
+                        order: 5
+                        title: Medication
+                        description: Medication administration
                       due_at: '2024-11-01T14:00:00Z'
                       note: Give vitamin D drops
                       status: pending
+                      status_display: Pending
                       completed_at: null
+                      created_by: 2
                       created_at: '2024-10-30T10:00:00Z'
+                      updated_at: '2024-10-30T10:00:00Z'
                   summary: Success Response
           description: Reminder created successfully
         '400':
@@ -2106,14 +2260,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/StandardResponse'
               examples:
-                ValidationError:
+                MissingFieldValidationError:
                   value:
                     success: false
                     code: 400
                     message: null
-                    error: 'category: This field is required'
+                    error: This field is required.
                     data: null
-                  summary: Validation Error
+                  summary: Missing Field Validation Error
+                ReminderDisabledValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Activity type cannot be used for reminders
+                    data: null
+                  summary: Reminder Disabled Validation Error
           description: Validation error
         '404':
           content:
@@ -2494,6 +2656,79 @@ paths:
                   summary: Validation Error
           description: Validation error
   /api/v1/measurements/{measurement_id}:
+    patch:
+      operationId: measurements_partial_update
+      description: Partially update a specific measurement
+      summary: Patch Measurement
+      parameters:
+      - in: path
+        name: measurement_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Measurements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMeasurementPatchRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMeasurementPatchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMeasurementPatchRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      id: 1
+                      child: 1
+                      child_name: Ali
+                      type: weight
+                      value: '4.70'
+                      unit: kg
+                      taken_at: '2024-11-02T10:00:00Z'
+                      notes: Updated measurement
+                      created_at: '2024-11-01T10:05:00Z'
+                  summary: Success Response
+          description: Measurement updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Validation error
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+              examples:
+                NotFound:
+                  value:
+                    success: false
+                    code: 404
+                    message: null
+                    error: Measurement not found
+                    data: null
+                  summary: Not Found
+          description: Measurement not found
     delete:
       operationId: measurements_destroy
       description: Soft delete a specific measurement (for error correction)
@@ -3015,13 +3250,29 @@ paths:
                     error: null
                     data:
                       id: 1
-                      child_id: 1
-                      category: medication
+                      child: 1
+                      child_name: Usmon
+                      activity_type: 5
+                      activity_type_detail:
+                        id: 5
+                        slug: medication
+                        icon_url: https://api.example.com/media/icons/activities/icon_give_pill.png
+                        color: '#596AB1'
+                        has_duration: false
+                        has_quality: false
+                        is_reminder_enabled: true
+                        is_active: true
+                        order: 5
+                        title: Medication
+                        description: Medication administration
                       due_at: '2024-11-02T14:00:00Z'
                       note: Give vitamin D drops - updated
                       status: pending
+                      status_display: Pending
                       completed_at: null
+                      created_by: 2
                       created_at: '2024-10-30T10:00:00Z'
+                      updated_at: '2024-10-31T11:00:00Z'
                   summary: Success Response
           description: Reminder updated successfully
         '400':
@@ -3030,14 +3281,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/StandardResponse'
               examples:
-                ValidationError:
+                DatetimeValidationError:
                   value:
                     success: false
                     code: 400
                     message: null
                     error: 'due_at: Enter a valid date/time'
                     data: null
-                  summary: Validation Error
+                  summary: Datetime Validation Error
+                ReminderDisabledValidationError:
+                  value:
+                    success: false
+                    code: 400
+                    message: null
+                    error: Activity type cannot be used for reminders
+                    data: null
+                  summary: Reminder Disabled Validation Error
           description: Validation error
         '404':
           content:
@@ -3476,6 +3735,32 @@ components:
             * `warm` - Warm
             * `calm` - Calm
             * `auto` - Auto
+    PatchedMeasurementPatchRequest:
+      type: object
+      description: Serializer for patching existing measurements.
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Measurement type
+          description: |-
+            Type of measurement
+
+            * `weight` - Weight
+            * `height` - Height
+            * `head_circumference` - Head Circumference
+        value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          description: Measurement value
+        taken_at:
+          type: string
+          format: date-time
+          description: When the measurement was taken (UTC, cannot be in the future)
+        notes:
+          type: string
+          description: Optional notes about this measurement
     PatchedReminderUpdateRequest:
       type: object
       description: Serializer for updating Reminder.

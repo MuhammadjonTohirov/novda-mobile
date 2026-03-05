@@ -191,6 +191,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeEditDetails => 'Edit details';
 
   @override
+  String get bodyMeasurementsTitle => 'Body measurements';
+
+  @override
+  String get bodyMeasurementsHeightChart => 'Height chart';
+
+  @override
+  String get bodyMeasurementsWeightChart => 'Weight chart';
+
+  @override
+  String get bodyMeasurementsHistory => 'Measurements history';
+
+  @override
+  String get bodyMeasurementsNoData => 'No measurements yet.';
+
+  @override
+  String get bodyMeasurementsActions => 'Measurement actions';
+
+  @override
+  String get bodyMeasurementsEdit => 'Edit';
+
+  @override
+  String get bodyMeasurementsEditTitle => 'Edit measurement';
+
+  @override
+  String get bodyMeasurementsDeleteEntry => 'Delete entry';
+
+  @override
+  String get bodyMeasurementsDeleteTitle => 'Delete this entry?';
+
+  @override
+  String get bodyMeasurementsDeleteDescription =>
+      'Weight and height values for this record will be removed.';
+
+  @override
+  String get bodyMeasurementsAtLeastOneValue =>
+      'Enter at least one value (weight or height).';
+
+  @override
   String get childDetailsEditTitle => 'Edit baby\'s details';
 
   @override
@@ -519,6 +557,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileParent => 'Parent';
+
+  @override
+  String get parentDetailsTitle => 'Parent details';
+
+  @override
+  String get parentDetailsPhone => 'Phone';
+
+  @override
+  String get parentDetailsFullName => 'Parent\'s full name';
+
+  @override
+  String get parentDetailsSaveChanges => 'Save changes';
 
   @override
   String get profileMyBabies => 'My babies';

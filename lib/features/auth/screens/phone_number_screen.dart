@@ -62,6 +62,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
                   switch (route) {
                     case PostVerificationRoute.goHome:
+                      final preferredLocale =
+                          await viewModel.resolvePreferredLocale();
+                      if (!mounted) return;
+                      context.appController.setLocale(
+                        Locale(preferredLocale.name),
+                      );
+
                       final resolvedTheme = await viewModel
                           .resolveThemeVariant();
                       if (!mounted) return;
@@ -84,33 +91,26 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   void _goToBabyGenderScreen() {
     final viewModel = context.read<AuthorizationViewModel>();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyGenderScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyGenderScreen(),
       ),
     );
   }
 
   void _goToChildrenSelectionScreen() {
     final viewModel = context.read<AuthorizationViewModel>();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const ChildrenSelectionScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const ChildrenSelectionScreen(),
       ),
     );
   }
 
   void _goToHomeScreen() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainTabScreen()),
-      (route) => false,
-    );
+    context.pushRouteAndRemoveAll(const MainTabScreen());
   }
 
   @override

@@ -192,6 +192,44 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeEditDetails => 'Изменить данные';
 
   @override
+  String get bodyMeasurementsTitle => 'Измерения тела';
+
+  @override
+  String get bodyMeasurementsHeightChart => 'График роста';
+
+  @override
+  String get bodyMeasurementsWeightChart => 'График веса';
+
+  @override
+  String get bodyMeasurementsHistory => 'История измерений';
+
+  @override
+  String get bodyMeasurementsNoData => 'Пока нет измерений.';
+
+  @override
+  String get bodyMeasurementsActions => 'Действия с измерением';
+
+  @override
+  String get bodyMeasurementsEdit => 'Редактировать';
+
+  @override
+  String get bodyMeasurementsEditTitle => 'Редактировать измерение';
+
+  @override
+  String get bodyMeasurementsDeleteEntry => 'Удалить запись';
+
+  @override
+  String get bodyMeasurementsDeleteTitle => 'Удалить эту запись?';
+
+  @override
+  String get bodyMeasurementsDeleteDescription =>
+      'Значения веса и роста для этой записи будут удалены.';
+
+  @override
+  String get bodyMeasurementsAtLeastOneValue =>
+      'Введите хотя бы одно значение (вес или рост).';
+
+  @override
   String get childDetailsEditTitle => 'Изменить данные малыша';
 
   @override
@@ -522,6 +560,18 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileParent => 'Родитель';
+
+  @override
+  String get parentDetailsTitle => 'Данные родителя';
+
+  @override
+  String get parentDetailsPhone => 'Телефон';
+
+  @override
+  String get parentDetailsFullName => 'Полное имя родителя';
+
+  @override
+  String get parentDetailsSaveChanges => 'Сохранить изменения';
 
   @override
   String get profileMyBabies => 'Мои дети';

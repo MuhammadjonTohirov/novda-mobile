@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:novda/core/app/app.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +11,7 @@ import '../add_action/add_activity_screen.dart';
 import '../add_action/add_reminder_screen.dart';
 import '../profile/child_details/child_details_screen.dart';
 import 'activity_history/activity_history_screen.dart';
+import 'body_measurements/body_measurements_screen.dart';
 import 'extensions/home_screen_ui_extensions.dart';
 import 'interactors/home_interactor.dart';
 import 'reminders/reminders_screen.dart';
@@ -57,7 +60,9 @@ class HomeScreen extends StatelessWidget {
                     .homeChildInfoCard(
                       childInfo: viewModel.activeChild,
                       childDetails: viewModel.activeChildDetails,
-                      onTap: () => _openChildDetails(context, viewModel),
+                      onTap: () => _openChildSelectorSheet(context, viewModel),
+                      onMetricTap: () =>
+                          _openBodyMeasurements(context, viewModel),
                     )
                     .paddingOnly(left: 16, right: 16),
                 const SizedBox(height: 20),
@@ -121,12 +126,10 @@ class HomeScreen extends StatelessWidget {
       return;
     }
 
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ActivityHistoryScreen(
-          childId: child.id,
-          initialTypes: viewModel.activityTypes,
-        ),
+    await context.pushRoute(
+      ActivityHistoryScreen(
+        childId: child.id,
+        initialTypes: viewModel.activityTypes,
       ),
     );
 
@@ -144,8 +147,8 @@ class HomeScreen extends StatelessWidget {
       return;
     }
 
-    final createdActivity = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => AddActivityScreen(activityType: type)),
+    final createdActivity = await context.pushRoute(
+      AddActivityScreen(activityType: type),
     );
 
     if (!context.mounted || createdActivity == null) return;
@@ -161,23 +164,55 @@ class HomeScreen extends StatelessWidget {
     BuildContext context,
     HomeViewModel viewModel,
   ) async {
-    final saved = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        builder: (_) => ChildDetailsScreen(childId: viewModel.activeChild?.id),
-      ),
+    final saved = await context.pushRoute<bool>(
+      ChildDetailsScreen(childId: viewModel.activeChild?.id),
     );
 
     if (!context.mounted || saved != true) return;
     await viewModel.load();
   }
 
+  Future<void> _openBodyMeasurements(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    final child = viewModel.activeChild;
+    if (child == null) {
+      context.showSnackMessage(context.l10n.homeNoActiveChildSelected);
+      return;
+    }
+
+    await context.pushRoute(
+      BodyMeasurementsScreen(childId: child.id),
+    );
+
+    if (!context.mounted) return;
+    await viewModel.load();
+  }
+
+  Future<void> _openChildSelectorSheet(
+    BuildContext context,
+    HomeViewModel viewModel,
+  ) async {
+    final selectedChildId = await context.showHomeChildSelectorSheet(
+      children: viewModel.children,
+      selectedChildId: viewModel.activeChild?.id,
+    );
+
+    if (!context.mounted || selectedChildId == null) return;
+    final resolvedTheme = await viewModel.selectChild(selectedChildId);
+    if (!context.mounted) return;
+
+    if (resolvedTheme != null) {
+      context.appController.setThemeVariant(resolvedTheme);
+    }
+  }
+
   Future<void> _openAllReminders(
     BuildContext context,
     HomeViewModel viewModel,
   ) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const RemindersScreen()));
+    await context.pushRoute(const RemindersScreen());
 
     if (!context.mounted) return;
     await viewModel.load();
@@ -187,9 +222,7 @@ class HomeScreen extends StatelessWidget {
     BuildContext context,
     HomeViewModel viewModel,
   ) async {
-    final createdReminder = await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const AddReminderScreen()));
+    final createdReminder = await context.pushRoute(const AddReminderScreen());
 
     if (!context.mounted || createdReminder == null) return;
 

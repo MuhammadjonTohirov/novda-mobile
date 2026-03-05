@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
@@ -103,8 +104,8 @@ extension LearnArticlesUiExtensions on BuildContext {
       return fallback;
     }
 
-    return Image.network(
-      imageUrl,
+    return Image(
+      image: CachedNetworkImageProvider(imageUrl),
       width: width,
       height: height,
       fit: BoxFit.cover,

@@ -5,7 +5,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../core/base/base_view_model.dart';
 import '../interactor/learn_tab_interactor.dart';
 
-class LearnTabViewModel extends BaseViewModel {
+class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
   LearnTabViewModel({LearnTabInteractor? interactor})
     : _interactor = interactor ?? LearnTabInteractor();
 
@@ -21,7 +21,6 @@ class LearnTabViewModel extends BaseViewModel {
 
   String _query = '';
   String? _selectedTopicSlug;
-  String? _actionErrorMessage;
   Timer? _searchDebounce;
 
   List<Topic> get topics => _topics;
@@ -56,12 +55,6 @@ class LearnTabViewModel extends BaseViewModel {
     }
 
     return count;
-  }
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
   }
 
   Future<void> load() async {
@@ -178,7 +171,7 @@ class LearnTabViewModel extends BaseViewModel {
       setSuccess();
     } catch (error) {
       if (hasExistingContent) {
-        _actionErrorMessage = _errorText(error);
+        setActionError(error);
         notifyListeners();
         return;
       }
@@ -203,7 +196,7 @@ class LearnTabViewModel extends BaseViewModel {
         _savedSlugs.add(slug);
       }
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       _savingSlugs.remove(slug);
       notifyListeners();
@@ -223,11 +216,6 @@ class LearnTabViewModel extends BaseViewModel {
     return left.title.toLowerCase().compareTo(right.title.toLowerCase());
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
-  }
-
   Future<void> _saveRecentQuery(String query) async {
     try {
       _recentQueries = await _interactor.saveRecentQuery(query);
@@ -242,7 +230,7 @@ class LearnTabViewModel extends BaseViewModel {
       _recentQueries = await _interactor.removeRecentQueryAt(index);
       notifyListeners();
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
       notifyListeners();
     }
   }

@@ -34,9 +34,9 @@ class _ActivitiesGrid extends StatelessWidget {
       itemCount: types.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1.31,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 1.4,
       ),
       itemBuilder: (context, index) {
         final type = types[index];
@@ -104,7 +104,7 @@ class _ActivityTypeTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: baseColor.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: baseColor.withValues(alpha: 0.20)),
       ),
       padding: const EdgeInsets.all(14),
@@ -175,8 +175,8 @@ class _ActivityTypeTile extends StatelessWidget {
     // if (_isOtherType()) return fallbackIcon;
     if (url.isEmpty) return fallbackIcon;
 
-    return Image.network(
-      url,
+    return Image(
+      image: CachedNetworkImageProvider(url),
       width: 32,
       height: 32,
       fit: BoxFit.fill,

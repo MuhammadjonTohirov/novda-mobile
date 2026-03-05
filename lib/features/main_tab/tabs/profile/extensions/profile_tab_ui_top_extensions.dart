@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:novda_sdk/novda_sdk.dart';
 
 import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
@@ -88,7 +87,9 @@ extension ProfileTabUiTopExtensions on BuildContext {
                   Row(
                     children: [
                       Image.asset(
-                        _profileAvatarByGender(activeChild.gender),
+                        activeChild.gender.avatarAssetByAgeInWeeks(
+                          activeChild.ageInWeeks,
+                        ),
                         width: 44,
                         height: 44,
                       ),
@@ -131,13 +132,5 @@ extension ProfileTabUiTopExtensions on BuildContext {
         .paddingOnly(left: 16, right: 16, bottom: 16)
         .safeArea(bottom: false)
         .container(color: colors.bgSoft);
-  }
-
-  String _profileAvatarByGender(Gender gender) {
-    return switch (gender) {
-      Gender.boy => 'assets/images/img_boy_avatar.png',
-      Gender.girl => 'assets/images/img_girl_avatar.png',
-      _ => 'assets/images/icon_baby.png',
-    };
   }
 }

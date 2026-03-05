@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:novda_sdk/novda_sdk.dart';
@@ -19,8 +20,8 @@ extension ActivityHistoryScreenUiMetadataExtensions on BuildContext {
 
     if (iconUrl.isEmpty) return fallback;
 
-    return Image.network(
-      iconUrl,
+    return Image(
+      image: CachedNetworkImageProvider(iconUrl),
       width: size,
       height: size,
       fit: BoxFit.contain,

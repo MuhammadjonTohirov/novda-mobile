@@ -7,6 +7,7 @@ import 'child_details/child_details_screen.dart';
 import 'extensions/profile_tab_ui_extensions.dart';
 import 'follow_us/follow_us_screen.dart';
 import 'legal_documents/legal_documents_screen.dart';
+import 'parent_details/parent_details_screen.dart';
 import 'saved_articles/saved_articles_screen.dart';
 import 'settings/settings_screen.dart';
 import 'support/support_screen.dart';
@@ -38,7 +39,7 @@ class ProfileTabContent extends StatelessWidget {
             viewModel: viewModel,
             onLogoutTap: () => _openLogoutSheet(context),
             onParentTap: () =>
-                context.showSnackMessage(context.l10n.homeComingSoon),
+                _openParentDetails(context, viewModel: viewModel),
             onAddChildTap: () =>
                 _openChildDetails(context, viewModel: viewModel),
             onChildTap: () => _openChildDetails(
@@ -61,9 +62,7 @@ class ProfileTabContent extends StatelessWidget {
   }
 
   void _openSettings(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
+    context.pushRoute(const SettingsScreen());
   }
 
   Future<void> _openLogoutSheet(BuildContext context) async {
@@ -89,8 +88,20 @@ class ProfileTabContent extends StatelessWidget {
     required ProfileTabViewModel viewModel,
     int? childId,
   }) async {
-    final saved = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => ChildDetailsScreen(childId: childId)),
+    final saved = await context.pushRoute<bool>(
+      ChildDetailsScreen(childId: childId),
+    );
+
+    if (!context.mounted || saved != true) return;
+    await viewModel.load();
+  }
+
+  Future<void> _openParentDetails(
+    BuildContext context, {
+    required ProfileTabViewModel viewModel,
+  }) async {
+    final saved = await context.pushRoute<bool>(
+      const ParentDetailsScreen(),
     );
 
     if (!context.mounted || saved != true) return;
@@ -101,29 +112,21 @@ class ProfileTabContent extends StatelessWidget {
     BuildContext context, {
     required ProfileTabViewModel viewModel,
   }) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const SavedArticlesScreen()));
+    await context.pushRoute(const SavedArticlesScreen());
 
     if (!context.mounted) return;
     await viewModel.load();
   }
 
   Future<void> _openFollowUs(BuildContext context) {
-    return Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const FollowUsScreen()));
+    return context.pushRoute(const FollowUsScreen());
   }
 
   Future<void> _openSupport(BuildContext context) {
-    return Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const SupportScreen()));
+    return context.pushRoute(const SupportScreen());
   }
 
   Future<void> _openLegalDocuments(BuildContext context) {
-    return Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const LegalDocumentsScreen()));
+    return context.pushRoute(const LegalDocumentsScreen());
   }
 }

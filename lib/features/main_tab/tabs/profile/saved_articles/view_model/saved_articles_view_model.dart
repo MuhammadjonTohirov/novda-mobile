@@ -5,7 +5,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import '../../../../../../core/base/base_view_model.dart';
 import '../interactor/saved_articles_interactor.dart';
 
-class SavedArticlesViewModel extends BaseViewModel {
+class SavedArticlesViewModel extends BaseViewModel with ActionErrorMixin {
   SavedArticlesViewModel({SavedArticlesInteractor? interactor})
     : _interactor = interactor ?? SavedArticlesInteractor();
 
@@ -13,17 +13,10 @@ class SavedArticlesViewModel extends BaseViewModel {
 
   List<ArticleListItem> _articles = const [];
   final Set<String> _savingSlugs = <String>{};
-  String? _actionErrorMessage;
 
   List<ArticleListItem> get articles => _articles;
   bool get hasContent => _articles.isNotEmpty;
   bool isSavingArticle(String slug) => _savingSlugs.contains(slug);
-
-  String? consumeActionError() {
-    final message = _actionErrorMessage;
-    _actionErrorMessage = null;
-    return message;
-  }
 
   Future<void> load() {
     return _load(withLoading: true);
@@ -50,7 +43,7 @@ class SavedArticlesViewModel extends BaseViewModel {
       setSuccess();
     } catch (error) {
       if (hasExistingContent) {
-        _actionErrorMessage = _errorText(error);
+        setActionError(error);
         notifyListeners();
         return;
       }
@@ -71,15 +64,11 @@ class SavedArticlesViewModel extends BaseViewModel {
           .where((savedArticle) => savedArticle.slug != slug)
           .toList(growable: false);
     } catch (error) {
-      _actionErrorMessage = _errorText(error);
+      setActionError(error);
     } finally {
       _savingSlugs.remove(slug);
       notifyListeners();
     }
   }
 
-  String _errorText(Object error) {
-    if (error is ApiException) return error.message;
-    return error.toString();
-  }
 }

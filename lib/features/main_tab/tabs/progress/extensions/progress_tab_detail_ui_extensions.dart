@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:novda_sdk/novda_sdk.dart';
@@ -317,8 +318,8 @@ extension ProgressTabDetailUiExtensions on BuildContext {
             ).expanded(),
             if (coverImage != null) ...[
               const SizedBox(width: 10),
-              Image.network(
-                coverImage,
+              Image(
+                image: CachedNetworkImageProvider(coverImage),
                 width: 82,
                 height: 54,
                 fit: BoxFit.cover,

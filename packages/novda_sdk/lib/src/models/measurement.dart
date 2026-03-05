@@ -185,6 +185,28 @@ class MeasurementCreateRequest {
   };
 }
 
+/// Request for patching an existing measurement
+class MeasurementPatchRequest {
+  const MeasurementPatchRequest({
+    this.type,
+    this.value,
+    this.takenAt,
+    this.notes,
+  });
+
+  final MeasurementType? type;
+  final double? value;
+  final DateTime? takenAt;
+  final String? notes;
+
+  Map<String, dynamic> toJson() => {
+    if (type != null) 'type': type!.value,
+    if (value != null) 'value': value.toString(),
+    if (takenAt != null) 'taken_at': takenAt!.toUtc().toIso8601String(),
+    if (notes != null) 'notes': notes,
+  };
+}
+
 /// Query parameters for measurement list
 class MeasurementListQuery {
   const MeasurementListQuery({this.type, this.from, this.to, this.limit});

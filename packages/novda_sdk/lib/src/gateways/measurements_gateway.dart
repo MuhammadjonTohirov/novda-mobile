@@ -1,12 +1,23 @@
 import '../core/network/api_client.dart';
+import '../core/network/json_helpers.dart';
 import '../models/measurement.dart';
 
 /// Gateway interface for measurement operations
 abstract interface class MeasurementsGateway {
-  Future<List<Measurement>> getMeasurements(int childId, MeasurementListQuery query);
+  Future<List<Measurement>> getMeasurements(
+    int childId,
+    MeasurementListQuery query,
+  );
   Future<LatestMeasurements> getLatestMeasurements(int childId);
   Future<ChartData> getChartData(int childId, ChartDataQuery query);
-  Future<Measurement> createMeasurement(int childId, MeasurementCreateRequest request);
+  Future<Measurement> createMeasurement(
+    int childId,
+    MeasurementCreateRequest request,
+  );
+  Future<Measurement> updateMeasurement(
+    int measurementId,
+    MeasurementPatchRequest request,
+  );
   Future<void> deleteMeasurement(int measurementId);
 }
 
@@ -24,9 +35,10 @@ class MeasurementsGatewayImpl implements MeasurementsGateway {
     return _client.get(
       '/api/v1/children/$childId/measurements/list',
       queryParameters: query.toQueryParams(),
-      fromJson: (json) => (json as List<dynamic>)
-          .map((e) => Measurement.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      fromJson: (json) => extractList(
+        json,
+        candidateKeys: const ['measurements', 'results'],
+      ).map((e) => Measurement.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 
@@ -55,6 +67,18 @@ class MeasurementsGatewayImpl implements MeasurementsGateway {
   ) async {
     return _client.post(
       '/api/v1/children/$childId/measurements',
+      data: request.toJson(),
+      fromJson: (json) => Measurement.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<Measurement> updateMeasurement(
+    int measurementId,
+    MeasurementPatchRequest request,
+  ) async {
+    return _client.patch(
+      '/api/v1/measurements/$measurementId',
       data: request.toJson(),
       fromJson: (json) => Measurement.fromJson(json as Map<String, dynamic>),
     );

@@ -1,4 +1,3 @@
-import 'package:novda/core/app/app.dart';
 import 'package:novda/core/services/services.dart';
 import 'package:novda_sdk/novda_sdk.dart';
 
@@ -27,10 +26,6 @@ class SettingsInteractor {
   Future<void> deleteAccount() async {
     await _userUseCase.deleteAccount();
     await services.tokenStorage.clearTokens();
-  }
-
-  Future<ThemeVariant> resolveThemeVariant({int? selectedChildId}) {
-    return services.resolveThemeVariant(selectedChildId: selectedChildId);
   }
 
   void setApiLocale(String localeCode) {

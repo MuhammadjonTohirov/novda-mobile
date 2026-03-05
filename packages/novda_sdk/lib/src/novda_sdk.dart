@@ -140,7 +140,7 @@ class NovdaSDK {
   }
 
   /// Create a new instance of NovdaSDK with custom use case implementations.
-  /// Useful for testing.
+  /// Useful for testing or wrapping use cases with decorators (e.g. caching).
   factory NovdaSDK.withUseCases({
     required AuthUseCase auth,
     required UserUseCase user,
@@ -151,6 +151,7 @@ class NovdaSDK {
     required RemindersUseCase reminders,
     required ArticlesUseCase articles,
     required ArticlesV2UseCase articlesV2,
+    LocaleConfigurable? localeConfigurable,
   }) {
     return NovdaSDK._(
       auth: auth,
@@ -162,6 +163,7 @@ class NovdaSDK {
       reminders: reminders,
       articles: articles,
       articlesV2: articlesV2,
+      localeConfigurable: localeConfigurable,
     );
   }
 }

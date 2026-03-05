@@ -62,28 +62,27 @@ class _ChildrenSelectionScreenState extends State<ChildrenSelectionScreen> {
 
     if (!mounted || !success) return;
 
+    final preferredLocale = await viewModel.resolvePreferredLocale();
+    if (!mounted) return;
+    context.appController.setLocale(Locale(preferredLocale.name));
+
     final resolvedTheme = await viewModel.resolveThemeVariant(
       selectedChildId: _selectedChildId,
     );
     if (!mounted) return;
     context.appController.setThemeVariant(resolvedTheme);
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainTabScreen()),
-      (route) => false,
-    );
+    context.pushRouteAndRemoveAll(const MainTabScreen());
   }
 
   void _addNewChild() {
     final viewModel = context.read<AuthorizationViewModel>();
     viewModel.clearRegistrationData();
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: viewModel,
-          child: const BabyGenderScreen(),
-        ),
+    context.pushRoute(
+      ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const BabyGenderScreen(),
       ),
     );
   }
@@ -205,7 +204,11 @@ class _ChildCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.asset(child.gender.iconAsset, width: 40, height: 40),
+            Image.asset(
+              child.gender.avatarAssetByAgeInWeeks(child.ageInWeeks),
+              width: 40,
+              height: 40,
+            ),
             const SizedBox(width: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,4 +259,3 @@ class _AddChildButton extends StatelessWidget {
     );
   }
 }
-

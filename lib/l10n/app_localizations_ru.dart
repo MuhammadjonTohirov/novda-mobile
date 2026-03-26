@@ -677,4 +677,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String homeTabPlaceholder(Object tab) {
     return 'Вкладка: $tab';
   }
+
+  @override
+  String get registrationFailed => 'Ошибка регистрации';
+
+  @override
+  String get activityTypeOther => 'Другое';
 }

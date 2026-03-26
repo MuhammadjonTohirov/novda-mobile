@@ -172,7 +172,6 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
     } catch (error) {
       if (hasExistingContent) {
         setActionError(error);
-        notifyListeners();
         return;
       }
 
@@ -231,7 +230,6 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
       notifyListeners();
     } catch (error) {
       setActionError(error);
-      notifyListeners();
     }
   }
 }

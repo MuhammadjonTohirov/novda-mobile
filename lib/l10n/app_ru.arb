@@ -341,5 +341,7 @@
     "placeholders": {
       "tab": {}
     }
-  }
+  },
+  "registrationFailed": "Ошибка регистрации",
+  "activityTypeOther": "Другое"
 }

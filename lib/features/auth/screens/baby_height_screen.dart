@@ -69,7 +69,7 @@ class _BabyHeightScreenState extends State<BabyHeightScreen> {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(viewModel.errorMessage ?? 'Registration failed'),
+          content: Text(viewModel.errorMessage ?? context.l10n.registrationFailed),
           backgroundColor: context.appColors.error,
         ),
       );

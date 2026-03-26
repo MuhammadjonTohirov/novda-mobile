@@ -44,7 +44,6 @@ class SavedArticlesViewModel extends BaseViewModel with ActionErrorMixin {
     } catch (error) {
       if (hasExistingContent) {
         setActionError(error);
-        notifyListeners();
         return;
       }
 

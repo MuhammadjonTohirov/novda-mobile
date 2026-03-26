@@ -125,7 +125,9 @@ class ServiceLocator {
       );
 
   void _assertInitialized() {
-    assert(_initialized, 'ServiceLocator must be initialized before use');
+    if (!_initialized) {
+      throw StateError('ServiceLocator must be initialized before use');
+    }
   }
 }
 

@@ -680,4 +680,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String homeTabPlaceholder(Object tab) {
     return '$tab bo\'limi';
   }
+
+  @override
+  String get registrationFailed => 'Ro\'yxatdan o\'tishda xatolik';
+
+  @override
+  String get activityTypeOther => 'Boshqa';
 }

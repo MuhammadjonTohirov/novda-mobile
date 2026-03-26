@@ -110,20 +110,16 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
     notifyListeners();
 
     try {
-      final guideFuture = _interactor.loadPeriodDetail(
-        child: child,
-        period: period,
-      );
-      final recommendedFuture = _interactor.loadRecommendedArticles(
-        child: child,
-        period: period,
-      );
-      _guide = await guideFuture;
-      _recommendedArticles = await recommendedFuture;
+      final results = await Future.wait([
+        _interactor.loadPeriodDetail(child: child, period: period),
+        _interactor.loadRecommendedArticles(child: child, period: period),
+      ]);
+      _guide = results[0] as ProgressGuide?;
+      _recommendedArticles = results[1] as List<ProgressContentItem>;
     } catch (error) {
       _guide = previousGuide;
       _recommendedArticles = previousRecommendedArticles;
-      setActionError(error);
+      setActionErrorSilently(error);
     } finally {
       _isDetailLoading = false;
       notifyListeners();

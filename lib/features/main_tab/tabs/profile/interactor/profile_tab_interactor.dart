@@ -29,28 +29,28 @@ class ProfileTabData {
 
 class ProfileTabInteractor {
   ProfileTabInteractor({
+    ActiveChildResolver? activeChildResolver,
     UserUseCase? userUseCase,
-    ChildrenUseCase? childrenUseCase,
-  }) : _userUseCase = userUseCase ?? services.sdk.user,
-       _childrenUseCase = childrenUseCase ?? services.sdk.children;
+  }) : _activeChildResolver = activeChildResolver ?? ActiveChildResolver(),
+       _userUseCase = userUseCase ?? services.sdk.user;
 
+  final ActiveChildResolver _activeChildResolver;
   final UserUseCase _userUseCase;
-  final ChildrenUseCase _childrenUseCase;
 
   Future<ProfileTabData> loadProfileData() async {
     final results = await Future.wait([
       _userUseCase.getProfile(),
-      _childrenUseCase.getChildren(),
+      _activeChildResolver.resolveActiveChild(),
     ]);
 
     final user = results[0] as User;
-    final children = results[1] as List<ChildListItem>;
-    final activeChild = _resolveActiveChild(
-      children: children,
-      activeChildId: user.lastActiveChild,
-    );
+    final activeChild = results[1] as ChildListItem?;
 
-    final savedArticlesCount = await _loadSavedArticlesCount();
+    final childrenFuture = services.sdk.children.getChildren();
+    final savedCountFuture = _loadSavedArticlesCount();
+
+    final children = await childrenFuture;
+    final savedArticlesCount = await savedCountFuture;
 
     return ProfileTabData(
       user: user,
@@ -67,19 +67,5 @@ class ProfileTabInteractor {
     } catch (_) {
       return 0;
     }
-  }
-
-  ChildListItem? _resolveActiveChild({
-    required List<ChildListItem> children,
-    required int? activeChildId,
-  }) {
-    if (children.isEmpty) return null;
-    if (activeChildId == null) return children.first;
-
-    for (final child in children) {
-      if (child.id == activeChildId) return child;
-    }
-
-    return children.first;
   }
 }

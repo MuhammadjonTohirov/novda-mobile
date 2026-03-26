@@ -20,34 +20,20 @@ class ProgressTabChildContext {
 
 class ProgressTabInteractor {
   ProgressTabInteractor({
-    UserUseCase? userUseCase,
-    ChildrenUseCase? childrenUseCase,
+    ActiveChildResolver? activeChildResolver,
     ProgressUseCase? progressUseCase,
     ArticlesV2UseCase? articlesV2UseCase,
-  }) : _userUseCase = userUseCase ?? services.sdk.user,
-       _childrenUseCase = childrenUseCase ?? services.sdk.children,
+  }) : _activeChildResolver = activeChildResolver ?? ActiveChildResolver(),
        _progressUseCase = progressUseCase ?? services.sdk.progress,
        _articlesV2UseCase = articlesV2UseCase ?? services.sdk.articlesV2;
 
-  final UserUseCase _userUseCase;
-  final ChildrenUseCase _childrenUseCase;
+  final ActiveChildResolver _activeChildResolver;
   final ProgressUseCase _progressUseCase;
   final ArticlesV2UseCase _articlesV2UseCase;
 
   Future<ProgressTabChildContext?> resolveActiveChild() async {
-    final results = await Future.wait([
-      _userUseCase.getProfile(),
-      _childrenUseCase.getChildren(),
-    ]);
-
-    final user = results[0] as User;
-    final children = results[1] as List<ChildListItem>;
-    if (children.isEmpty) return null;
-
-    final activeChild = _resolveActiveChild(
-      children: children,
-      activeChildId: user.lastActiveChild,
-    );
+    final activeChild = await _activeChildResolver.resolveActiveChild();
+    if (activeChild == null) return null;
 
     return ProgressTabChildContext(
       id: activeChild.id,
@@ -66,23 +52,44 @@ class ProgressTabInteractor {
   Future<ProgressGuide> loadPeriodDetail({
     required ProgressTabChildContext child,
     required ProgressPeriod period,
-  }) {
-    if (period.periodUnit == ProgressPeriodUnit.unknown) {
-      return loadCurrentProgress(child: child);
-    }
+  }) async {
+    final sharedContent = await loadSharedPeriodContent(
+      child: child,
+      period: period,
+    );
+    final suggestions = await loadPeriodSuggestions(
+      child: child,
+      period: period,
+    );
 
-    return _progressUseCase.getPeriodDetail(
-      periodUnit: period.periodUnit,
-      periodIndex: period.periodIndex,
+    return applySuggestionsToGuide(
+      guide: buildGuideFromSharedContent(sharedContent),
+      suggestions: suggestions,
     );
   }
 
-  Future<ProgressGuide> loadCurrentProgress({
+  Future<ProgressSharedPeriodContent> loadSharedPeriodContent({
     required ProgressTabChildContext child,
+    required ProgressPeriod period,
   }) {
-    return _progressUseCase.getCurrentProgress(
-      ageDays: ageInDays(child.birthDate),
+    return _progressUseCase.getSharedPeriodContent(
+      periodUnit: period.periodUnit,
+      periodIndex: period.periodIndex,
+      gender: _mapProgressGender(child.gender),
     );
+  }
+
+  Future<List<ProgressContentItem>> loadPeriodSuggestions({
+    required ProgressTabChildContext child,
+    required ProgressPeriod period,
+  }) async {
+    final childSuggestions = await _progressUseCase.getChildPeriodSuggestions(
+      childId: child.id,
+      periodUnit: period.periodUnit,
+      periodIndex: period.periodIndex,
+    );
+
+    return childSuggestions.suggestions;
   }
 
   Future<List<ProgressContentItem>> loadRecommendedArticles({
@@ -111,19 +118,6 @@ class ProgressTabInteractor {
     }
   }
 
-  ChildListItem _resolveActiveChild({
-    required List<ChildListItem> children,
-    required int? activeChildId,
-  }) {
-    if (activeChildId == null) return children.first;
-
-    for (final child in children) {
-      if (child.id == activeChildId) return child;
-    }
-
-    return children.first;
-  }
-
   int ageInDays(DateTime birthDate) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -140,6 +134,60 @@ class ProgressTabInteractor {
       ProgressPeriodUnit.year => null,
       ProgressPeriodUnit.unknown => null,
     };
+  }
+
+  ProgressGenderFilter _mapProgressGender(Gender gender) {
+    return switch (gender) {
+      Gender.boy => ProgressGenderFilter.boy,
+      Gender.girl => ProgressGenderFilter.girl,
+      Gender.undisclosed => ProgressGenderFilter.all,
+    };
+  }
+
+  ProgressGuide buildGuideFromSharedContent(
+    ProgressSharedPeriodContent sharedContent,
+  ) {
+    return _mergeSharedContentWithSuggestions(
+      sharedGuide: sharedContent.guide,
+      exercises: sharedContent.exercises,
+      suggestions: const [],
+    );
+  }
+
+  ProgressGuide applySuggestionsToGuide({
+    required ProgressGuide guide,
+    required List<ProgressContentItem> suggestions,
+  }) {
+    return _mergeSharedContentWithSuggestions(
+      sharedGuide: guide,
+      exercises: guide.exercises,
+      suggestions: suggestions,
+    );
+  }
+
+  ProgressGuide _mergeSharedContentWithSuggestions({
+    required ProgressGuide sharedGuide,
+    required List<ProgressContentItem> exercises,
+    required List<ProgressContentItem> suggestions,
+  }) {
+    return ProgressGuide(
+      periodUnit: sharedGuide.periodUnit,
+      periodIndex: sharedGuide.periodIndex,
+      weekNumber: sharedGuide.weekNumber,
+      stageType: sharedGuide.stageType,
+      weekType: sharedGuide.weekType,
+      dateRange: sharedGuide.dateRange,
+      startDate: sharedGuide.startDate,
+      endDate: sharedGuide.endDate,
+      headline: sharedGuide.headline,
+      moodExpression: sharedGuide.moodExpression,
+      summary: sharedGuide.summary,
+      crisisWarning: sharedGuide.crisisWarning,
+      crisisDescription: sharedGuide.crisisDescription,
+      exercises: exercises,
+      suggestions: suggestions,
+      recommendations: const [],
+    );
   }
 
   ProgressContentItem _toProgressRecommendationItem(ArticleListItem article) {

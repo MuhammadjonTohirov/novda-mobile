@@ -36,25 +36,37 @@ class Reminder extends Equatable {
   final DateTime updatedAt;
 
   factory Reminder.fromJson(Map<String, dynamic> json) {
+    final dueAt = DateTime.tryParse(json['due_at']?.toString() ?? '') ??
+        DateTime.now();
+    final rawDetail = json['activity_type_detail'];
     return Reminder(
-      id: json['id'] as int,
-      child: json['child'] as int,
-      childName: json['child_name'] as String,
-      activityType: json['activity_type'] as int,
-      activityTypeDetail: ActivityType.fromJson(
-        json['activity_type_detail'] as Map<String, dynamic>,
-      ),
-      dueAt: DateTime.parse(json['due_at'] as String),
+      id: _parseInt(json['id']),
+      child: _parseInt(json['child']),
+      childName: json['child_name'] as String? ?? '',
+      activityType: _parseInt(json['activity_type']),
+      activityTypeDetail: rawDetail is Map<String, dynamic>
+          ? ActivityType.fromJson(rawDetail)
+          : rawDetail is Map
+              ? ActivityType.fromJson(Map<String, dynamic>.from(rawDetail))
+              : ActivityType.fromJson(const {}),
+      dueAt: dueAt,
       note: json['note'] as String?,
-      status: ReminderStatus.fromString(json['status'] as String? ?? 'pending'),
+      status: ReminderStatus.fromString(json['status']?.toString() ?? 'pending'),
       statusDisplay: json['status_display'] as String? ?? '',
-      completedAt: json['completed_at'] != null
-          ? DateTime.parse(json['completed_at'] as String)
-          : null,
-      createdBy: json['created_by'] as int,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      completedAt: DateTime.tryParse(json['completed_at']?.toString() ?? ''),
+      createdBy: _parseInt(json['created_by']),
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          dueAt,
+      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? '') ??
+          dueAt,
     );
+  }
+
+  static int _parseInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   @override
@@ -91,10 +103,10 @@ class CalendarDay extends Equatable {
 
   factory CalendarDay.fromJson(Map<String, dynamic> json) {
     return CalendarDay(
-      date: DateTime.parse(json['date'] as String),
-      pendingCount: json['pending_count'] as int,
-      completedCount: json['completed_count'] as int,
-      totalCount: json['total_count'] as int,
+      date: DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
+      pendingCount: json['pending_count'] as int? ?? 0,
+      completedCount: json['completed_count'] as int? ?? 0,
+      totalCount: json['total_count'] as int? ?? 0,
     );
   }
 

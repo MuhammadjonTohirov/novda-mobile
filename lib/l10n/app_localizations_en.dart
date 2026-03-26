@@ -674,4 +674,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeTabPlaceholder(Object tab) {
     return '$tab tab';
   }
+
+  @override
+  String get registrationFailed => 'Registration failed';
+
+  @override
+  String get activityTypeOther => 'Other';
 }

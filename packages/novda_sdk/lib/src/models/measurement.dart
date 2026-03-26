@@ -143,19 +143,25 @@ class ChartData extends Equatable {
   final double? average;
 
   factory ChartData.fromJson(Map<String, dynamic> json) {
+    final rawLabels = json['labels'];
+    final rawValues = json['values'];
     return ChartData(
-      labels: (json['labels'] as List<dynamic>)
-          .map((e) => DateTime.parse(e as String))
-          .toList(),
-      values: (json['values'] as List<dynamic>)
-          .map((e) => double.parse(e.toString()))
-          .toList(),
-      unit: json['unit'] as String,
-      min: json['min'] != null ? double.parse(json['min'].toString()) : null,
-      max: json['max'] != null ? double.parse(json['max'].toString()) : null,
-      average: json['average'] != null
-          ? double.parse(json['average'].toString())
-          : null,
+      labels: rawLabels is List
+          ? rawLabels
+              .map((e) => DateTime.tryParse(e?.toString() ?? ''))
+              .whereType<DateTime>()
+              .toList()
+          : const [],
+      values: rawValues is List
+          ? rawValues
+              .map((e) => double.tryParse(e?.toString() ?? ''))
+              .whereType<double>()
+              .toList()
+          : const [],
+      unit: json['unit'] as String? ?? '',
+      min: double.tryParse(json['min']?.toString() ?? ''),
+      max: double.tryParse(json['max']?.toString() ?? ''),
+      average: double.tryParse(json['average']?.toString() ?? ''),
     );
   }
 

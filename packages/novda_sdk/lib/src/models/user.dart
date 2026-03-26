@@ -30,21 +30,35 @@ class User extends Equatable {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] as int,
-      phone: json['phone'] as String,
+      id: _parseInt(json['id']),
+      phone: json['phone'] as String? ?? '',
       name: json['name'] as String? ?? '',
       email: json['email'] as String?,
       preferredLocale:
-          PreferredLocale.fromString(json['preferred_locale'] as String? ?? 'en'),
+          PreferredLocale.fromString(json['preferred_locale']?.toString() ?? 'en'),
       themePreference:
-          ThemePreference.fromString(json['theme_preference'] as String? ?? 'auto'),
+          ThemePreference.fromString(json['theme_preference']?.toString() ?? 'auto'),
       notificationsEnabled: json['notifications_enabled'] as bool? ?? true,
-      termsAcceptedAt: json['terms_accepted_at'] != null
-          ? DateTime.parse(json['terms_accepted_at'] as String)
-          : null,
-      lastActiveChild: json['last_active_child'] as int?,
-      ageInWeeks: json['age_in_weeks'] as int?,
+      termsAcceptedAt:
+          DateTime.tryParse(json['terms_accepted_at']?.toString() ?? ''),
+      lastActiveChild: _parseNullableInt(json['last_active_child']),
+      ageInWeeks: _parseNullableInt(json['age_in_weeks']),
     );
+  }
+
+  static int _parseInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
+  static int? _parseNullableInt(Object? value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 
   @override

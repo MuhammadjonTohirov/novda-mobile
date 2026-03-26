@@ -6,16 +6,6 @@
     "auditLog": "/Users/r/Documents/Development/Personal/Novda/novda/logs/.0225e0784008d9f889eab02ae0d874c2b3b23483-audit.json",
     "files": [
         {
-            "date": 1771049801318,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-14.log",
-            "hash": "f3a10dbe56df0e1714fabcb80776f9c804d3d4e50f94f7958a1b0d4f9a4cc595"
-        },
-        {
-            "date": 1771157379243,
-            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-15.log",
-            "hash": "d851922af8a5acd6b1ec393ada9e34147c5c99cd4147da534c2f1e9929435d8b"
-        },
-        {
             "date": 1771907405480,
             "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-24.log",
             "hash": "5a41ae4ac0eaea3bb2f1c3ee14008bc4f596f978473c24503b99e3bd0fbc80a3"
@@ -29,6 +19,16 @@
             "date": 1772250329511,
             "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-02-28.log",
             "hash": "4c81a060ed49c227d258927a85e9cca51b18b2727fef99199da87a4ac20d7b77"
+        },
+        {
+            "date": 1772511928431,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-03-03.log",
+            "hash": "4983bd2986b0b969feff48de8d502e1229597aa243dc9f334b547b943287cef6"
+        },
+        {
+            "date": 1772622488139,
+            "name": "/Users/r/Documents/Development/Personal/Novda/novda/logs/mcp-puppeteer-2026-03-04.log",
+            "hash": "abcb75e713801f97f0778f36dd2346c8f2357a2186d3ee393c52f5d83ac09d2c"
         }
     ],
     "hashType": "sha256"

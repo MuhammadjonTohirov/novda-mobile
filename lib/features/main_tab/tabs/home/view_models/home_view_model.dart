@@ -13,6 +13,7 @@ class HomeViewModel extends BaseViewModel with ActionErrorMixin {
 
   HomeDashboardData _dashboard = HomeDashboardData.empty();
   final Set<int> _updatingReminderIds = <int>{};
+  bool _isSelectingChild = false;
 
   ChildListItem? get activeChild => _dashboard.activeChild;
   List<ChildListItem> get children => _dashboard.children;
@@ -39,8 +40,9 @@ class HomeViewModel extends BaseViewModel with ActionErrorMixin {
   }
 
   Future<ThemeVariant?> selectChild(int childId) async {
-    if (activeChild?.id == childId) return null;
+    if (activeChild?.id == childId || _isSelectingChild) return null;
 
+    _isSelectingChild = true;
     try {
       await _interactor.selectChild(childId);
       final themeVariant = await services.resolveThemeVariant(
@@ -51,6 +53,8 @@ class HomeViewModel extends BaseViewModel with ActionErrorMixin {
     } catch (error) {
       setActionError(error);
       return null;
+    } finally {
+      _isSelectingChild = false;
     }
   }
 

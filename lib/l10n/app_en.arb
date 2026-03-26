@@ -341,5 +341,7 @@
     "placeholders": {
       "tab": {}
     }
-  }
+  },
+  "registrationFailed": "Registration failed",
+  "activityTypeOther": "Other"
 }

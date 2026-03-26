@@ -10,9 +10,18 @@ import '../view_model/progress_tab_view_model.dart';
 extension ProgressTabDetailUiExtensions on BuildContext {
   Widget progressSummaryCard({
     required ProgressTabViewModel viewModel,
-    required ProgressGuide guide,
+    required ProgressGuide? guide,
+    bool isLoading = false,
   }) {
     final colors = appColors;
+    if (isLoading) {
+      return _progressLoadingCard(height: 112);
+    }
+
+    if (guide == null) {
+      return _progressMessageCard(message: l10n.progressNoDetails);
+    }
+
     final selectedPeriod = viewModel.selectedPeriod;
     final periodLabel = selectedPeriod != null
         ? progressPeriodTitle(selectedPeriod)
@@ -48,9 +57,16 @@ extension ProgressTabDetailUiExtensions on BuildContext {
     );
   }
 
-  Widget progressExercisesCard({required ProgressGuide guide}) {
+  Widget progressExercisesCard({
+    required ProgressGuide? guide,
+    bool isLoading = false,
+  }) {
     final colors = appColors;
-    final items = guide.exercises;
+    if (isLoading) {
+      return _progressLoadingCard(height: 160);
+    }
+
+    final items = guide?.exercises ?? const <ProgressContentItem>[];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,6 +141,7 @@ extension ProgressTabDetailUiExtensions on BuildContext {
   Widget progressSuggestionsSection({
     required String name,
     required List<ProgressContentItem> suggestions,
+    bool isLoading = false,
   }) {
     final colors = appColors;
 
@@ -136,7 +153,9 @@ extension ProgressTabDetailUiExtensions on BuildContext {
           style: AppTypography.headingS.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 10),
-        if (suggestions.isEmpty)
+        if (isLoading)
+          _progressLoadingRowCard()
+        else if (suggestions.isEmpty)
           Text(
             l10n.progressNoSuggestions,
             style: AppTypography.bodyMRegular.copyWith(
@@ -163,6 +182,7 @@ extension ProgressTabDetailUiExtensions on BuildContext {
   Widget progressRecommendationsSection({
     required String name,
     required List<ProgressContentItem> recommendations,
+    bool isLoading = false,
   }) {
     final colors = appColors;
 
@@ -174,7 +194,9 @@ extension ProgressTabDetailUiExtensions on BuildContext {
           style: AppTypography.headingS.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 10),
-        if (recommendations.isEmpty)
+        if (isLoading)
+          _progressLoadingCard(height: 108)
+        else if (recommendations.isEmpty)
           Text(
             l10n.progressNoRecommendations,
             style: AppTypography.bodyMRegular.copyWith(
@@ -367,6 +389,56 @@ extension ProgressTabDetailUiExtensions on BuildContext {
         color: colors.bgPrimary,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: colors.border.withValues(alpha: 0.6)),
+      ),
+    );
+  }
+
+  Widget _progressLoadingCard({required double height}) {
+    final colors = appColors;
+
+    return Center(
+      child: CircularProgressIndicator(strokeWidth: 2, color: colors.accent),
+    ).container(
+      height: height,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colors.bgPrimary,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.border.withValues(alpha: 0.35)),
+      ),
+    );
+  }
+
+  Widget _progressLoadingRowCard() {
+    final colors = appColors;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          3,
+          (index) => _progressLoadingCard(
+            height: 132,
+          ).container(width: 160).paddingOnly(right: index == 2 ? 0 : 10),
+        ),
+      ),
+    ).container(
+      decoration: BoxDecoration(color: colors.bgSecondary.withValues(alpha: 0)),
+    );
+  }
+
+  Widget _progressMessageCard({required String message}) {
+    final colors = appColors;
+
+    return Text(
+      message,
+      style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
+    ).container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colors.bgPrimary,
+        borderRadius: BorderRadius.circular(14),
       ),
     );
   }

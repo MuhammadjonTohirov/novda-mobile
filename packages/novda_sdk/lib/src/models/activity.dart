@@ -32,18 +32,25 @@ class ActivityType extends Equatable {
 
   factory ActivityType.fromJson(Map<String, dynamic> json) {
     return ActivityType(
-      id: json['id'] as int,
-      slug: json['slug'] as String,
+      id: _parseInt(json['id']),
+      slug: json['slug'] as String? ?? '',
       iconUrl: json['icon_url'] as String? ?? '',
-      color: json['color'] as String,
+      color: json['color'] as String? ?? '',
       hasDuration: json['has_duration'] as bool? ?? false,
       hasQuality: json['has_quality'] as bool? ?? false,
       isReminderEnabled: json['is_reminder_enabled'] as bool? ?? true,
       isActive: json['is_active'] as bool? ?? true,
-      order: json['order'] as int? ?? 0,
-      title: json['title'] as String,
+      order: _parseInt(json['order']),
+      title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
     );
+  }
+
+  static int _parseInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   @override
@@ -78,10 +85,12 @@ class ConditionType extends Equatable {
 
   factory ConditionType.fromJson(Map<String, dynamic> json) {
     return ConditionType(
-      id: json['id'] as int,
-      slug: json['slug'] as String,
+      id: json['id'] is int
+          ? json['id'] as int
+          : int.tryParse(json['id']?.toString() ?? '') ?? 0,
+      slug: json['slug'] as String? ?? '',
       iconUrl: json['icon_url'] as String? ?? '',
-      name: json['name'] as String,
+      name: json['name'] as String? ?? '',
     );
   }
 
@@ -122,26 +131,41 @@ class ActivityItem extends Equatable {
   final DateTime updatedAt;
 
   factory ActivityItem.fromJson(Map<String, dynamic> json) {
+    final startDate =
+        DateTime.tryParse(json['start_date']?.toString() ?? '') ??
+            DateTime.now();
+    final rawDetail = json['activity_type_detail'];
     return ActivityItem(
-      id: json['id'] as int,
-      activityType: json['activity_type'] as int,
-      activityTypeDetail: ActivityType.fromJson(
-        json['activity_type_detail'] as Map<String, dynamic>,
-      ),
-      child: json['child'] as int,
-      childName: json['child_name'] as String,
-      startDate: DateTime.parse(json['start_date'] as String),
-      endDate: json['end_date'] != null
-          ? DateTime.parse(json['end_date'] as String)
-          : null,
+      id: _parseInt(json['id']),
+      activityType: _parseInt(json['activity_type']),
+      activityTypeDetail: rawDetail is Map<String, dynamic>
+          ? ActivityType.fromJson(rawDetail)
+          : rawDetail is Map
+              ? ActivityType.fromJson(Map<String, dynamic>.from(rawDetail))
+              : ActivityType.fromJson(const {}),
+      child: _parseInt(json['child']),
+      childName: json['child_name'] as String? ?? '',
+      startDate: startDate,
+      endDate: DateTime.tryParse(json['end_date']?.toString() ?? ''),
       durationMinutes:
           int.tryParse(json['duration_minutes']?.toString() ?? ''),
-      quality: Quality.fromString(json['quality'] as String?),
+      quality: Quality.fromString(json['quality']?.toString()),
       comments: json['comments'] as String?,
-      metadata: json['metadata'] as Map<String, dynamic>?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      metadata: json['metadata'] is Map<String, dynamic>
+          ? json['metadata'] as Map<String, dynamic>
+          : null,
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          startDate,
+      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? '') ??
+          startDate,
     );
+  }
+
+  static int _parseInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   @override
@@ -175,13 +199,20 @@ class ActivitySummary extends Equatable {
   final int totalToday;
 
   factory ActivitySummary.fromJson(Map<String, dynamic> json) {
+    final rawActivities = json['last_activities'];
+    final rawCounts = json['daily_counts'];
     return ActivitySummary(
-      lastActivities: (json['last_activities'] as List<dynamic>)
-          .map((e) => ActivityItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      dailyCounts: (json['daily_counts'] as Map<String, dynamic>)
-          .map((k, v) => MapEntry(k, v as int)),
-      totalToday: json['total_today'] as int,
+      lastActivities: rawActivities is List
+          ? rawActivities
+              .whereType<Map<String, dynamic>>()
+              .map(ActivityItem.fromJson)
+              .toList()
+          : const [],
+      dailyCounts: rawCounts is Map<String, dynamic>
+          ? rawCounts.map(
+              (k, v) => MapEntry(k, v is int ? v : int.tryParse('$v') ?? 0))
+          : const {},
+      totalToday: json['total_today'] as int? ?? 0,
     );
   }
 

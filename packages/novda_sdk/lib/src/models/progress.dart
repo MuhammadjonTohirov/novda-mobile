@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'enums.dart';
+
 enum ProgressGenderFilter {
   boy('boy'),
   girl('girl'),
@@ -151,8 +153,10 @@ class ProgressPeriod extends Equatable {
 
 class ProgressGuide extends Equatable {
   const ProgressGuide({
+    this.id,
     required this.periodUnit,
     required this.periodIndex,
+    this.genderFilter,
     this.weekNumber,
     this.stageType,
     this.weekType,
@@ -160,6 +164,7 @@ class ProgressGuide extends Equatable {
     this.startDate,
     this.endDate,
     this.headline,
+    this.moodExpression,
     this.summary,
     this.crisisWarning,
     this.crisisDescription,
@@ -168,8 +173,10 @@ class ProgressGuide extends Equatable {
     required this.recommendations,
   });
 
+  final int? id;
   final ProgressPeriodUnit periodUnit;
   final int periodIndex;
+  final ProgressGenderFilter? genderFilter;
   final int? weekNumber;
   final String? stageType;
   final String? weekType;
@@ -177,6 +184,7 @@ class ProgressGuide extends Equatable {
   final DateTime? startDate;
   final DateTime? endDate;
   final String? headline;
+  final String? moodExpression;
   final String? summary;
   final String? crisisWarning;
   final String? crisisDescription;
@@ -185,20 +193,8 @@ class ProgressGuide extends Equatable {
   final List<ProgressContentItem> recommendations;
 
   factory ProgressGuide.fromJson(Map<String, dynamic> json) {
-    final periodUnitValue = _toNullableString(json['period_unit']);
-    return ProgressGuide(
-      periodUnit: ProgressPeriodUnit.fromString(periodUnitValue),
-      periodIndex: _toInt(json['period_index']) ?? 0,
-      weekNumber: _toInt(json['week_number']),
-      stageType: _toNullableString(json['stage_type']),
-      weekType: _toNullableString(json['week_type']),
-      dateRange: _toNullableString(json['date_range']),
-      startDate: _toDateTime(json['start_date']),
-      endDate: _toDateTime(json['end_date']),
-      headline: _toNullableString(json['headline']),
-      summary: _toNullableString(json['summary']),
-      crisisWarning: _toNullableString(json['crisis_warning']),
-      crisisDescription: _toNullableString(json['crisis_description']),
+    return _guideFromJsonMap(
+      json,
       exercises: _contentList(json['exercises']),
       suggestions: _contentList(json['suggestions']),
       recommendations: _contentList(json['recommendations']),
@@ -207,8 +203,10 @@ class ProgressGuide extends Equatable {
 
   @override
   List<Object?> get props => [
+    id,
     periodUnit,
     periodIndex,
+    genderFilter,
     weekNumber,
     stageType,
     weekType,
@@ -216,6 +214,7 @@ class ProgressGuide extends Equatable {
     startDate,
     endDate,
     headline,
+    moodExpression,
     summary,
     crisisWarning,
     crisisDescription,
@@ -223,6 +222,99 @@ class ProgressGuide extends Equatable {
     suggestions,
     recommendations,
   ];
+}
+
+class ProgressSharedPeriodContent extends Equatable {
+  const ProgressSharedPeriodContent({
+    required this.guide,
+    required this.exercises,
+  });
+
+  final ProgressGuide guide;
+  final List<ProgressContentItem> exercises;
+
+  factory ProgressSharedPeriodContent.fromJson(Map<String, dynamic> json) {
+    final exercises = _contentList(json['exercises']);
+    final guide = _guideFromJsonMap(
+      _toMap(json['guide']) ?? const <String, dynamic>{},
+      exercises: exercises,
+      suggestions: const [],
+      recommendations: const [],
+    );
+
+    return ProgressSharedPeriodContent(guide: guide, exercises: exercises);
+  }
+
+  @override
+  List<Object?> get props => [guide, exercises];
+}
+
+class ProgressSuggestionChild extends Equatable {
+  const ProgressSuggestionChild({
+    required this.id,
+    required this.name,
+    required this.gender,
+    required this.ageDisplay,
+  });
+
+  static const empty = ProgressSuggestionChild(
+    id: 0,
+    name: '',
+    gender: Gender.undisclosed,
+    ageDisplay: '',
+  );
+
+  final int id;
+  final String name;
+  final Gender gender;
+  final String ageDisplay;
+
+  factory ProgressSuggestionChild.fromJson(Map<String, dynamic> json) {
+    return ProgressSuggestionChild(
+      id: _toInt(json['id']) ?? 0,
+      name: _toNullableString(json['name']) ?? '',
+      gender: Gender.fromString(_toNullableString(json['gender']) ?? ''),
+      ageDisplay: _toNullableString(json['age_display']) ?? '',
+    );
+  }
+
+  @override
+  List<Object?> get props => [id, name, gender, ageDisplay];
+}
+
+class ProgressChildPeriodSuggestions extends Equatable {
+  const ProgressChildPeriodSuggestions({
+    required this.child,
+    required this.guide,
+    required this.suggestions,
+  });
+
+  final ProgressSuggestionChild child;
+  final ProgressGuide guide;
+  final List<ProgressContentItem> suggestions;
+
+  factory ProgressChildPeriodSuggestions.fromJson(Map<String, dynamic> json) {
+    final suggestions = _contentList(json['suggestions']);
+    final childMap = _toMap(json['child']);
+    final child = childMap == null
+        ? ProgressSuggestionChild.empty
+        : ProgressSuggestionChild.fromJson(childMap);
+    final guide = _guideFromJsonMap(
+      _toMap(json['guide']) ?? const <String, dynamic>{},
+      exercises: const [],
+      suggestions: suggestions,
+      recommendations: const [],
+    );
+
+    return ProgressChildPeriodSuggestions(
+      child: child,
+      guide: guide,
+      suggestions: suggestions,
+    );
+  }
+
+  @override
+  List<Object?> get props => [child, guide, suggestions];
 }
 
 class ProgressPeriodSelector extends Equatable {
@@ -416,4 +508,42 @@ DateTime? _toDateTime(Object? value) {
   final text = _toNullableString(value);
   if (text == null) return null;
   return DateTime.tryParse(text);
+}
+
+Map<String, dynamic>? _toMap(Object? value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) return Map<String, dynamic>.from(value);
+  return null;
+}
+
+ProgressGuide _guideFromJsonMap(
+  Map<String, dynamic> json, {
+  required List<ProgressContentItem> exercises,
+  required List<ProgressContentItem> suggestions,
+  required List<ProgressContentItem> recommendations,
+}) {
+  final periodUnitValue = _toNullableString(json['period_unit']);
+  final genderFilterValue = _toNullableString(json['gender_filter']);
+  return ProgressGuide(
+    id: _toInt(json['id']),
+    periodUnit: ProgressPeriodUnit.fromString(periodUnitValue),
+    periodIndex: _toInt(json['period_index']) ?? 0,
+    genderFilter: genderFilterValue == null
+        ? null
+        : ProgressGenderFilter.fromString(genderFilterValue),
+    weekNumber: _toInt(json['week_number']),
+    stageType: _toNullableString(json['stage_type']),
+    weekType: _toNullableString(json['week_type']),
+    dateRange: _toNullableString(json['date_range']),
+    startDate: _toDateTime(json['start_date']),
+    endDate: _toDateTime(json['end_date']),
+    headline: _toNullableString(json['headline']),
+    moodExpression: _toNullableString(json['mood_expression']),
+    summary: _toNullableString(json['summary']),
+    crisisWarning: _toNullableString(json['crisis_warning']),
+    crisisDescription: _toNullableString(json['crisis_description']),
+    exercises: exercises,
+    suggestions: suggestions,
+    recommendations: recommendations,
+  );
 }

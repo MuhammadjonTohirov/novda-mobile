@@ -30,6 +30,7 @@ class _RemindersList extends StatelessWidget {
       children: reminders
           .map(
             (reminder) => _ReminderTile(
+              key: ValueKey(reminder.id),
               reminder: reminder,
               isUpdating: viewModel.isUpdatingReminder(reminder.id),
               onCheckTap: () => viewModel.completeReminder(reminder.id),
@@ -42,6 +43,7 @@ class _RemindersList extends StatelessWidget {
 
 class _ReminderTile extends StatelessWidget {
   const _ReminderTile({
+    super.key,
     required this.reminder,
     required this.isUpdating,
     required this.onCheckTap,

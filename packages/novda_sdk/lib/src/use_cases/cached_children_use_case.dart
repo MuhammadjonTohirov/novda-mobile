@@ -8,9 +8,13 @@ import 'children_use_case.dart';
 /// Caches [getChildren] and [getChild] responses with a 2-minute TTL.
 /// Mutation operations invalidate the cache automatically.
 class CachedChildrenUseCase implements ChildrenUseCase {
-  CachedChildrenUseCase(this._inner);
+  CachedChildrenUseCase(
+    this._inner, {
+    void Function()? onInvalidateRelatedCaches,
+  }) : _onInvalidateRelatedCaches = onInvalidateRelatedCaches;
 
   final ChildrenUseCase _inner;
+  final void Function()? _onInvalidateRelatedCaches;
   final _childrenCache = InMemoryCache<List<ChildListItem>>(
     ttl: Duration(minutes: 2),
   );
@@ -83,11 +87,12 @@ class CachedChildrenUseCase implements ChildrenUseCase {
   @override
   Future<void> selectChild(int childId) async {
     await _inner.selectChild(childId);
-    _childrenCache.invalidate();
+    _invalidateAll();
   }
 
   void _invalidateAll() {
     _childrenCache.invalidate();
     _childCache.clear();
+    _onInvalidateRelatedCaches?.call();
   }
 }

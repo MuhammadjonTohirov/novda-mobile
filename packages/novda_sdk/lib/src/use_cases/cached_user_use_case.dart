@@ -39,7 +39,7 @@ class CachedUserUseCase implements UserUseCase {
       themePreference: themePreference,
       notificationsEnabled: notificationsEnabled,
     );
-    _profileCache.invalidate();
+    invalidateProfileCache();
     return result;
   }
 
@@ -50,6 +50,9 @@ class CachedUserUseCase implements UserUseCase {
   Future<void> acceptTerms() => _inner.acceptTerms();
 
   @override
-  Future<List<ArticleListItem>> getSavedArticles() =>
-      _inner.getSavedArticles();
+  Future<List<ArticleListItem>> getSavedArticles() => _inner.getSavedArticles();
+
+  void invalidateProfileCache() {
+    _profileCache.invalidate();
+  }
 }

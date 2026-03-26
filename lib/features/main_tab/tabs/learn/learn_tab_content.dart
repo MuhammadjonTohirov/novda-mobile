@@ -104,7 +104,7 @@ class _LearnTabContentState extends State<LearnTabContent> {
           }
 
           if (viewModel.hasError && !viewModel.hasContent) {
-            return context.learnLoadErrorView(
+            return context.loadErrorView(
               message: viewModel.errorMessage ?? context.l10n.learnFailedLoad,
               onRetry: viewModel.load,
             );

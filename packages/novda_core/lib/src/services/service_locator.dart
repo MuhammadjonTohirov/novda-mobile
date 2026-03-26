@@ -43,10 +43,16 @@ class ServiceLocator {
       tokenProvider: _tokenStorage,
     );
 
+    final cachedUserUseCase = CachedUserUseCase(rawSdk.user);
+    final cachedChildrenUseCase = CachedChildrenUseCase(
+      rawSdk.children,
+      onInvalidateRelatedCaches: cachedUserUseCase.invalidateProfileCache,
+    );
+
     _sdk = NovdaSDK.withUseCases(
       auth: rawSdk.auth,
-      user: CachedUserUseCase(rawSdk.user),
-      children: CachedChildrenUseCase(rawSdk.children),
+      user: cachedUserUseCase,
+      children: cachedChildrenUseCase,
       activities: CachedActivitiesUseCase(rawSdk.activities),
       measurements: rawSdk.measurements,
       progress: rawSdk.progress,
@@ -125,7 +131,9 @@ class ServiceLocator {
       );
 
   void _assertInitialized() {
-    assert(_initialized, 'ServiceLocator must be initialized before use');
+    if (!_initialized) {
+      throw StateError('ServiceLocator must be initialized before use');
+    }
   }
 }
 

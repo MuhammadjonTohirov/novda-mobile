@@ -44,6 +44,7 @@ class _ActivitiesGrid extends StatelessWidget {
         final count = viewModel.todayCountByType[type.id] ?? 0;
 
         return _ActivityTypeTile(
+          key: ValueKey(type.id),
           type: type,
           lastActivity: latest,
           count: count,
@@ -56,22 +57,13 @@ class _ActivitiesGrid extends StatelessWidget {
   List<ActivityType> _topDashboardTypes(List<ActivityType> allTypes) {
     if (allTypes.isEmpty) return const [];
 
-    final nonOther = <ActivityType>[];
-
-    for (final type in allTypes) {
-      nonOther.add(type);
-    }
-
-    final selected = <ActivityType>[...nonOther.take(5)];
-    // first where title is other
-    final other = nonOther.firstWhere(
+    final nonOther = allTypes.where((t) => !_isOtherType(t)).toList();
+    final other = allTypes.firstWhere(
       _isOtherType,
       orElse: () => HomeInteractor.fallbackOtherType,
     );
 
-    selected.add(other);
-
-    return selected.take(6).toList();
+    return [...nonOther.take(5), other];
   }
 
   bool _isOtherType(ActivityType type) {
@@ -85,6 +77,7 @@ class _ActivitiesGrid extends StatelessWidget {
 
 class _ActivityTypeTile extends StatelessWidget {
   const _ActivityTypeTile({
+    super.key,
     required this.type,
     required this.lastActivity,
     required this.count,
@@ -180,10 +173,7 @@ class _ActivityTypeTile extends StatelessWidget {
       width: 32,
       height: 32,
       fit: BoxFit.fill,
-      errorBuilder: (_, error, trace) {
-        debugPrint("Failed to load image: $url with error: $error");
-        return fallbackIcon;
-      },
+      errorBuilder: (_, __, ___) => fallbackIcon,
       loadingBuilder: (_, child, loadingProgress) {
         if (loadingProgress == null) return child;
         return fallbackIcon;

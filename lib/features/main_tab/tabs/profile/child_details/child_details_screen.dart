@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:novda/core/ui/ui.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/app/app.dart';
@@ -33,23 +32,10 @@ class ChildDetailsScreen extends StatelessWidget {
             return Scaffold(
               backgroundColor: context.appColors.bgPrimary,
               appBar: _appBar(context),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    viewModel.errorMessage ?? context.l10n.homeFailedLoad,
-                    style: AppTypography.bodyMRegular.copyWith(
-                      color: context.appColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  12.h,
-                  AppTextButton(
-                    text: context.l10n.homeRetry,
-                    onPressed: viewModel.load,
-                  ),
-                ],
-              ).paddingAll(16).center(),
+              body: context.loadErrorView(
+                message: viewModel.errorMessage,
+                onRetry: viewModel.load,
+              ),
             );
           }
 
@@ -74,19 +60,8 @@ class ChildDetailsScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    final colors = context.appColors;
-
-    return AppBar(
-      backgroundColor: colors.bgPrimary,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
+  PreferredSizeWidget _appBar(BuildContext context) =>
+      context.novdaAppBar();
 
   Future<void> _save(
     BuildContext context,

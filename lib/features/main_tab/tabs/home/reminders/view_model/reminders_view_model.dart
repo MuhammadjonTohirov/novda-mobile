@@ -141,10 +141,8 @@ class RemindersViewModel extends BaseViewModel with ActionErrorMixin {
       reminders[index] = updated;
       reminders.sort(_interactor.sortReminders);
       _selectedDayReminders = reminders;
-      notifyListeners();
     } catch (error) {
       setActionError(error);
-      notifyListeners();
     } finally {
       _updatingReminderIds.remove(reminderId);
       notifyListeners();

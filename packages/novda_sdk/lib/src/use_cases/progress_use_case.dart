@@ -31,6 +31,20 @@ abstract interface class ProgressUseCase {
 
   /// All shared configured progress periods
   Future<ProgressAllPeriods> getAllPeriods({ProgressGenderFilter? gender});
+
+  /// Shared v2 period content for a selected period
+  Future<ProgressSharedPeriodContent> getSharedPeriodContent({
+    required ProgressPeriodUnit periodUnit,
+    required int periodIndex,
+    ProgressGenderFilter? gender,
+  });
+
+  /// Child-specific v2 suggestions for a selected period
+  Future<ProgressChildPeriodSuggestions> getChildPeriodSuggestions({
+    required int childId,
+    required ProgressPeriodUnit periodUnit,
+    required int periodIndex,
+  });
 }
 
 /// Implementation of ProgressUseCase
@@ -89,5 +103,31 @@ class ProgressUseCaseImpl implements ProgressUseCase {
   @override
   Future<ProgressAllPeriods> getAllPeriods({ProgressGenderFilter? gender}) {
     return _gateway.getAllPeriods(gender: gender);
+  }
+
+  @override
+  Future<ProgressSharedPeriodContent> getSharedPeriodContent({
+    required ProgressPeriodUnit periodUnit,
+    required int periodIndex,
+    ProgressGenderFilter? gender,
+  }) {
+    return _gateway.getSharedPeriodContent(
+      periodUnit: periodUnit,
+      periodIndex: periodIndex,
+      gender: gender,
+    );
+  }
+
+  @override
+  Future<ProgressChildPeriodSuggestions> getChildPeriodSuggestions({
+    required int childId,
+    required ProgressPeriodUnit periodUnit,
+    required int periodIndex,
+  }) {
+    return _gateway.getChildPeriodSuggestions(
+      childId: childId,
+      periodUnit: periodUnit,
+      periodIndex: periodIndex,
+    );
   }
 }

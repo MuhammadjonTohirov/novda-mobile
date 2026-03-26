@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import 'extensions/article_screen_ui_body_extensions.dart';
-import 'extensions/article_screen_ui_state_extensions.dart';
 import 'interactor/article_screen_interactor.dart';
 import 'view_model/article_screen_view_model.dart';
 
@@ -35,7 +34,7 @@ class ArticleScreen extends StatelessWidget {
           if (viewModel.hasError && !viewModel.hasDetail) {
             return Scaffold(
               backgroundColor: context.appColors.bgSecondary,
-              body: context.articleLoadErrorView(
+              body: context.loadErrorView(
                 message: viewModel.errorMessage ?? context.l10n.learnFailedLoad,
                 onRetry: viewModel.load,
               ),

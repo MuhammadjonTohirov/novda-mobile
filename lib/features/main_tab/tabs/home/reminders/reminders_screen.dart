@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../add_action/add_reminder_screen.dart';
-import '../extensions/home_screen_ui_extensions.dart';
 import 'extensions/reminders_screen_ui_extensions.dart';
 import 'view_model/reminders_view_model.dart';
 
@@ -31,7 +30,7 @@ class RemindersScreen extends StatelessWidget {
             return Scaffold(
               backgroundColor: context.appColors.bgSecondary,
               appBar: _appBar(context),
-              body: context.homeLoadErrorView(onRetry: viewModel.load),
+              body: context.loadErrorView(onRetry: viewModel.load),
             );
           }
 
@@ -48,19 +47,8 @@ class RemindersScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    final colors = context.appColors;
-
-    return AppBar(
-      backgroundColor: colors.bgSecondary,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
+  PreferredSizeWidget _appBar(BuildContext context) =>
+      context.novdaAppBar(backgroundColor: context.appColors.bgSecondary);
 
   Widget _body(BuildContext context, RemindersViewModel viewModel) {
     final colors = context.appColors;

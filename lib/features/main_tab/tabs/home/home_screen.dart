@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
           }
 
           if (viewModel.hasError && !viewModel.hasAnyContent) {
-            return context.homeLoadErrorView(onRetry: viewModel.load);
+            return context.loadErrorView(onRetry: viewModel.load);
           }
 
           final colors = context.appColors;
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
             onRefresh: viewModel.load,
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0),
+              padding: EdgeInsets.zero,
               children: [
                 context
                     .homeMyChildHeader(

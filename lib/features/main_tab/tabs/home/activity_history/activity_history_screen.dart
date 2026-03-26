@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../add_action/add_activity_screen.dart';
-import '../extensions/home_screen_ui_extensions.dart';
 import 'extensions/activity_history_screen_ui_extensions.dart';
 import 'view_model/activity_history_view_model.dart';
 
@@ -31,15 +30,7 @@ class ActivityHistoryScreen extends StatelessWidget {
 
           return Scaffold(
             backgroundColor: colors.bgSecondary,
-            appBar: AppBar(
-              backgroundColor: colors.bgSecondary,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
+            appBar: context.novdaAppBar(backgroundColor: colors.bgSecondary),
             body: _body(context, viewModel),
           );
         },
@@ -56,7 +47,7 @@ class ActivityHistoryScreen extends StatelessWidget {
 
     if (viewModel.hasError && !viewModel.hasActivities) {
       return context
-          .homeLoadErrorView(onRetry: viewModel.load)
+          .loadErrorView(onRetry: viewModel.load)
           .safeArea(top: false, bottom: false);
     }
 

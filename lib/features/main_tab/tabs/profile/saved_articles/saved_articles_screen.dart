@@ -6,7 +6,6 @@ import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../learn/article/article_screen.dart';
 import 'extensions/saved_articles_screen_ui_extensions.dart';
-import 'extensions/saved_articles_screen_ui_state_extensions.dart';
 import 'interactor/saved_articles_interactor.dart';
 import 'view_model/saved_articles_view_model.dart';
 
@@ -32,7 +31,7 @@ class SavedArticlesScreen extends StatelessWidget {
           if (viewModel.hasError && !viewModel.hasContent) {
             return Scaffold(
               backgroundColor: context.appColors.bgSecondary,
-              body: context.savedArticlesLoadErrorView(
+              body: context.loadErrorView(
                 message: viewModel.errorMessage ?? context.l10n.learnFailedLoad,
                 onRetry: viewModel.load,
               ),

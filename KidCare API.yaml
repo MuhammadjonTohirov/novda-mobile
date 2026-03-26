@@ -3449,6 +3449,93 @@ paths:
               schema:
                 $ref: '#/components/schemas/StandardResponse'
           description: Invalid query parameters
+  /api/v2/children/{child_id}/progress/periods/{period_unit}/{period_index}/suggestions:
+    get:
+      operationId: api_v2_children_progress_periods_suggestions_retrieve
+      description: Get child-specific suggestions for a selected period. Suggestions
+        are generated once per child and period, then served from cached child suggestion
+        data.
+      summary: Get Child Progress Suggestions (v2)
+      parameters:
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+        description: 'Requested response language. Supported: en, uz, ru. Unsupported
+          or missing values fall back to en.'
+      - in: path
+        name: child_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: period_index
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: period_unit
+        schema:
+          type: string
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildProgressSuggestionEnvelope'
+              examples:
+                ChildSuggestionsResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      child:
+                        id: 5
+                        name: Jasmin
+                        gender: girl
+                        age_display: 3 months 2 weeks
+                      guide:
+                        id: 11
+                        period_unit: week
+                        period_index: 11
+                        week_number: 11
+                        gender_filter: girl
+                        stage_type: normal
+                        week_type: normal
+                      suggestions:
+                      - id: 7
+                        order: 1
+                        title: Keep bedtime calm
+                        body: Use a slower, quieter routine before sleep.
+                  summary: Child Suggestions Response
+          description: Child suggestions retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid period unit
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Child not found
+        '502':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: AI generation failed
   /api/v2/children/{child_id}/recommended-articles:
     get:
       operationId: api_v2_children_recommended_articles_retrieve
@@ -3503,6 +3590,86 @@ paths:
               schema:
                 $ref: '#/components/schemas/StandardResponse'
           description: Child or guide not found
+  /api/v2/progress/periods/{period_unit}/{period_index}:
+    get:
+      operationId: api_v2_progress_periods_retrieve
+      description: Get shared progress content for a selected period and gender. Content
+        is generated once and then served from cached guide data.
+      summary: Get Shared Progress Period (v2)
+      parameters:
+      - in: header
+        name: Accept-Language
+        schema:
+          type: string
+        description: 'Requested response language. Supported: en, uz, ru. Unsupported
+          or missing values fall back to en.'
+      - in: query
+        name: gender
+        schema:
+          type: string
+        description: 'Optional gender bucket: boy, girl, or all (default: all)'
+      - in: path
+        name: period_index
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: period_unit
+        schema:
+          type: string
+        required: true
+      tags:
+      - Progress
+      security:
+      - jwtAuth: []
+      - Bearer: []
+        ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedProgressContentEnvelope'
+              examples:
+                SharedPeriodResponse:
+                  value:
+                    success: true
+                    code: 200
+                    message: null
+                    error: null
+                    data:
+                      guide:
+                        id: 1
+                        period_unit: week
+                        period_index: 1
+                        week_number: 1
+                        gender_filter: all
+                        stage_type: normal
+                        week_type: normal
+                        headline: What happens in week 1?
+                        mood_expression: I feel safe in warm arms.
+                        summary: Your newborn is adapting to the outside world.
+                        crisis_warning: null
+                        crisis_description: null
+                      exercises:
+                      - id: 1
+                        order: 1
+                        title: Gentle touch time
+                        body: Hold your baby skin-to-skin for a few minutes.
+                  summary: Shared Period Response
+          description: Shared period content retrieved successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: Invalid period unit or gender
+        '502':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardResponse'
+          description: AI generation failed
 components:
   schemas:
     AcceptTermsRequest:
@@ -3590,6 +3757,109 @@ components:
       - birth_date
       - gender
       - name
+    ChildProgressSuggestionChild:
+      type: object
+      description: Selected child metadata for the suggestions endpoint.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        age_display:
+          type: string
+      required:
+      - age_display
+      - gender
+      - id
+      - name
+    ChildProgressSuggestionEnvelope:
+      type: object
+      description: OpenAPI envelope for child-specific suggestions.
+      properties:
+        success:
+          type: boolean
+        code:
+          type: integer
+        message:
+          type: string
+          nullable: true
+        error:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/ChildProgressSuggestionListV2'
+      required:
+      - code
+      - data
+      - success
+    ChildProgressSuggestionGuide:
+      type: object
+      description: Minimal guide metadata used for child suggestions.
+      properties:
+        id:
+          type: integer
+        period_unit:
+          type: string
+        period_index:
+          type: integer
+        week_number:
+          type: integer
+          nullable: true
+        gender_filter:
+          type: string
+        stage_type:
+          type: string
+        week_type:
+          type: string
+      required:
+      - gender_filter
+      - id
+      - period_index
+      - period_unit
+      - stage_type
+    ChildProgressSuggestionListV2:
+      type: object
+      description: Response payload for child-specific period suggestions.
+      properties:
+        child:
+          $ref: '#/components/schemas/ChildProgressSuggestionChild'
+        guide:
+          $ref: '#/components/schemas/ChildProgressSuggestionGuide'
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildProgressSuggestionV2'
+      required:
+      - child
+      - guide
+      - suggestions
+    ChildProgressSuggestionV2:
+      type: object
+      description: Localized child suggestion payload for progress v2.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Display order (lower numbers appear first)
+        title:
+          type: string
+          nullable: true
+          readOnly: true
+        body:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - body
+      - id
+      - title
     GenderEnum:
       enum:
       - boy
@@ -3814,6 +4084,31 @@ components:
         * `en` - English
         * `uz` - Uzbek
         * `ru` - Russian
+    ProgressExerciseV2:
+      type: object
+      description: Localized exercise payload for shared progress content.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Display order (lower numbers appear first)
+        title:
+          type: string
+          nullable: true
+          readOnly: true
+        body:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - body
+      - id
+      - title
     PurposeEnum:
       enum:
       - auth
@@ -3849,6 +4144,82 @@ components:
       required:
       - activity_type
       - due_at
+    SharedProgressContentEnvelope:
+      type: object
+      description: OpenAPI envelope for shared progress content.
+      properties:
+        success:
+          type: boolean
+        code:
+          type: integer
+        message:
+          type: string
+          nullable: true
+        error:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/SharedProgressContentV2'
+      required:
+      - code
+      - data
+      - success
+    SharedProgressContentV2:
+      type: object
+      description: Response payload for shared period content.
+      properties:
+        guide:
+          $ref: '#/components/schemas/SharedProgressGuideV2'
+        exercises:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgressExerciseV2'
+      required:
+      - exercises
+      - guide
+    SharedProgressGuideV2:
+      type: object
+      description: Guide metadata and content for the shared period endpoint.
+      properties:
+        id:
+          type: integer
+        period_unit:
+          type: string
+        period_index:
+          type: integer
+        week_number:
+          type: integer
+          nullable: true
+        gender_filter:
+          type: string
+        stage_type:
+          type: string
+        week_type:
+          type: string
+        headline:
+          type: string
+          nullable: true
+        mood_expression:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+        crisis_warning:
+          type: string
+          nullable: true
+        crisis_description:
+          type: string
+          nullable: true
+      required:
+      - gender_filter
+      - headline
+      - id
+      - mood_expression
+      - period_index
+      - period_unit
+      - stage_type
+      - summary
     StandardResponse:
       type: object
       description: |-

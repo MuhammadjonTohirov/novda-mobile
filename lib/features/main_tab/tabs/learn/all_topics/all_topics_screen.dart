@@ -6,7 +6,6 @@ import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../topic_articles/topic_articles_screen.dart';
 import 'extensions/all_topics_screen_ui_extensions.dart';
-import 'extensions/all_topics_screen_ui_state_extensions.dart';
 import 'interactor/all_topics_interactor.dart';
 import 'view_model/all_topics_view_model.dart';
 
@@ -30,7 +29,7 @@ class AllTopicsScreen extends StatelessWidget {
           if (viewModel.hasError && !viewModel.hasTopics) {
             return Scaffold(
               backgroundColor: context.appColors.bgSecondary,
-              body: context.allTopicsLoadErrorView(
+              body: context.loadErrorView(
                 message: viewModel.errorMessage ?? context.l10n.learnFailedLoad,
                 onRetry: viewModel.load,
               ),

@@ -119,15 +119,10 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
     return Scaffold(
       backgroundColor: colors.bgPrimary,
-      appBar: AppBar(
-        backgroundColor: colors.bgPrimary,
-        surfaceTintColor: colors.bgPrimary,
-        elevation: 0,
-        leading: const SizedBox(width: 48),
+      appBar: context.novdaAppBar(
         title: const AuthStepProgressBar(step: 1),
-        actions: [
-          const SizedBox(width: 48),
-        ],
+        leading: const SizedBox(width: 48),
+        actions: [const SizedBox(width: 48)],
       ),
       body: Consumer<AuthorizationViewModel>(
         builder: (context, viewModel, child) {

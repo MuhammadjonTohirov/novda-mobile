@@ -29,23 +29,10 @@ class ParentDetailsScreen extends StatelessWidget {
             return Scaffold(
               backgroundColor: context.appColors.bgPrimary,
               appBar: _appBar(context),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    viewModel.errorMessage ?? context.l10n.homeFailedLoad,
-                    style: AppTypography.bodyMRegular.copyWith(
-                      color: context.appColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  12.h,
-                  TextButton(
-                    onPressed: viewModel.load,
-                    child: Text(context.l10n.homeRetry),
-                  ),
-                ],
-              ).paddingAll(16).center(),
+              body: context.loadErrorView(
+                message: viewModel.errorMessage,
+                onRetry: viewModel.load,
+              ),
             );
           }
 
@@ -70,19 +57,8 @@ class ParentDetailsScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    final colors = context.appColors;
-
-    return AppBar(
-      backgroundColor: colors.bgPrimary,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
+  PreferredSizeWidget _appBar(BuildContext context) =>
+      context.novdaAppBar();
 
   Future<void> _save(
     BuildContext context,

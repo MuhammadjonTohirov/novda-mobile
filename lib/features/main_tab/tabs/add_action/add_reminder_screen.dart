@@ -47,23 +47,10 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
             return Scaffold(
               backgroundColor: context.appColors.bgPrimary,
               appBar: _appBar(context),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    viewModel.errorMessage ?? context.l10n.homeFailedLoad,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.bodyMRegular.copyWith(
-                      color: context.appColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextButton(
-                    text: context.l10n.homeRetry,
-                    onPressed: viewModel.load,
-                  ),
-                ],
-              ).paddingAll(16).center(),
+              body: context.loadErrorView(
+                message: viewModel.errorMessage,
+                onRetry: viewModel.load,
+              ),
             );
           }
 
@@ -82,19 +69,8 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context) {
-    final colors = context.appColors;
-
-    return AppBar(
-      backgroundColor: colors.bgPrimary,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
+  PreferredSizeWidget _appBar(BuildContext context) =>
+      context.novdaAppBar();
 
   Widget _content(BuildContext context, AddReminderViewModel viewModel) {
     final colors = context.appColors;

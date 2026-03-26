@@ -6,7 +6,6 @@ import '../../../../../core/extensions/extensions.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../article/article_screen.dart';
 import 'extensions/topic_articles_screen_ui_extensions.dart';
-import 'extensions/topic_articles_screen_ui_state_extensions.dart';
 import 'interactor/topic_articles_interactor.dart';
 import 'view_model/topic_articles_view_model.dart';
 
@@ -36,7 +35,7 @@ class TopicArticlesScreen extends StatelessWidget {
           if (viewModel.hasError && !viewModel.hasContent) {
             return Scaffold(
               backgroundColor: context.appColors.bgSecondary,
-              body: context.topicArticlesLoadErrorView(
+              body: context.loadErrorView(
                 message: viewModel.errorMessage ?? context.l10n.learnFailedLoad,
                 onRetry: viewModel.load,
               ),

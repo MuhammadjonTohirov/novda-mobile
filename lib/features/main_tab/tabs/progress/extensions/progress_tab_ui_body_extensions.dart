@@ -39,74 +39,69 @@ extension ProgressTabUiBodyExtensions on BuildContext {
             onCalendarTap: onCalendarTap,
           ).container(height: _heroWithPeriodsHeight, clipBehavior: Clip.none),
 
-          if (guide == null)
-            Text(
-              l10n.progressNoDetails,
-              style: AppTypography.bodyMRegular.copyWith(
-                color: colors.textSecondary,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  const SizedBox(height: 10),
+
+                  if (hasPeriods)
+                    progressPeriodSelector(
+                      viewModel: viewModel,
+                      onPeriodTap: onPeriodTap,
+                      controller: periodScrollController,
+                    ),
+
+                  const SizedBox(height: 12),
+                ],
+              ).container(
+                decoration: BoxDecoration(
+                  color: appColors.bgSoft,
+                  borderRadius: BorderRadius.zero,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ).paddingAll(16).center()
-          else
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(height: 10),
 
-                    if (hasPeriods)
-                      progressPeriodSelector(
-                        viewModel: viewModel,
-                        onPeriodTap: onPeriodTap,
-                        controller: periodScrollController,
-                      ),
-
-                    const SizedBox(height: 12),
-                  ],
-                ).container(
-                  decoration: BoxDecoration(
-                    color: appColors.bgSoft,
-                    borderRadius: BorderRadius.circular(0),
+              Stack(
+                children: [
+                  Container(
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: appColors.bgSoft,
+                      borderRadius: BorderRadius.zero,
+                    ),
                   ),
-                ),
+                  Column(
+                    children: [
+                      progressSummaryCard(
+                        viewModel: viewModel,
+                        guide: guide,
+                        isLoading: viewModel.isSharedContentLoading,
+                      ).paddingOnly(left: 16, right: 16),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ],
+              ),
 
-                Stack(
-                  children: [
-                    Container(
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: appColors.bgSoft,
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        progressSummaryCard(
-                          viewModel: viewModel,
-                          guide: guide,
-                        ).paddingOnly(left: 16, right: 16),
-                        const SizedBox(height: 12),
-                      ],
-                    ),
-                  ],
-                ),
-
-                progressExercisesCard(
-                  guide: guide,
-                ).paddingOnly(left: 16, right: 16),
-                const SizedBox(height: 12),
-                progressSuggestionsSection(
-                  name: child.name,
-                  suggestions: guide.suggestions,
-                ).paddingOnly(left: 16, right: 16),
-                const SizedBox(height: 12),
-                progressRecommendationsSection(
-                  name: child.name,
-                  recommendations: viewModel.recommendedArticles,
-                ).paddingOnly(left: 16, right: 16),
-              ],
-            ),
+              progressExercisesCard(
+                guide: guide,
+                isLoading: viewModel.isSharedContentLoading,
+              ).paddingOnly(left: 16, right: 16),
+              const SizedBox(height: 12),
+              progressSuggestionsSection(
+                name: child.name,
+                suggestions: guide?.suggestions ?? const [],
+                isLoading: viewModel.isSuggestionsLoading,
+              ).paddingOnly(left: 16, right: 16),
+              const SizedBox(height: 12),
+              progressRecommendationsSection(
+                name: child.name,
+                recommendations: viewModel.recommendedArticles,
+                isLoading: viewModel.isRecommendationsLoading,
+              ).paddingOnly(left: 16, right: 16),
+            ],
+          ),
           const SizedBox(height: 20),
         ],
       ), //.paddingOnly(top: 20),

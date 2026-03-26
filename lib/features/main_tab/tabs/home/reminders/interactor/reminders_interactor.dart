@@ -5,39 +5,15 @@ import '../../../../../../core/services/services.dart';
 
 class RemindersInteractor {
   RemindersInteractor({
-    UserUseCase? userUseCase,
-    ChildrenUseCase? childrenUseCase,
+    ActiveChildResolver? activeChildResolver,
     RemindersUseCase? remindersUseCase,
-  }) : _userUseCase = userUseCase ?? services.sdk.user,
-       _childrenUseCase = childrenUseCase ?? services.sdk.children,
+  }) : _activeChildResolver = activeChildResolver ?? ActiveChildResolver(),
        _remindersUseCase = remindersUseCase ?? services.sdk.reminders;
 
-  final UserUseCase _userUseCase;
-  final ChildrenUseCase _childrenUseCase;
+  final ActiveChildResolver _activeChildResolver;
   final RemindersUseCase _remindersUseCase;
 
-  Future<int?> resolveActiveChildId() async {
-    final results = await Future.wait([
-      _userUseCase.getProfile(),
-      _childrenUseCase.getChildren(),
-    ]);
-
-    final user = results[0] as User;
-    final children = results[1] as List<ChildListItem>;
-
-    if (children.isEmpty) return null;
-
-    final preferredChildId = user.lastActiveChild;
-    if (preferredChildId != null) {
-      for (final child in children) {
-        if (child.id == preferredChildId) {
-          return preferredChildId;
-        }
-      }
-    }
-
-    return children.first.id;
-  }
+  Future<int?> resolveActiveChildId() => _activeChildResolver.resolveActiveChildId();
 
   Future<List<CalendarDay>> loadCalendarDays(int childId, DateTime month) {
     final monthKey = DateFormat('yyyy-MM').format(month);

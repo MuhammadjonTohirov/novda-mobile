@@ -60,17 +60,9 @@ class _BabyWeightScreenState extends State<BabyWeightScreen> {
 
     return Scaffold(
       backgroundColor: colors.bgPrimary,
-      appBar: AppBar(
-        backgroundColor: colors.bgPrimary,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: context.novdaAppBar(
         title: const AuthStepProgressBar(step: 6),
-        actions: [
-          const SizedBox(width: 48),
-        ],
+        actions: [const SizedBox(width: 48)],
       ),
       body: Column(
         children: [

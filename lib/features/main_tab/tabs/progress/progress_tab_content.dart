@@ -43,7 +43,7 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
           if (viewModel.hasError && !viewModel.hasContent) {
             final message =
                 viewModel.errorMessage ?? context.l10n.progressFailedLoad;
-            return context.progressLoadErrorView(
+            return context.loadErrorView(
               message: message,
               onRetry: viewModel.load,
             );

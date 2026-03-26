@@ -31,20 +31,10 @@ class SettingsScreen extends StatelessWidget {
           if (viewModel.hasError && !viewModel.hasLoaded) {
             return Scaffold(
               appBar: _settingsAppBar(context),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    viewModel.errorMessage ?? context.l10n.homeFailedLoad,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: viewModel.load,
-                    child: Text(context.l10n.homeRetry),
-                  ),
-                ],
-              ).center(),
+              body: context.loadErrorView(
+                message: viewModel.errorMessage,
+                onRetry: viewModel.load,
+              ),
             );
           }
 
@@ -64,19 +54,8 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _settingsAppBar(BuildContext context) {
-    final colors = context.appColors;
-
-    return AppBar(
-      backgroundColor: colors.bgSecondary,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.textPrimary),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
+  PreferredSizeWidget _settingsAppBar(BuildContext context) =>
+      context.novdaAppBar(backgroundColor: context.appColors.bgSecondary);
 
   Future<void> _openThemePicker(
     BuildContext context,

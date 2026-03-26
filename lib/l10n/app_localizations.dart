@@ -1335,6 +1335,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{tab} tab'**
   String homeTabPlaceholder(Object tab);
+
+  /// No description provided for @registrationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed'**
+  String get registrationFailed;
+
+  /// No description provided for @activityTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get activityTypeOther;
 }
 
 class _AppLocalizationsDelegate

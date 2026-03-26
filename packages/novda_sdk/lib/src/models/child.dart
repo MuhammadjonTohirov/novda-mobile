@@ -3,6 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'enums.dart';
 import 'measurement.dart';
 
+int _parseInt(Object? value) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value is String) return int.tryParse(value) ?? 0;
+  return 0;
+}
+
 /// Full child model with computed fields
 class Child extends Equatable {
   const Child({
@@ -34,25 +41,28 @@ class Child extends Equatable {
   final DateTime updatedAt;
 
   factory Child.fromJson(Map<String, dynamic> json) {
+    final birthDate = DateTime.tryParse(json['birth_date']?.toString() ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
     return Child(
-      id: json['id'] as int,
-      userId: json['user'] as int,
-      name: json['name'] as String,
-      gender: Gender.fromString(json['gender'] as String),
-      birthDate: DateTime.parse(json['birth_date'] as String),
+      id: _parseInt(json['id']),
+      userId: _parseInt(json['user']),
+      name: json['name'] as String? ?? '',
+      gender: Gender.fromString(json['gender']?.toString() ?? ''),
+      birthDate: birthDate,
       avatarImage: json['avatar_image'] as String?,
       themeOverride: json['theme_override'] != null
-          ? ThemePreference.fromString(json['theme_override'] as String)
+          ? ThemePreference.fromString(json['theme_override'].toString())
           : null,
-      ageInWeeks: int.tryParse(json['age_in_weeks'].toString()) ?? 0,
+      ageInWeeks: _parseInt(json['age_in_weeks']),
       ageDisplay: json['age_display'] as String? ?? '',
-      latestMeasurements: json['latest_measurements'] != null &&
-              json['latest_measurements'] is Map<String, dynamic>
+      latestMeasurements: json['latest_measurements'] is Map<String, dynamic>
           ? LatestMeasurements.fromJson(
               json['latest_measurements'] as Map<String, dynamic>)
           : null,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          birthDate,
+      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? '') ??
+          birthDate,
     );
   }
 
@@ -96,15 +106,18 @@ class ChildListItem extends Equatable {
   final DateTime createdAt;
 
   factory ChildListItem.fromJson(Map<String, dynamic> json) {
+    final birthDate = DateTime.tryParse(json['birth_date']?.toString() ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
     return ChildListItem(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      gender: Gender.fromString(json['gender'] as String),
-      birthDate: DateTime.parse(json['birth_date'] as String),
+      id: _parseInt(json['id']),
+      name: json['name'] as String? ?? '',
+      gender: Gender.fromString(json['gender']?.toString() ?? ''),
+      birthDate: birthDate,
       avatarImage: json['avatar_image'] as String?,
-      ageInWeeks: int.tryParse(json['age_in_weeks'].toString()) ?? 0,
+      ageInWeeks: _parseInt(json['age_in_weeks']),
       ageDisplay: json['age_display'] as String? ?? '',
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          birthDate,
     );
   }
 
@@ -138,11 +151,13 @@ class ChildCreateRequest {
   Map<String, dynamic> toJson() => {
         'name': name,
         'gender': gender.name,
-        'birth_date':
-            '${birthDate.year}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}',
+        'birth_date': _formatDate(birthDate),
         if (themeOverride != null) 'theme_override': themeOverride!.name,
       };
 }
+
+String _formatDate(DateTime date) =>
+    '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
 /// Request model for updating a child
 class ChildUpdateRequest {
@@ -161,9 +176,7 @@ class ChildUpdateRequest {
   Map<String, dynamic> toJson() => {
         if (name != null) 'name': name,
         if (gender != null) 'gender': gender!.name,
-        if (birthDate != null)
-          'birth_date':
-              '${birthDate!.year}-${birthDate!.month.toString().padLeft(2, '0')}-${birthDate!.day.toString().padLeft(2, '0')}',
+        if (birthDate != null) 'birth_date': _formatDate(birthDate!),
         if (themeOverride != null) 'theme_override': themeOverride!.name,
       };
 }

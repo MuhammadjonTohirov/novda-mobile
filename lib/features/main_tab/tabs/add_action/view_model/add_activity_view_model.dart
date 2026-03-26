@@ -225,7 +225,11 @@ class AddActivityViewModel extends BaseViewModel with ActionErrorMixin {
       }
 
       if (_selectedReminderIds.isNotEmpty) {
-        await _interactor.completeReminders(_selectedReminderIds);
+        try {
+          await _interactor.completeReminders(_selectedReminderIds);
+        } catch (_) {
+          // Activity was created successfully; reminder completion is best-effort.
+        }
       }
 
       return true;

@@ -341,5 +341,7 @@
     "placeholders": {
       "tab": {}
     }
-  }
+  },
+  "registrationFailed": "Ro'yxatdan o'tishda xatolik",
+  "activityTypeOther": "Boshqa"
 }

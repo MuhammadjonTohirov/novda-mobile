@@ -44,9 +44,13 @@ class AuthInterceptor extends InterceptorsWrapper {
     if (_shouldTryRefresh(err)) {
       final refreshed = await _tryRefreshToken();
       if (refreshed) {
-        err.requestOptions.extra[_authRetryAttemptedExtraKey] = true;
-        final response = await _retry(err.requestOptions);
-        return handler.resolve(response);
+        try {
+          err.requestOptions.extra[_authRetryAttemptedExtraKey] = true;
+          final response = await _retry(err.requestOptions);
+          return handler.resolve(response);
+        } on DioException catch (retryError) {
+          return handler.next(retryError);
+        }
       }
     }
     handler.next(err);
@@ -78,13 +82,18 @@ class AuthInterceptor extends InterceptorsWrapper {
       );
 
       if (response.statusCode == 200) {
-        final data = response.data['data'];
-        if (data != null) {
-          await _tokenProvider.saveTokens(
-            access: data['access'] as String,
-            refresh: data['refresh'] as String,
-          );
-          return true;
+        final data = response.data;
+        final tokenData = data is Map ? (data['data'] ?? data) : null;
+        if (tokenData is Map) {
+          final access = tokenData['access']?.toString();
+          final refresh = tokenData['refresh']?.toString();
+          if (access != null && refresh != null) {
+            await _tokenProvider.saveTokens(
+              access: access,
+              refresh: refresh,
+            );
+            return true;
+          }
         }
       }
     } catch (_) {

@@ -16,15 +16,21 @@ class BodyMeasurementsViewModel extends BaseViewModel with ActionErrorMixin {
   List<Measurement> _measurements = const [];
   final Set<String> _mutatingEntryKeys = <String>{};
 
+  // Cached computed properties - invalidated on _measurements change
+  List<Measurement>? _cachedWeight;
+  List<Measurement>? _cachedHeight;
+  List<BodyMeasurementEntry>? _cachedEntries;
+
   bool get hasMeasurements => _measurements.isNotEmpty;
 
   List<Measurement> get weightMeasurements =>
-      _typeMeasurements(MeasurementType.weight);
+      _cachedWeight ??= _typeMeasurements(MeasurementType.weight);
 
   List<Measurement> get heightMeasurements =>
-      _typeMeasurements(MeasurementType.height);
+      _cachedHeight ??= _typeMeasurements(MeasurementType.height);
 
-  List<BodyMeasurementEntry> get entries => _buildEntries();
+  List<BodyMeasurementEntry> get entries =>
+      _cachedEntries ??= _buildEntries();
 
   bool isMutatingEntry(String entryKey) =>
       _mutatingEntryKeys.contains(entryKey);
@@ -194,6 +200,13 @@ class BodyMeasurementsViewModel extends BaseViewModel with ActionErrorMixin {
 
   Future<void> _reloadMeasurements() async {
     _measurements = await _interactor.loadMeasurements(childId);
+    _invalidateCache();
+  }
+
+  void _invalidateCache() {
+    _cachedWeight = null;
+    _cachedHeight = null;
+    _cachedEntries = null;
   }
 
   Future<bool> _runEntryMutation({
@@ -211,7 +224,6 @@ class BodyMeasurementsViewModel extends BaseViewModel with ActionErrorMixin {
       return true;
     } catch (error) {
       setActionError(error);
-      notifyListeners();
       return false;
     } finally {
       _mutatingEntryKeys.remove(key);

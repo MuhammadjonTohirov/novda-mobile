@@ -12,16 +12,25 @@ class _RemindersList extends StatelessWidget {
     if (reminders.isEmpty) {
       final colors = context.appColors;
 
-      return Text(
-        context.l10n.homeNoReminders,
-        style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
-        textAlign: TextAlign.center,
-      ).container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 22),
-        decoration: BoxDecoration(
-          color: colors.bgSecondary,
-          borderRadius: BorderRadius.circular(18),
+      return TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: child,
+        ),
+        child: Text(
+          context.l10n.homeNoReminders,
+          style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
+          textAlign: TextAlign.center,
+        ).container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 22),
+          decoration: BoxDecoration(
+            color: colors.bgSecondary,
+            borderRadius: BorderRadius.circular(18),
+          ),
         ),
       );
     }

@@ -170,52 +170,59 @@ extension ProgressTabUiBodyExtensions on BuildContext {
   }) {
     final colors = appColors;
 
-    return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              progressPeriodTitle(period),
-              style: AppTypography.bodyMMedium.copyWith(
-                color: isSelected ? colors.accent : colors.textPrimary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              progressPeriodDateLabel(period: period, birthDate: birthDate),
-              style: AppTypography.bodySRegular.copyWith(
-                color: isSelected ? colors.accent : colors.textSecondary,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        )
-        .container(
-          width: 110,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? colors.bgPrimary.withAlpha(230)
-                : colors.bgPrimary,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isSelected
-                  ? colors.accent.withValues(alpha: 0.6)
-                  : colors.border,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: colors.textPrimary.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
-            ],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      width: 110,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? colors.bgPrimary.withAlpha(230)
+            : colors.bgPrimary,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSelected
+              ? colors.accent.withValues(alpha: 0.6)
+              : colors.border,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colors.textPrimary.withValues(alpha: isSelected ? 0.08 : 0.04),
+            blurRadius: isSelected ? 12 : 8,
+            offset: const Offset(0, 3),
           ),
-        )
-        .inkWell(onTap: onTap, borderRadius: BorderRadius.circular(16));
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 250),
+            style: AppTypography.bodyMMedium.copyWith(
+              color: isSelected ? colors.accent : colors.textPrimary,
+            ),
+            child: Text(
+              progressPeriodTitle(period),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(height: 4),
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 250),
+            style: AppTypography.bodySRegular.copyWith(
+              color: isSelected ? colors.accent : colors.textSecondary,
+            ),
+            child: Text(
+              progressPeriodDateLabel(period: period, birthDate: birthDate),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ).inkWell(onTap: onTap, borderRadius: BorderRadius.circular(16));
   }
 
   String _progressCallout(ProgressGuide? guide) {

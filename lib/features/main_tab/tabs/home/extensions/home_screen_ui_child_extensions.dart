@@ -51,88 +51,100 @@ extension HomeScreenUiChildExtensions on BuildContext {
     final ageInWeeks = childDetails?.ageInWeeks ?? childInfo?.ageInWeeks ?? 0;
     final measurements = childDetails?.latestMeasurements;
 
-    return Column(
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  gender.avatarAssetByAgeInWeeks(ageInWeeks),
-                  width: 44,
-                  height: 44,
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTypography.bodyLMedium.copyWith(
-                        color: colors.textPrimary,
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) => Opacity(
+        opacity: value,
+        child: Transform.scale(
+          scale: 0.95 + (0.05 * value),
+          child: child,
+        ),
+      ),
+      child: Column(
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    gender.avatarAssetByAgeInWeeks(ageInWeeks),
+                    width: 44,
+                    height: 44,
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: AppTypography.bodyLMedium.copyWith(
+                          color: colors.textPrimary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      age,
-                      style: AppTypography.bodyMRegular.copyWith(
-                        color: colors.textSecondary,
+                      const SizedBox(height: 2),
+                      Text(
+                        age,
+                        style: AppTypography.bodyMRegular.copyWith(
+                          color: colors.textSecondary,
+                        ),
                       ),
+                    ],
+                  ).expanded(),
+                  Icon(
+                    Icons.chevron_right,
+                    color: colors.textSecondary,
+                    size: 24,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Divider(height: 1, color: colors.border),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  _homeInfoMetric(
+                    icon: Image.asset(
+                      'assets/images/icon_baby.png',
+                      width: 22,
+                      height: 22,
                     ),
-                  ],
-                ).expanded(),
-                Icon(
-                  Icons.chevron_right,
-                  color: colors.textSecondary,
-                  size: 24,
-                ),
-              ],
+                    label: l10n.homeGender,
+                    value: gender.localizedLabel(l10n),
+                    onTap: onMetricTap,
+                  ),
+                  _homeInfoMetric(
+                    icon: Image.asset(
+                      'assets/images/icon_scale.png',
+                      width: 22,
+                      height: 22,
+                    ),
+                    label: l10n.weight,
+                    value: _formatMeasurement(measurements?.weight),
+                    onTap: onMetricTap,
+                  ),
+                  _homeInfoMetric(
+                    icon: Image.asset(
+                      'assets/images/icon_arrow_topbottom.png',
+                      width: 22,
+                      height: 22,
+                    ),
+                    label: l10n.height,
+                    value: _formatMeasurement(measurements?.height),
+                    onTap: onMetricTap,
+                  ),
+                ],
+              ),
+            ],
+          )
+          .container(
+            decoration: BoxDecoration(
+              color: colors.bgPrimary,
+              borderRadius: BorderRadius.circular(24),
             ),
-            const SizedBox(height: 14),
-            Divider(height: 1, color: colors.border),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                _homeInfoMetric(
-                  icon: Image.asset(
-                    'assets/images/icon_baby.png',
-                    width: 22,
-                    height: 22,
-                  ),
-                  label: l10n.homeGender,
-                  value: gender.localizedLabel(l10n),
-                  onTap: onMetricTap,
-                ),
-                _homeInfoMetric(
-                  icon: Image.asset(
-                    'assets/images/icon_scale.png',
-                    width: 22,
-                    height: 22,
-                  ),
-                  label: l10n.weight,
-                  value: _formatMeasurement(measurements?.weight),
-                  onTap: onMetricTap,
-                ),
-                _homeInfoMetric(
-                  icon: Image.asset(
-                    'assets/images/icon_arrow_topbottom.png',
-                    width: 22,
-                    height: 22,
-                  ),
-                  label: l10n.height,
-                  value: _formatMeasurement(measurements?.height),
-                  onTap: onMetricTap,
-                ),
-              ],
-            ),
-          ],
-        )
-        .container(
-          decoration: BoxDecoration(
-            color: colors.bgPrimary,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
-        )
-        .inkWell(onTap: onTap, borderRadius: BorderRadius.circular(24));
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+          )
+          .inkWell(onTap: onTap, borderRadius: BorderRadius.circular(24)),
+    );
   }
 
   Widget _homeInfoMetric({

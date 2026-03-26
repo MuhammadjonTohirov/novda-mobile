@@ -81,6 +81,7 @@ class MeasurementLineChart extends StatelessWidget {
             yValueMapper: (item, _) => item.value,
             color: colors.accent.withValues(alpha: 0.14),
             borderWidth: 0,
+            animationDuration: 800,
           ),
           LineSeries<_MeasurementChartPoint, DateTime>(
             dataSource: points,
@@ -88,6 +89,7 @@ class MeasurementLineChart extends StatelessWidget {
             yValueMapper: (item, _) => item.value,
             color: colors.accent,
             width: 2.2,
+            animationDuration: 800,
             markerSettings: MarkerSettings(
               isVisible: true,
               width: 7,

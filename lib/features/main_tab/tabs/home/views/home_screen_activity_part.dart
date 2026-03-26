@@ -13,16 +13,25 @@ class _ActivitiesGrid extends StatelessWidget {
     if (types.isEmpty) {
       final colors = context.appColors;
 
-      return Text(
-        context.l10n.homeNoActivityTypes,
-        style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
-        textAlign: TextAlign.center,
-      ).container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-        decoration: BoxDecoration(
-          color: colors.bgSecondary,
-          borderRadius: BorderRadius.circular(16),
+      return TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: child,
+        ),
+        child: Text(
+          context.l10n.homeNoActivityTypes,
+          style: AppTypography.bodyMRegular.copyWith(color: colors.textSecondary),
+          textAlign: TextAlign.center,
+        ).container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          decoration: BoxDecoration(
+            color: colors.bgSecondary,
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       );
     }
@@ -108,20 +117,31 @@ class _ActivityTypeTile extends StatelessWidget {
             children: [
               _buildActivityIcon(baseColor),
               const Spacer(),
-              if (count > 0)
-                Text(
-                  '$count',
-                  style: AppTypography.bodyLMedium.copyWith(color: baseColor),
-                ).container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(scale: animation, child: child),
                 ),
+                child: count > 0
+                    ? Text(
+                        '$count',
+                        key: ValueKey(count),
+                        style: AppTypography.bodyLMedium.copyWith(
+                          color: baseColor,
+                        ),
+                      ).container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ],
           ),
           const Spacer(),

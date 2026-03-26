@@ -38,33 +38,35 @@ extension ActivityHistoryScreenUiFiltersExtensions on BuildContext {
     final colors = appColors;
     final baseColor = colors.accent.parseHexOrSelf(type.color);
 
-    return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            activityHistoryTypeIcon(type: type, color: baseColor, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              type.title,
-              style: AppTypography.bodyLMedium.copyWith(
-                color: selected ? baseColor : colors.textSecondary,
-              ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        color: selected
+            ? baseColor.withValues(alpha: 0.08)
+            : colors.bgSecondary,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: selected
+              ? baseColor.withValues(alpha: 0.28)
+              : colors.border,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          activityHistoryTypeIcon(type: type, color: baseColor, size: 20),
+          const SizedBox(width: 8),
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 250),
+            style: AppTypography.bodyLMedium.copyWith(
+              color: selected ? baseColor : colors.textSecondary,
             ),
-          ],
-        )
-        .container(
-          decoration: BoxDecoration(
-            color: selected
-                ? baseColor.withValues(alpha: 0.08)
-                : colors.bgSecondary,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: selected
-                  ? baseColor.withValues(alpha: 0.28)
-                  : colors.border,
-            ),
+            child: Text(type.title),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        )
-        .inkWell(onTap: onTap, borderRadius: BorderRadius.circular(18));
+        ],
+      ),
+    ).inkWell(onTap: onTap, borderRadius: BorderRadius.circular(18));
   }
 }

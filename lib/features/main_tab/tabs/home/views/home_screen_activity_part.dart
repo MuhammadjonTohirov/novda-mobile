@@ -44,6 +44,7 @@ class _ActivitiesGrid extends StatelessWidget {
         final count = viewModel.todayCountByType[type.id] ?? 0;
 
         return _ActivityTypeTile(
+          key: ValueKey(type.id),
           type: type,
           lastActivity: latest,
           count: count,
@@ -76,6 +77,7 @@ class _ActivitiesGrid extends StatelessWidget {
 
 class _ActivityTypeTile extends StatelessWidget {
   const _ActivityTypeTile({
+    super.key,
     required this.type,
     required this.lastActivity,
     required this.count,

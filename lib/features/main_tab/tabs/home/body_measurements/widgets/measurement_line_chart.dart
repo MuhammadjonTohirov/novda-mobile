@@ -44,9 +44,10 @@ class MeasurementLineChart extends StatelessWidget {
     final minAxis = _resolveAxisMin(minValue: minValue, maxValue: maxValue);
     final maxAxis = _resolveAxisMax(minValue: minValue, maxValue: maxValue);
 
-    return SizedBox(
-      height: 178,
-      child: SfCartesianChart(
+    return RepaintBoundary(
+      child: SizedBox(
+        height: 178,
+        child: SfCartesianChart(
         margin: EdgeInsets.zero,
         plotAreaBorderWidth: 0,
         primaryXAxis: DateTimeAxis(
@@ -97,6 +98,7 @@ class MeasurementLineChart extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

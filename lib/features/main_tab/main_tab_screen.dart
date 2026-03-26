@@ -22,8 +22,9 @@ class MainTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MainTabViewModel>(
       create: (_) => MainTabViewModel(),
-      child: Consumer<MainTabViewModel>(
-        builder: (context, viewModel, _) {
+      child: Builder(
+        builder: (context) {
+          final viewModel = context.watch<MainTabViewModel>();
           final l10n = context.l10n;
           final colors = context.appColors;
           final localeCode = Localizations.localeOf(context).languageCode;

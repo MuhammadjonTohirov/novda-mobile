@@ -23,6 +23,10 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
   String? _selectedTopicSlug;
   Timer? _searchDebounce;
 
+  // Cached computed properties - invalidated on content change
+  List<Topic>? _cachedPopularTopics;
+  Map<String, int>? _cachedTopicArticleCounts;
+
   List<Topic> get topics => _topics;
   List<ArticleListItem> get articles => _articles;
   List<String> get recentQueries => _recentQueries;
@@ -30,13 +34,7 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
   String? get selectedTopicSlug => _selectedTopicSlug;
   bool get hasContent => _topics.isNotEmpty || _articles.isNotEmpty;
 
-  List<Topic> get popularTopics {
-    final popular = _topics.where((topic) => topic.isPopular).toList();
-    if (popular.isEmpty) return _topics.take(6).toList();
-
-    popular.sort(_compareTopics);
-    return popular.take(6).toList();
-  }
+  List<Topic> get popularTopics => _cachedPopularTopics ??= _buildPopularTopics();
 
   bool isTopicSelected(String topicSlug) => _selectedTopicSlug == topicSlug;
 
@@ -47,14 +45,8 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
   bool isSavingArticle(String slug) => _savingSlugs.contains(slug);
 
   int topicArticleCount(String topicSlug) {
-    var count = 0;
-
-    for (final article in _articles) {
-      final hasTopic = article.topics.any((topic) => topic.slug == topicSlug);
-      if (hasTopic) count += 1;
-    }
-
-    return count;
+    final counts = _cachedTopicArticleCounts ??= _buildTopicArticleCounts();
+    return counts[topicSlug] ?? 0;
   }
 
   Future<void> load() async {
@@ -160,6 +152,7 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
 
       _topics = _sortTopics(data.topics);
       _articles = data.articles;
+      _invalidateContentCaches();
       _savedSlugs
         ..clear()
         ..addAll(
@@ -200,6 +193,29 @@ class LearnTabViewModel extends BaseViewModel with ActionErrorMixin {
       _savingSlugs.remove(slug);
       notifyListeners();
     }
+  }
+
+  void _invalidateContentCaches() {
+    _cachedPopularTopics = null;
+    _cachedTopicArticleCounts = null;
+  }
+
+  List<Topic> _buildPopularTopics() {
+    final popular = _topics.where((topic) => topic.isPopular).toList();
+    if (popular.isEmpty) return _topics.take(6).toList();
+
+    popular.sort(_compareTopics);
+    return popular.take(6).toList();
+  }
+
+  Map<String, int> _buildTopicArticleCounts() {
+    final counts = <String, int>{};
+    for (final article in _articles) {
+      for (final topic in article.topics) {
+        counts[topic.slug] = (counts[topic.slug] ?? 0) + 1;
+      }
+    }
+    return counts;
   }
 
   List<Topic> _sortTopics(List<Topic> source) {

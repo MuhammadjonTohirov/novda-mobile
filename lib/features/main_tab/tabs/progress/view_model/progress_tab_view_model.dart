@@ -11,8 +11,10 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
 
   ProgressTabChildContext? _activeChild;
   List<ProgressPeriod> _periods = const [];
+  ProgressPeriod? _actualPeriod;
   ProgressPeriod? _selectedPeriod;
   ProgressGuide? _guide;
+  List<ProgressContentItem> _suggestions = const [];
   List<ProgressContentItem> _recommendedArticles = const [];
   bool _isDetailLoading = false;
   bool _isSharedContentLoading = false;
@@ -24,6 +26,7 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   List<ProgressPeriod> get periods => _periods;
   ProgressPeriod? get selectedPeriod => _selectedPeriod;
   ProgressGuide? get guide => _guide;
+  List<ProgressContentItem> get suggestions => _suggestions;
   List<ProgressContentItem> get recommendedArticles => _recommendedArticles;
   bool get isDetailLoading => _isDetailLoading;
   bool get isSharedContentLoading => _isSharedContentLoading;
@@ -55,16 +58,21 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
       final allPeriods = await _interactor.loadAllPeriods();
       final sortedAllPeriods = _interactor.sortPeriods(allPeriods);
       final ageDays = _interactor.ageInDays(child.birthDate);
-      _selectedPeriod = _interactor.resolveCurrentPeriodByAge(
+      _actualPeriod = _interactor.resolveCurrentPeriodByAge(
         periods: sortedAllPeriods,
         ageDays: ageDays,
       );
+      _selectedPeriod = _actualPeriod;
       _periods = sortedAllPeriods;
       setSuccess();
 
       if (_selectedPeriod != null) {
         try {
-          await _loadPeriodSections(child: child, period: _selectedPeriod!);
+          await _loadPeriodSections(
+            child: child,
+            period: _selectedPeriod!,
+            loadSupplementaryContent: true,
+          );
         } catch (error) {
           setActionError(error);
         }
@@ -82,6 +90,7 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
 
     final previousSelectedPeriod = _selectedPeriod;
     final previousGuide = _guide;
+    final previousSuggestions = _suggestions;
     final previousRecommendedArticles = _recommendedArticles;
     _selectedPeriod = period;
 
@@ -89,13 +98,16 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
       await _loadPeriodSections(
         child: child,
         period: period,
+        loadSupplementaryContent: false,
         previousSelectedPeriod: previousSelectedPeriod,
         previousGuide: previousGuide,
+        previousSuggestions: previousSuggestions,
         previousRecommendedArticles: previousRecommendedArticles,
       );
     } catch (error) {
       _selectedPeriod = previousSelectedPeriod;
       _guide = previousGuide;
+      _suggestions = previousSuggestions;
       _recommendedArticles = previousRecommendedArticles;
       setActionError(error);
     }
@@ -104,8 +116,10 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   Future<void> _loadPeriodSections({
     required ProgressTabChildContext child,
     required ProgressPeriod period,
+    required bool loadSupplementaryContent,
     ProgressPeriod? previousSelectedPeriod,
     ProgressGuide? previousGuide,
+    List<ProgressContentItem>? previousSuggestions,
     List<ProgressContentItem>? previousRecommendedArticles,
   }) async {
     _isDetailLoading = true;
@@ -113,7 +127,12 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
     _isSuggestionsLoading = false;
     _isRecommendationsLoading = false;
     _guide = null;
-    _recommendedArticles = const [];
+    if (previousSuggestions == null) {
+      _suggestions = const [];
+    }
+    if (previousRecommendedArticles == null) {
+      _recommendedArticles = const [];
+    }
     notifyListeners();
 
     try {
@@ -123,29 +142,32 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
       );
       _guide = _interactor.buildGuideFromSharedContent(sharedContent);
       _isSharedContentLoading = false;
-      _isSuggestionsLoading = true;
       notifyListeners();
 
-      final suggestions = await _interactor.loadPeriodSuggestions(
-        child: child,
-        period: period,
-      );
-      _guide = _interactor.applySuggestionsToGuide(
-        guide: _guide!,
-        suggestions: suggestions,
-      );
-      _isSuggestionsLoading = false;
-      _isRecommendationsLoading = true;
-      notifyListeners();
+      if (loadSupplementaryContent) {
+        final supplementaryPeriod = _actualPeriod ?? period;
 
-      _recommendedArticles = await _interactor.loadRecommendedArticles(
-        child: child,
-        period: period,
-      );
-      _isRecommendationsLoading = false;
+        _isSuggestionsLoading = true;
+        notifyListeners();
+
+        _suggestions = await _interactor.loadPeriodSuggestions(
+          child: child,
+          period: supplementaryPeriod,
+        );
+        _isSuggestionsLoading = false;
+        _isRecommendationsLoading = true;
+        notifyListeners();
+
+        _recommendedArticles = await _interactor.loadRecommendedArticles(
+          child: child,
+          period: supplementaryPeriod,
+        );
+        _isRecommendationsLoading = false;
+      }
     } catch (error) {
       _selectedPeriod = previousSelectedPeriod ?? _selectedPeriod;
       _guide = previousGuide;
+      _suggestions = previousSuggestions ?? const [];
       _recommendedArticles = previousRecommendedArticles ?? const [];
       _isSharedContentLoading = false;
       _isSuggestionsLoading = false;
@@ -159,8 +181,10 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
 
   void _resetContent() {
     _periods = const [];
+    _actualPeriod = null;
     _selectedPeriod = null;
     _guide = null;
+    _suggestions = const [];
     _recommendedArticles = const [];
     _isDetailLoading = false;
     _isSharedContentLoading = false;

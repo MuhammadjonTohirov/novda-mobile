@@ -3,6 +3,7 @@ import 'package:novda_sdk/novda_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/theme_variant.dart';
+import 'app_environment.dart';
 import 'auth_service.dart';
 import 'theme_resolution_service.dart';
 import 'token_storage.dart';
@@ -17,8 +18,7 @@ class ServiceLocator {
     return _instance!;
   }
 
-  static const _baseUrl = 'http://94.158.51.9:8000';
-  // static const _baseUrl = 'https://kidscare.uzyol.uz';
+  static final _baseUrl = AppEnvironment.baseUrl;
   static const _apiKey = 'KIDS_CARE_API_KEY_9839283ad98asdj123j23a0s9dia9d';
 
   late final SharedPreferences _prefs;

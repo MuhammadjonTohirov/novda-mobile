@@ -6,21 +6,40 @@
     "configurations": [
     
         {
-            "name": "novda",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "novda (profile mode)",
+            "name": "novda (staging)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "args": [
+                "--flavor", "staging",
+                "--dart-define=STAGING=true"
+            ]
         },
         {
-            "name": "novda (release mode)",
+            "name": "novda (staging release)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--flavor", "staging",
+                "--dart-define=STAGING=true"
+            ]
+        },
+        {
+            "name": "novda (production)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor", "production"
+            ]
+        },
+        {
+            "name": "novda (production release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--flavor", "production"
+            ]
         },
         {
             "name": "novda_sdk",

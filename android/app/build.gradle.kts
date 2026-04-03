@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.novda"
+    namespace = "uz.tox.novda"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,14 +20,26 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.novda"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        applicationId = "uz.tox.novda"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("staging") {
+            dimension = "environment"
+            applicationId = "uz.tox.novda_staging"
+            resValue("string", "app_name", "Novda Staging")
+        }
+        create("production") {
+            dimension = "environment"
+            applicationId = "uz.tox.novda"
+            resValue("string", "app_name", "Novda")
+        }
     }
 
     buildTypes {

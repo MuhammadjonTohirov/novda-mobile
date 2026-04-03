@@ -81,29 +81,6 @@ void main() {
     ),
   ];
 
-  final initialGuide = ProgressGuide(
-    periodUnit: ProgressPeriodUnit.week,
-    periodIndex: 10,
-    weekNumber: 10,
-    stageType: 'normal',
-    weekType: 'normal',
-    headline: 'Week 10',
-    summary: 'Initial summary',
-    exercises: const [
-      ProgressContentItem(
-        data: {'id': 1, 'title': 'Exercise 1'},
-        title: 'Exercise 1',
-      ),
-    ],
-    suggestions: const [
-      ProgressContentItem(
-        data: {'id': 2, 'title': 'Suggestion 1'},
-        title: 'Suggestion 1',
-      ),
-    ],
-    recommendations: const [],
-  );
-
   final initialRecommendations = [
     const ProgressContentItem(
       data: {'slug': 'article-1', 'title': 'Article 1'},
@@ -207,12 +184,6 @@ void main() {
           ),
         ).thenAnswer((_) => suggestionsCompleter.future);
         when(
-          () => mockInteractor.applySuggestionsToGuide(
-            guide: guideWithoutSuggestions10,
-            suggestions: suggestions10,
-          ),
-        ).thenReturn(initialGuide);
-        when(
           () => mockInteractor.loadRecommendedArticles(
             child: child,
             period: period10,
@@ -257,13 +228,16 @@ void main() {
           ),
         );
 
-        expect(viewModel.guide, equals(initialGuide));
+        expect(viewModel.guide, equals(guideWithoutSuggestions10));
+        expect(viewModel.suggestions, equals(suggestions10));
         expect(viewModel.isSuggestionsLoading, isFalse);
         expect(viewModel.isRecommendationsLoading, isTrue);
 
         recommendationsCompleter.complete(initialRecommendations);
         await loadFuture;
 
+        expect(viewModel.guide, equals(guideWithoutSuggestions10));
+        expect(viewModel.suggestions, equals(suggestions10));
         expect(viewModel.recommendedArticles, equals(initialRecommendations));
         expect(viewModel.isRecommendationsLoading, isFalse);
       },
@@ -297,6 +271,7 @@ void main() {
         expect(viewModel.guide, isNull);
         expect(viewModel.selectedPeriod, isNull);
         expect(viewModel.periods, isEmpty);
+        expect(viewModel.suggestions, isEmpty);
         expect(viewModel.recommendedArticles, isEmpty);
         expect(viewModel.isSharedContentLoading, isFalse);
         expect(viewModel.isSuggestionsLoading, isFalse);
@@ -307,7 +282,7 @@ void main() {
 
   group('selectPeriod', () {
     test(
-      'restores previous guide and recommendations when detail loading fails',
+      'keeps current-period suggestions and recommendations when selecting another period',
       () async {
         final allPeriods = <ProgressPeriod>[period10, period11];
 
@@ -343,12 +318,6 @@ void main() {
           ),
         ).thenAnswer((_) async => suggestions10);
         when(
-          () => mockInteractor.applySuggestionsToGuide(
-            guide: guideWithoutSuggestions10,
-            suggestions: suggestions10,
-          ),
-        ).thenReturn(initialGuide);
-        when(
           () => mockInteractor.loadRecommendedArticles(
             child: child,
             period: period10,
@@ -366,8 +335,78 @@ void main() {
         when(
           () => mockInteractor.buildGuideFromSharedContent(sharedContent11),
         ).thenReturn(guideWithoutSuggestions11);
+
+        await viewModel.load();
+        await viewModel.selectPeriod(period11);
+
+        expect(viewModel.periods, equals(allPeriods));
+        expect(viewModel.selectedPeriod, equals(period11));
+        expect(viewModel.guide, equals(guideWithoutSuggestions11));
+        expect(viewModel.suggestions, equals(suggestions10));
+        expect(viewModel.recommendedArticles, equals(initialRecommendations));
+        expect(viewModel.state, ViewState.success);
+        verifyNever(
+          () => mockInteractor.loadPeriodSuggestions(
+            child: child,
+            period: period11,
+          ),
+        );
+        verifyNever(
+          () => mockInteractor.loadRecommendedArticles(
+            child: child,
+            period: period11,
+          ),
+        );
+      },
+    );
+
+    test(
+      'restores previous detail and current-period extras when selected detail load fails',
+      () async {
+        final allPeriods = <ProgressPeriod>[period10, period11];
+
+        when(
+          () => mockInteractor.resolveActiveChild(),
+        ).thenAnswer((_) async => child);
+        when(
+          () => mockInteractor.loadAllPeriods(),
+        ).thenAnswer((_) async => allPeriods);
+        when(
+          () => mockInteractor.sortPeriods(allPeriods),
+        ).thenReturn(allPeriods);
+        when(() => mockInteractor.ageInDays(child.birthDate)).thenReturn(70);
+        when(
+          () => mockInteractor.resolveCurrentPeriodByAge(
+            periods: allPeriods,
+            ageDays: 70,
+          ),
+        ).thenReturn(period10);
+        when(
+          () => mockInteractor.loadSharedPeriodContent(
+            child: child,
+            period: period10,
+          ),
+        ).thenAnswer((_) async => sharedContent10);
+        when(
+          () => mockInteractor.buildGuideFromSharedContent(sharedContent10),
+        ).thenReturn(guideWithoutSuggestions10);
         when(
           () => mockInteractor.loadPeriodSuggestions(
+            child: child,
+            period: period10,
+          ),
+        ).thenAnswer((_) async => suggestions10);
+        when(
+          () => mockInteractor.loadRecommendedArticles(
+            child: child,
+            period: period10,
+          ),
+        ).thenAnswer((_) async => initialRecommendations);
+        when(
+          () => mockInteractor.isSamePeriod(period10, period11),
+        ).thenReturn(false);
+        when(
+          () => mockInteractor.loadSharedPeriodContent(
             child: child,
             period: period11,
           ),
@@ -380,7 +419,8 @@ void main() {
 
         expect(viewModel.periods, equals(allPeriods));
         expect(viewModel.selectedPeriod, equals(period10));
-        expect(viewModel.guide, equals(initialGuide));
+        expect(viewModel.guide, equals(guideWithoutSuggestions10));
+        expect(viewModel.suggestions, equals(suggestions10));
         expect(viewModel.recommendedArticles, equals(initialRecommendations));
         expect(viewModel.consumeActionError(), 'Period load failed');
         expect(viewModel.state, ViewState.success);

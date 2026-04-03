@@ -8,8 +8,6 @@ import 'progress_tab_detail_ui_extensions.dart';
 import 'progress_tab_ui_no_child_extensions.dart';
 
 extension ProgressTabUiBodyExtensions on BuildContext {
-  static const double _heroBackgroundHeight = 400;
-  static const double _heroWithPeriodsHeight = 350;
   static const double _periodSelectorHeight = 64;
 
   Widget progressTabBody({
@@ -26,7 +24,6 @@ extension ProgressTabUiBodyExtensions on BuildContext {
     if (child == null) {
       return progressNoChildView();
     }
-    final hasPeriods = viewModel.periods.isNotEmpty;
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
@@ -37,72 +34,34 @@ extension ProgressTabUiBodyExtensions on BuildContext {
           progressHeroSection(
             viewModel: viewModel,
             onCalendarTap: onCalendarTap,
-          ).container(height: _heroWithPeriodsHeight, clipBehavior: Clip.none),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  const SizedBox(height: 10),
-
-                  if (hasPeriods)
-                    progressPeriodSelector(
-                      viewModel: viewModel,
-                      onPeriodTap: onPeriodTap,
-                      controller: periodScrollController,
-                    ),
-
-                  const SizedBox(height: 12),
-                ],
-              ).container(
-                decoration: BoxDecoration(
-                  color: appColors.bgSoft,
-                  borderRadius: BorderRadius.zero,
-                ),
-              ),
-
-              Stack(
-                children: [
-                  Container(
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: appColors.bgSoft,
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      progressSummaryCard(
-                        viewModel: viewModel,
-                        guide: guide,
-                        isLoading: viewModel.isSharedContentLoading,
-                      ).paddingOnly(left: 16, right: 16),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
-                ],
-              ),
-
-              progressExercisesCard(
-                guide: guide,
-                isLoading: viewModel.isSharedContentLoading,
-              ).paddingOnly(left: 16, right: 16),
-              const SizedBox(height: 12),
-              progressSuggestionsSection(
-                name: child.name,
-                suggestions: guide?.suggestions ?? const [],
-                isLoading: viewModel.isSuggestionsLoading,
-              ).paddingOnly(left: 16, right: 16),
-              const SizedBox(height: 12),
-              progressRecommendationsSection(
-                name: child.name,
-                recommendations: viewModel.recommendedArticles,
-                isLoading: viewModel.isRecommendationsLoading,
-              ).paddingOnly(left: 16, right: 16),
-            ],
+            onPeriodTap: onPeriodTap,
+            periodScrollController: periodScrollController,
           ),
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 12),
+          progressSummaryCard(
+            viewModel: viewModel,
+            guide: guide,
+            isLoading: viewModel.isSharedContentLoading,
+          ).paddingOnly(left: 16, right: 16),
+          const SizedBox(height: 12),
+
+          progressExercisesCard(
+            guide: guide,
+            isLoading: viewModel.isSharedContentLoading,
+          ).paddingOnly(left: 16, right: 16),
+          const SizedBox(height: 12),
+          progressSuggestionsSection(
+            name: child.name,
+            suggestions: viewModel.suggestions,
+            isLoading: viewModel.isSuggestionsLoading,
+          ).paddingOnly(left: 16, right: 16),
+          const SizedBox(height: 12),
+          progressRecommendationsSection(
+            name: child.name,
+            recommendations: viewModel.recommendedArticles,
+            isLoading: viewModel.isRecommendationsLoading,
+          ).paddingOnly(left: 16, right: 16),
         ],
       ), //.paddingOnly(top: 20),
     ).container(color: colors.bgSecondary);
@@ -111,21 +70,109 @@ extension ProgressTabUiBodyExtensions on BuildContext {
   Widget progressHeroSection({
     required ProgressTabViewModel viewModel,
     required VoidCallback onCalendarTap,
+    required ValueChanged<ProgressPeriod> onPeriodTap,
+    required ScrollController periodScrollController,
   }) {
     final child = viewModel.activeChild!;
+    final colors = appColors;
     final guide = viewModel.guide;
     final callout = _progressCallout(guide);
+    final ageInWeeks = DateTime.now().difference(child.birthDate).inDays ~/ 7;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        _progressTopBackground(calloutText: callout, gender: child.gender),
-        _progressHeroForeground(
-          childName: child.name,
-          childAge: child.ageDisplay,
-          onCalendarTap: onCalendarTap,
-        ),
-      ],
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                l10n.progressTab,
+                style: AppTypography.headingL.copyWith(
+                  color: colors.textPrimary,
+                ),
+              ).expanded(),
+              Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 16,
+                        color: colors.accent,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        l10n.progressCalendar,
+                        style: AppTypography.bodyMMedium.copyWith(
+                          color: colors.accent,
+                        ),
+                      ),
+                    ],
+                  )
+                  .paddingSymmetric(horizontal: 8, vertical: 8)
+                  .inkWell(
+                    onTap: onCalendarTap,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+            ],
+          ).paddingOnly(left: 16, right: 16),
+
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Image.asset(
+                child.gender.avatarAssetByAgeInWeeks(ageInWeeks),
+                width: 44,
+                height: 44,
+              ),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    child.name,
+                    style: AppTypography.bodyLMedium.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    child.ageDisplay,
+                    style: AppTypography.bodyMRegular.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  ),
+                ],
+              ).expanded(),
+            ],
+          ).paddingOnly(left: 16, right: 16),
+          const SizedBox(height: 14),
+          if (viewModel.periods.isNotEmpty)
+            progressPeriodSelector(
+              viewModel: viewModel,
+              onPeriodTap: onPeriodTap,
+              controller: periodScrollController,
+            ),
+          if (viewModel.periods.isNotEmpty) const SizedBox(height: 14),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: colors.bgPrimary,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: colors.border),
+            ),
+            child: Text(
+              callout,
+              style: AppTypography.bodyMRegular.copyWith(
+                color: colors.textPrimary,
+                height: 1.35,
+              ),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ).paddingOnly(left: 16, right: 16),
+        ],
+      ).paddingOnly(top: 10),
     );
   }
 
@@ -176,9 +223,7 @@ extension ProgressTabUiBodyExtensions on BuildContext {
       width: 110,
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
-        color: isSelected
-            ? colors.bgPrimary.withAlpha(230)
-            : colors.bgPrimary,
+        color: isSelected ? colors.bgPrimary.withAlpha(230) : colors.bgPrimary,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected
@@ -187,7 +232,9 @@ extension ProgressTabUiBodyExtensions on BuildContext {
         ),
         boxShadow: [
           BoxShadow(
-            color: colors.textPrimary.withValues(alpha: isSelected ? 0.08 : 0.04),
+            color: colors.textPrimary.withValues(
+              alpha: isSelected ? 0.08 : 0.04,
+            ),
             blurRadius: isSelected ? 12 : 8,
             offset: const Offset(0, 3),
           ),
@@ -230,132 +277,5 @@ extension ProgressTabUiBodyExtensions on BuildContext {
         guide?.headline ??
         guide?.summary ??
         l10n.progressDefaultCallout;
-  }
-
-  Widget _progressHeroForeground({
-    required String childName,
-    required String childAge,
-    required VoidCallback onCalendarTap,
-  }) {
-    final colors = appColors;
-
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                l10n.progressTab,
-                style: AppTypography.headingL.copyWith(
-                  color: colors.textPrimary,
-                ),
-              ).expanded(),
-              Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today_outlined,
-                        size: 16,
-                        color: colors.accent,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        l10n.progressCalendar,
-                        style: AppTypography.bodyMMedium.copyWith(
-                          color: colors.accent,
-                        ),
-                      ),
-                    ],
-                  )
-                  .paddingSymmetric(horizontal: 8, vertical: 8)
-                  .inkWell(
-                    onTap: onCalendarTap,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                childName,
-                style: AppTypography.bodyLMedium.copyWith(
-                  color: colors.textPrimary,
-                ),
-              ),
-              Text(
-                childAge,
-                style: AppTypography.bodyMRegular.copyWith(
-                  color: colors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ).paddingOnly(left: 16, right: 16, top: 10),
-    );
-  }
-
-  Widget _progressTopBackground({
-    required String calloutText,
-    required Gender gender,
-  }) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        _progressKidWithToysBackground(gender: gender),
-        _progressQuoteBubble(
-          text: calloutText,
-          isBoy: gender != Gender.girl,
-        ).positioned(right: 16, top: 128),
-      ],
-    );
-  }
-
-  Widget _progressKidWithToysBackground({required Gender gender}) {
-    final babyAsset = switch (gender) {
-      Gender.girl => 'assets/images/image_girl_with_toys.png',
-      _ => 'assets/images/image_kid_with_toys.png',
-    };
-
-    return SizedBox(
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/image_dots.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(color: appColors.bgSoft),
-            height: 100,
-          ).paddingOnly(top: _heroBackgroundHeight - 105),
-          Image.asset(babyAsset, fit: BoxFit.contain).paddingOnly(top: 210),
-        ],
-      ),
-    );
-  }
-
-  Widget _progressQuoteBubble({required String text, required bool isBoy}) {
-    final quoteAsset = isBoy
-        ? 'assets/images/img_quote_baby_boy.png'
-        : 'assets/images/img_quote_baby_girl.png';
-
-    return Stack(
-      children: [
-        Image.asset(quoteAsset, fit: BoxFit.cover),
-        Text(
-          text,
-          style: AppTypography.bodySRegular,
-          maxLines: 4,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.left,
-        ).paddingOnly(left: 12, right: 8, top: 8, bottom: 10),
-      ],
-    ).sized(width: 180, height: 100);
   }
 }

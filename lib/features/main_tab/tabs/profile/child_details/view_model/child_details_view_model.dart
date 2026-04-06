@@ -119,7 +119,7 @@ class ChildDetailsViewModel extends BaseViewModel with ActionErrorMixin {
 
       await _persistMeasurementsIfNeeded(
         childId: child.id,
-        takenAt: isEditMode ? DateTime.now() : selectedBirthDate,
+        takenAt: DateTime.now(),
         weight: selectedWeight,
         height: selectedHeight,
       );
@@ -144,14 +144,17 @@ class ChildDetailsViewModel extends BaseViewModel with ActionErrorMixin {
     required double weight,
     required double height,
   }) async {
-    final shouldSaveWeight = !isEditMode || _form.shouldSaveWeight(weight);
-    final shouldSaveHeight = !isEditMode || _form.shouldSaveHeight(height);
+    final hasWeightChanged = _form.shouldSaveWeight(weight);
+    final hasHeightChanged = _form.shouldSaveHeight(height);
+    final shouldSave = !isEditMode || hasWeightChanged || hasHeightChanged;
+
+    if (!shouldSave) return;
 
     await _interactor.createMeasurements(
       childId: childId,
       takenAt: takenAt,
-      weightKg: shouldSaveWeight ? weight : null,
-      heightCm: shouldSaveHeight ? height : null,
+      weightKg: weight,
+      heightCm: height,
     );
 
     _form.updateInitialMeasurements(weight: weight, height: height);

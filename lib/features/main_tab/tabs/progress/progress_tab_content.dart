@@ -19,7 +19,6 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
   static const double _periodListHorizontalPadding = 16;
 
   final ScrollController _periodScrollController = ScrollController();
-  String? _lastCenteredPeriodKey;
 
   @override
   void dispose() {
@@ -36,7 +35,7 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
         builder: (context, viewModel, _) {
           context.showDeferredSnackIfNeeded(viewModel.consumeActionError());
 
-          if (viewModel.isLoading && !viewModel.hasContent) {
+          if (viewModel.isInitialLoading) {
             return const CircularProgressIndicator().center().safeArea();
           }
 
@@ -64,44 +63,45 @@ class _ProgressTabContentState extends State<ProgressTabContent> {
   }
 
   void _centerSelectedPeriodIfNeeded(ProgressTabViewModel viewModel) {
-    final selected = viewModel.selectedPeriod;
-    if (selected == null) {
-      _lastCenteredPeriodKey = null;
-      return;
-    }
-    if (viewModel.periods.isEmpty) return;
+    if (!viewModel.consumeScrollToSelected()) return;
 
     final selectedIndex = viewModel.periods.indexWhere((period) {
       return viewModel.isSelectedPeriod(period);
     });
     if (selectedIndex < 0) return;
 
-    final selectedKey =
-        '${selected.periodUnit.name}:${selected.periodIndex}:$selectedIndex:${viewModel.periods.length}';
-    if (_lastCenteredPeriodKey == selectedKey) return;
-    _lastCenteredPeriodKey = selectedKey;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_periodScrollController.hasClients) return;
-
-      final viewportWidth = _periodScrollController.position.viewportDimension;
-      final itemExtent = _periodChipWidth + _periodChipSpacing;
-      final selectedItemCenter =
-          _periodListHorizontalPadding +
-          (selectedIndex * itemExtent) +
-          (_periodChipWidth / 2);
-      final maxScroll = _periodScrollController.position.maxScrollExtent;
-      final targetOffset = (selectedItemCenter - (viewportWidth / 2)).clamp(
-        0.0,
-        maxScroll,
-      );
-
-      _periodScrollController.animateTo(
-        targetOffset,
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOutCubic,
-      );
+      if (!mounted || !_periodScrollController.hasClients) {
+        // List not laid out yet — retry on next frame.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollToPeriodIndex(selectedIndex);
+        });
+        return;
+      }
+      _scrollToPeriodIndex(selectedIndex);
     });
+  }
+
+  void _scrollToPeriodIndex(int selectedIndex) {
+    if (!mounted || !_periodScrollController.hasClients) return;
+
+    final viewportWidth = _periodScrollController.position.viewportDimension;
+    final itemExtent = _periodChipWidth + _periodChipSpacing;
+    final selectedItemCenter =
+        _periodListHorizontalPadding +
+        (selectedIndex * itemExtent) +
+        (_periodChipWidth / 2);
+    final maxScroll = _periodScrollController.position.maxScrollExtent;
+    final targetOffset = (selectedItemCenter - (viewportWidth / 2)).clamp(
+      0.0,
+      maxScroll,
+    );
+
+    _periodScrollController.animateTo(
+      targetOffset,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
+    );
   }
 
 }

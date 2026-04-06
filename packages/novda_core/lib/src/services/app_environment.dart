@@ -16,6 +16,6 @@ class AppEnvironment {
   static String get baseUrl =>
       _isStaging ? _stagingUrl : _productionUrl;
 
-  static const _stagingUrl = 'http://94.158.51.9:8000';
+  static const _stagingUrl = 'http://dev.mttech.uz';
   static const _productionUrl = 'https://kidscare.uzyol.uz';
 }

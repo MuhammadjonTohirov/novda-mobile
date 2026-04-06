@@ -16,6 +16,8 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   ProgressGuide? _guide;
   List<ProgressContentItem> _suggestions = const [];
   List<ProgressContentItem> _recommendedArticles = const [];
+  bool _isInitialLoading = false;
+  bool _needsScrollToSelected = false;
   bool _isDetailLoading = false;
   bool _isSharedContentLoading = false;
   bool _isSuggestionsLoading = false;
@@ -28,6 +30,16 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   ProgressGuide? get guide => _guide;
   List<ProgressContentItem> get suggestions => _suggestions;
   List<ProgressContentItem> get recommendedArticles => _recommendedArticles;
+  bool get isInitialLoading => _isInitialLoading;
+
+  /// Returns `true` once after the selected period changes and the UI
+  /// should scroll to it. Calling this consumes the flag.
+  bool consumeScrollToSelected() {
+    if (!_needsScrollToSelected) return false;
+    _needsScrollToSelected = false;
+    return true;
+  }
+
   bool get isDetailLoading => _isDetailLoading;
   bool get isSharedContentLoading => _isSharedContentLoading;
   bool get isSuggestionsLoading => _isSuggestionsLoading;
@@ -43,7 +55,8 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
   }
 
   Future<void> load() async {
-    setLoading();
+    _isInitialLoading = true;
+    notifyListeners();
 
     try {
       _activeChild = await _interactor.resolveActiveChild();
@@ -51,6 +64,7 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
 
       final child = _activeChild;
       if (child == null) {
+        _isInitialLoading = false;
         setSuccess();
         return;
       }
@@ -64,6 +78,8 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
       );
       _selectedPeriod = _actualPeriod;
       _periods = sortedAllPeriods;
+      _needsScrollToSelected = _selectedPeriod != null;
+      _isInitialLoading = false;
       setSuccess();
 
       if (_selectedPeriod != null) {
@@ -78,6 +94,7 @@ class ProgressTabViewModel extends BaseViewModel with ActionErrorMixin {
         }
       }
     } catch (error) {
+      _isInitialLoading = false;
       handleException(error);
     }
   }
